@@ -34,7 +34,7 @@
 
 | **이정우** | **박정선** | **이윤주** | **최주철** | **박지훈** |
 | :------: |  :------: | :------: | :------: | :------: |
-| ![thumb_150x150_sgsqc4_uqd9-ilz66_17194464619271](https://github.com/user-attachments/assets/229964de-031f-461d-b270-1efb73333195) |![user_2_image](https://github.com/user-attachments/assets/sample_image_2)|![user_3_image](https://github.com/user-attachments/assets/sample_image_3) |![user_4_image](https://github.com/user-attachments/assets/sample_image_4) |![user_5_image](https://github.com/user-attachments/assets/sample_image_5) |
+| ![user_1_image](https://github.com/user-attachments/assets/sample_image_2)|![user_2_image](https://github.com/user-attachments/assets/sample_image_2)|![user_3_image](https://github.com/user-attachments/assets/sample_image_3) |![user_4_image](https://github.com/user-attachments/assets/sample_image_4) |![user_5_image](https://github.com/user-attachments/assets/sample_image_5) |
 
 </div>
 <br>
