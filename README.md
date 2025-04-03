@@ -1,6 +1,6 @@
 # 🍽 FoodyChat - AI 기반 음식 분석 & 맞춤 추천 서비스
 
-![적절한 이미지 커버dddd 설정 FoodieyChat Cover](https://github.com/user-attachments/assets/your_image_url_here)
+![적절한 이미지 커버dddd awdawd설정 FoodieyChat Cover](https://github.com/user-attachments/assets/your_image_url_here)
 
 
 ## 📌 사이트
