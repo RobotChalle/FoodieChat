@@ -23,7 +23,7 @@ public class UserVO {
 	private String membership_lvl;		// 회원등급
 	
 	/* 테이블명 user_details */
-	private String gender;
+	private int gender;
 	private int age;
 	private float user_weight;
 	private float height;

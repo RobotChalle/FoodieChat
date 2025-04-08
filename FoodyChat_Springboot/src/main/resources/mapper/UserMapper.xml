@@ -1,11 +1,68 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.foodychat.user.dao.UserDAO">
-	<!-- 사용자 조회 -->
-	<select id="selectUserById" parameterType="int" resultType="com.foodychat.user.vo.UserVO">
-		SELECT * FROM users WHERE user_id = #{id}
-	</select>
+
+<!-- 회원가입 (user 테이블 insert) -->
+    <insert id="insertUser" parameterType="UserVO">
+		INSERT INTO users (
+            email, google_id, user_password, user_name, phone, membership_level,
+            reg_ip, reg_date
+        ) VALUES (
+            #{email}, #{google_id}, #{user_password}, #{user_name}, #{phone},'regular',
+            #{login_ip}, NOW()
+        )
+    </insert>
+
+    <!-- 회원가입 (user_details 테이블 insert) -->
+    <insert id="insertUserDetails" parameterType="com.foodychat.user.vo.UserDetailsVO">
+    INSERT INTO user_details (user_id, gender, age, user_weight, height, user_address, health_goal)
+    VALUES (#{user_id}, #{gender}, #{age}, #{user_weight}, #{height}, #{user_address}, #{health_goal})
+	</insert>
+
+
+    <!-- 이메일 중복 확인 -->
+    <select id="checkEmailExists" parameterType="String" resultType="int">
+        SELECT COUNT(*) FROM user WHERE email = #{email}
+    </select>
+
+    <!-- 이메일로 사용자 조회 -->
+    <select id="findByEmail" parameterType="String" resultType="com.foodychat.user.vo.UserVO">
+        SELECT u.*, ud.age, ud.user_weight, ud.height, ud.user_address
+        FROM user u
+        LEFT JOIN user_details ud ON u.user_id = ud.user_id
+        WHERE u.email = #{email}
+    </select>
+
+    <!-- 구글 ID로 사용자 조회 -->
+    <select id="findByGoogleId" parameterType="String" resultType="com.foodychat.user.vo.UserVO">
+        SELECT u.*, ud.age, ud.user_weight, ud.height, ud.user_address
+        FROM user u
+        LEFT JOIN user_details ud ON u.user_id = ud.user_id
+        WHERE u.google_id = #{googleId}
+    </select>
+
+    <!-- 구글 로그인 시 신규 등록 -->
+    <insert id="insertGoogleUser" parameterType="UserVO">
+        INSERT INTO users (email, google_id, user_name, phone, membership_level)
+        VALUES (#{email}, #{google_id}, #{user_name}, '010-1234-5678', 'regular');
+    </insert>
+
+    <!-- 로그인 정보 업데이트 -->
+    <update id="updateLoginInfo">
+        UPDATE users
+        SET login_id = #{login_id}, login_ip = #{login_ip}
+        WHERE user_id = #{user_id}
+    </update>
+
+    <!-- 사용자 ID로 조회 -->
+    <select id="findByUserId" parameterType="long" resultType="com.foodychat.user.vo.UserVO">
+        SELECT *
+        FROM users u
+        JOIN user_details ud ON u.user_id = ud.user_id
+        WHERE u.user_id = #{user_id}
+    </select>
+
 </mapper>
