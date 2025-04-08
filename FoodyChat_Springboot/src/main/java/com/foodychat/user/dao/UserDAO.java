@@ -17,9 +17,20 @@ public class UserDAO {
     private SqlSession sqlSession;
 
     /**
-     * 특정 사용자 조회
-     */
-    public UserVO getUserById(int id) {
-        return sqlSession.selectOne(mapperQuery + ".selectUserById", id);
-    }
+	 * ID로 사용자 조회
+	 * */
+	public UserVO getUserById(long id) {
+		return sqlSession.selectOne(mapperQuery + ".selectUserById", id);
+	}
+	
+	/**
+	 * 이메일로 사용자 조회
+	 * */
+	public UserVO getUserByEmail(String email) {
+		return sqlSession.selectOne(mapperQuery + ".selectUserByEmail", email);
+	}
+
+	public void updatePasswordUser(UserVO user) {
+		sqlSession.update(mapperQuery + ".updatePasswordUser", user);
+	}
 }

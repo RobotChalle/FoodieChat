@@ -4,8 +4,48 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.foodychat.user.dao.UserDAO">
-	<!-- 사용자 조회 -->
-	<select id="selectUserById" parameterType="int" resultType="com.foodychat.user.vo.UserVO">
-		SELECT * FROM users WHERE user_id = #{id}
+	<!-- 사용자 조회(아이디) -->
+	<select id="selectUserById" parameterType="long" resultType="com.foodychat.user.vo.UserVO">
+		SELECT	um.user_id,
+				um.email,
+				IFNULL(um.google_id,'') AS google_id,
+				IFNULL(um.user_password,'') AS google_id,
+				um.user_name,
+				um.phone,
+				um.membership_level as membership_lvl,
+				um.reg_date,
+				um.upd_date,
+				CASE IFNULL(ud.gender,'1') WHEN '2' THEN '여' ELSE '남' END,
+				ud.age,
+				ud.user_weight,
+				ud.height,
+				ud.user_address
+		FROM	users um LEFT OUTER JOIN user_details ud ON um.user_id = ud.user_id
+		WHERE	um.user_id = #{id}
 	</select>
+	<!-- 사용자 조회(이메일) -->
+	<select id="selectUserByEmail" parameterType="string" resultType="com.foodychat.user.vo.UserVO">
+		SELECT	um.user_id,
+				um.email,
+				IFNULL(um.google_id,'') AS google_id,
+				IFNULL(um.user_password,'') AS google_id,
+				um.user_name,
+				um.phone,
+				um.membership_level as membership_lvl,
+				um.reg_date,
+				um.upd_date,
+				CASE IFNULL(ud.gender,'1') WHEN '2' THEN '여' ELSE '남' END,
+				ud.age,
+				ud.user_weight,
+				ud.height,
+				ud.user_address
+		FROM	users um LEFT OUTER JOIN user_details ud ON um.user_id = ud.user_id
+		WHERE	um.email = #{email}
+	</select>
+	<!-- 사용자 비밀번호 수정 -->
+	<update id="updatePasswordUser" parameterType="com.foodychat.user.vo.UserVO">
+		UPDATE	users
+		SET		user_password = #{user_password}
+		WHERE 	user_id = #{user_id}
+	</update>
 </mapper>

@@ -1,6 +1,7 @@
 package com.foodychat.user.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.foodychat.user.dao.UserDAO;
@@ -12,14 +13,49 @@ import com.foodychat.user.vo.UserVO;
  */	
 @Service
 public class UserServiceImpl implements UserService {
-	@Autowired
-    UserDAO userDao;
+	private final UserDAO userDao;
+    private final PasswordEncoder passwordEncoder;
+
+    public UserServiceImpl(UserDAO userDao, PasswordEncoder passwordEncoder) {
+        this.userDao = userDao;
+        this.passwordEncoder = passwordEncoder;
+    }
 
 	/**
      * 모든 사용자 조회
      */
 	@Override
-	public UserVO getUserById(int id) {
+	public UserVO getUserById(long id) {
 		return userDao.getUserById(id);
+	}
+	
+	/**
+	 * 이메일로 사용자 조회
+	 * */
+	@Override
+	public UserVO getUserByEmail(String email) {
+		return userDao.getUserByEmail(email);
+	}
+
+	/**
+	 * 새로운 비밀번호 암호화 후 저장
+	 */
+	@Override
+	public boolean changePassword(String userEmail, String currentPassword, String newPassword) {
+		userEmail = "1";
+		UserVO user = userDao.getUserById(Long.parseLong(userEmail));
+        if (user == null) return false;
+
+        // 현재 비밀번호 일치 여부 확인
+        if (!passwordEncoder.matches(currentPassword, user.getUser_password())) {
+            return false;
+        }
+
+        // 새 비밀번호 암호화 후 저장
+        String encodedNewPassword = passwordEncoder.encode(newPassword);
+        user.setUser_password(encodedNewPassword);
+        userDao.updatePasswordUser(user);
+        
+        return true;
 	}
 }
