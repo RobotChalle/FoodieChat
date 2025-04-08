@@ -1,5 +1,7 @@
 package com.foodychat.user.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +18,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.foodychat.user.service.AuthService;
 import com.foodychat.user.service.UserService;
 import com.foodychat.user.vo.UserVO;
 
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 
 /**
  * 사용자 관리 컨트롤러
@@ -58,4 +62,31 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 실패");
         }
     }
+    // 회원가입+구글 API
+@RestController
+@RequestMapping("/api/auth")
+@RequiredArgsConstructor
+public class AuthController {
+    private final AuthService authService;
+
+    @PostMapping("/google")
+    public ResponseEntity<?> googleLogin(@RequestBody Map<String, String> body) {
+        String token = body.get("token");
+        String jwt = authService.googleLogin(token);
+        return ResponseEntity.ok(Map.of("token", jwt));
+    }
+
+    @PostMapping("/signup")
+    public ResponseEntity<?> signup(@RequestBody UserVO uservo) {
+        authService.signup(uservo);
+        return ResponseEntity.ok("회원가입 완료");
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody UserVO uservo) {
+        String jwt = authService.login(uservo);
+        return ResponseEntity.ok(Map.of("token", jwt));
+    }
+}
+
 }
