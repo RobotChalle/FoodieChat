@@ -29,6 +29,8 @@ export default function MainPage() {
           <div className="navbar-center desktop-menu">
             <Link to="/chatbot" className="nav-link">🤖 <span>챗봇</span></Link>
             <Link to="/image-analysis" className="nav-link">🍱 <span>이미지 분석</span></Link>
+            <Link to="/mypage" className="nav-link">🍱 <span>마이페이지</span></Link>
+            <Link to="/adminpage" className="nav-link">🍱 <span>관리자페이지</span></Link>
           </div>
 
           <div className="navbar-right desktop-menu">
@@ -58,6 +60,8 @@ export default function MainPage() {
       <div className={`mobile-menu ${menuOpen ? 'show' : ''}`}>
         <Link to="/chatbot" onClick={() => setMenuOpen(false)}>🤖 챗봇</Link>
         <Link to="/image-analysis" onClick={() => setMenuOpen(false)}>🍱 이미지 분석</Link>
+        <Link to="/mypage" onClick={() => setMenuOpen(false)}>🍱 마이페이지</Link>
+        <Link to="/adminpage" onClick={() => setMenuOpen(false)}>🍱 관리자페이지</Link>
         <Link to="/login" onClick={() => setMenuOpen(false)}>로그인</Link>
         <Link to="/signup" onClick={() => setMenuOpen(false)}>회원가입</Link>
       </div>

@@ -21,6 +21,8 @@ public class UserVO {
 	private String user_name;			// 회원이름
 	private String phone;				// 회원전화번호
 	private String membership_lvl;		// 회원등급
+	private String reg_date;			// 가입일시
+	private String upd_date;			// 수정일시
 	
 	/* 테이블명 user_details */
 	private String gender;

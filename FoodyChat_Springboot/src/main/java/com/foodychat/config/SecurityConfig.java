@@ -14,21 +14,19 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 	@Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
-	
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-            .csrf(csrf -> csrf.disable())  // CSRF 비활성화
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-            		.requestMatchers("/", "/index.html", "/static/**", "/login", "/users/register", "/api/**", "/users/login", "/users/**").permitAll()
-                    .anyRequest().authenticated()
+                .requestMatchers("/users/**", "/loginUser").permitAll()
+                .anyRequest().authenticated()
             )
-            .logout(logout -> logout.logoutUrl("/users/logout").permitAll());
-
+            .formLogin().disable();
         return http.build();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
     }
 
     @Bean
