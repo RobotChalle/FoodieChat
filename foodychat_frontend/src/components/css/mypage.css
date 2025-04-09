@@ -1,70 +1,173 @@
+/* mypage.css */
+
 body {
+  background: #f5f7fa;
+  font-family: 'Noto Sans KR', sans-serif;
   margin: 0;
   padding: 0;
-  font-family: 'Pretendard', sans-serif;
-  background-color: #f9f9f9;
 }
 
-.mypage-wrapper {
+.mypage-grid-container {
+  max-width: 1000px;
+  margin: 50px auto;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 2rem;
+  padding: 0 1rem;
+}
+
+.mypage-grid-row.profile {
   display: flex;
   justify-content: center;
-  align-items: center;
-  min-height: 100vh;
 }
 
-.mypage-box {
+.profile-sidebar {
   background: white;
-  padding: 40px 32px;
-  border-radius: 12px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
-  width: 100%;
-  max-width: 400px;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   text-align: center;
+  width: 100%;
+  max-width: 300px;
+}
+
+.profile-picture img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 1rem;
+}
+
+.profile-sidebar h3 {
+  margin: 0.5rem 0;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.profile-sidebar p {
+  margin: 0.2rem 0;
+  color: #666;
+}
+
+.mypage-grid-row.info {
+  display: flex;
+  justify-content: center;
+}
+
+.mypage-content {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 700px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }
 
 .mypage-title {
-  font-size: 22px;
-  font-weight: 700;
-  margin-bottom: 28px;
-  color: #111;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+  text-align: center;
 }
 
-.info-section {
-  background-color: #f3f4f6;
-  padding: 16px;
-  border-radius: 8px;
-  margin-bottom: 24px;
-  font-size: 14px;
-  color: #333;
-  text-align: left;
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
-.info-section p {
-  margin: 6px 0;
+.form-pair {
+  display: flex;
+  gap: 1rem;
+}
+
+.form-triple {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: 500;
+  margin-bottom: 0.3rem;
+  color: #34495e;
+}
+
+input, select {
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 1rem;
+  background: #fafafa;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: #5dade2;
+  background: #fff;
+}
+
+.helper-text {
+  font-size: 0.8rem;
+  color: #888;
+  margin-top: 0.2rem;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.mypage-grid-row.actions {
+  display: flex;
+  justify-content: center;
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .mypage-button {
-  width: 100%;
-  padding: 14px;
-  background-color: #10b981; /* emerald-500 */
+  background-color: #3498db;
   color: white;
-  font-weight: 600;
-  font-size: 15px;
+  padding: 0.7rem 1.5rem;
+  font-size: 1rem;
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   cursor: pointer;
-  margin-bottom: 16px;
-  transition: background-color 0.2s;
+  transition: background 0.3s ease;
 }
 
 .mypage-button:hover {
-  background-color: #059669;
+  background-color: #2980b9;
 }
 
 .mypage-button.secondary {
-  background-color: #f87171; /* red-400 */
+  background-color: #95a5a6;
 }
 
 .mypage-button.secondary:hover {
-  background-color: #ef4444; /* red-500 */
+  background-color: #7f8c8d;
+}
+
+.mypage-button.logout {
+  background-color: #e74c3c;
+}
+
+.mypage-button.logout:hover {
+  background-color: #c0392b;
+}
+
+.error-message {
+  color: red;
+  font-weight: 500;
+  text-align: center;
 }
