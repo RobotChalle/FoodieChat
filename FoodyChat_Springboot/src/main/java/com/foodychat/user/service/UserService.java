@@ -1,5 +1,6 @@
 package com.foodychat.user.service;
 
+import com.foodychat.user.vo.UserLogVO;
 import com.foodychat.user.vo.UserVO;
 
 /**
@@ -16,13 +17,24 @@ public interface UserService {
 	 * 이메일로 사용자 조회
 	 * */
 	UserVO getUserByEmail(String email);
-
+	
 	/**
-	 * 
-	 * @param userEmail 로그인된 이메일
-	 * @param currentPassword 현재비밀번호
-	 * @param newPassword 새로운비밀번호
-	 * @return
-	 */
+	 * 비밀번호 변경
+	 * */
 	boolean changePassword(String userEmail, String currentPassword, String newPassword);
+	
+	/**
+	 * 로그저장
+	 * */
+	void insertUserLog(UserLogVO log);
+	
+	/**
+	 * 마지막로그인 정보 확인
+	 * */
+	UserLogVO getLastSuccessfulLogByUserId(long user_id);
+	
+	/**
+	 * 로그아웃시간 저장
+	 * */
+	void updateLogoutTime(UserLogVO lastLog);
 }
