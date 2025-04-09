@@ -6,7 +6,7 @@
 <mapper namespace="com.foodychat.user.dao.UserDAO">
 
 <!-- 회원가입 (user 테이블 insert) -->
-    <insert id="insertUser" parameterType="UserVO">
+    <insert id="insertUser" parameterType="UserVO" useGeneratedKeys="true" keyProperty="user_id">
 		INSERT INTO users (
             email, google_id, user_password, user_name, phone, membership_level,
             reg_ip, reg_date
@@ -29,26 +29,26 @@
     </select>
 
     <!-- 이메일로 사용자 조회 -->
-    <select id="findByEmail" parameterType="String" resultType="com.foodychat.user.vo.UserVO">
-        SELECT u.*, ud.age, ud.user_weight, ud.height, ud.user_address
-        FROM user u
-        LEFT JOIN user_details ud ON u.user_id = ud.user_id
-        WHERE u.email = #{email}
-    </select>
+	<select id="findByEmail" parameterType="string" resultType="UserVO">
+    	SELECT u.*, ud.age, ud.user_weight, ud.height, ud.user_address
+    	FROM users u
+    	LEFT JOIN user_details ud ON u.user_id = ud.user_id
+    	WHERE u.email = #{email}
+	</select>
 
     <!-- 구글 ID로 사용자 조회 -->
     <select id="findByGoogleId" parameterType="String" resultType="com.foodychat.user.vo.UserVO">
         SELECT u.*, ud.age, ud.user_weight, ud.height, ud.user_address
-        FROM user u
+        FROM users
         LEFT JOIN user_details ud ON u.user_id = ud.user_id
         WHERE u.google_id = #{googleId}
     </select>
 
     <!-- 구글 로그인 시 신규 등록 -->
-    <insert id="insertGoogleUser" parameterType="UserVO">
-        INSERT INTO users (email, google_id, user_name, phone, membership_level)
-        VALUES (#{email}, #{google_id}, #{user_name}, '010-1234-5678', 'regular');
-    </insert>
+   	<insert id="insertGoogleUser" parameterType="UserVO" useGeneratedKeys="true" keyProperty="user_id">
+    INSERT INTO users (email, google_id, user_name, phone, membership_level)
+    VALUES (#{email}, #{google_id}, #{user_name}, #{phone}, 'regular');
+	</insert>
 
     <!-- 로그인 정보 업데이트 -->
     <update id="updateLoginInfo">
