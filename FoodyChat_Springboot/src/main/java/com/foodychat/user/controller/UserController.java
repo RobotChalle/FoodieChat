@@ -1,5 +1,6 @@
 package com.foodychat.user.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,33 +53,57 @@ public class UserController {
     }
     
     // 회원가입+구글 API
-
+    
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody UserVO userVO) {
-        userService.registerUser(userVO);
-        return ResponseEntity.ok("회원가입 성공");
+    public ResponseEntity<Map<String, Object>> signup(@RequestBody UserVO userVO) {
+        userService.registerUser(userVO); // 회원가입 수행, user_id가 userVO에 세팅되어야 함
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "회원가입 성공");
+        response.put("user_id", userVO.getUser_id()); // 👉 user_id 포함
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/google")
     public ResponseEntity<?> googleSignup(@RequestBody Map<String, String> body) {
         String token = body.get("token");
         GoogleUserInfo userInfo = GoogleTokenVerifier.verify(token); // 직접 구현
+
+        // 이미 존재하는 유저인지 확인
+        UserVO existingUser = userService.getUserByEmail(userInfo.getEmail());
+        if (existingUser != null) {
+            return ResponseEntity.ok(Map.of("user_id", existingUser.getUser_id()));
+        }
+
+        // 신규 유저 생성
         UserVO user = new UserVO();
         user.setEmail(userInfo.getEmail());
         user.setGoogle_id(userInfo.getGoogleId());
         user.setUser_name(userInfo.getName());
+        user.setPhone("010-1234-5678"); // ✅ 기본값 설정
         user.setMembership_lvl("regular");
 
         userService.registerGoogleUser(user);
-        return ResponseEntity.ok("구글 회원가입 성공");
+
+        // 다시 조회해서 user_id 가져오기
+        UserVO savedUser = userService.getUserByEmail(userInfo.getEmail());
+
+        if (savedUser == null) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("유저 저장 후 조회 실패");
+        }
+
+        return ResponseEntity.ok(Map.of("user_id", savedUser.getUser_id()));
     }
+
+    
     @PostMapping("/details")
-    public ResponseEntity<?> saveUserDetails(@RequestBody UserDetailsVO details, HttpSession session) {
-        Integer userId = (Integer) session.getAttribute("userId"); // 또는 SecurityContext에서 가져오기
-        details.setUser_id(userId);
+    public ResponseEntity<?> saveUserDetails(@RequestBody UserDetailsVO details) {
+        if (details.getUser_id() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("user_id 누락됨");
+        }
         userService.saveUserDetails(details);
         return ResponseEntity.ok("추가 정보 저장 성공");
     }
-
 
 }

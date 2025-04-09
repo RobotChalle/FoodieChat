@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 public class UserDetailsVO {
-    private int user_id; // 회원 ID (세션 등에서 가져올 것)
+	private Integer user_id; // 회원 ID (세션 등에서 가져올 것)
     private String gender;
     private int age;
     private double user_weight;
