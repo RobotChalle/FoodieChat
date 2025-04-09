@@ -1,11 +1,11 @@
 package com.foodychat.user.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.foodychat.user.dao.UserDAO;
 import com.foodychat.user.service.UserService;
+import com.foodychat.user.vo.UserLogVO;
 import com.foodychat.user.vo.UserVO;
 
 /**
@@ -57,5 +57,29 @@ public class UserServiceImpl implements UserService {
         userDao.updatePasswordUser(user);
         
         return true;
+	}
+
+	/**
+	 * 로그저장
+	 * */
+	@Override
+	public void insertUserLog(UserLogVO log) {
+		userDao.insertUserLog(log);
+	}
+
+	/**
+	 * 마지막로그인 정보 확인
+	 * */
+	@Override
+	public UserLogVO getLastSuccessfulLogByUserId(long user_id) {
+		return userDao.getLastSuccessfulLogByUserId(user_id);
+	}
+
+	/**
+	 * 로그아웃시간 저장
+	 * */
+	@Override
+	public void updateLogoutTime(UserLogVO lastLog) {
+		userDao.updateLogoutTime(lastLog);
 	}
 }

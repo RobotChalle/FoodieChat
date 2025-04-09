@@ -15,11 +15,12 @@
 				um.membership_level as membership_lvl,
 				um.reg_date,
 				um.upd_date,
-				CASE IFNULL(ud.gender,'1') WHEN '2' THEN '여' ELSE '남' END,
+				CASE IFNULL(ud.gender,'1') WHEN '2' THEN '여' ELSE '남' END as gender,
 				ud.age,
 				ud.user_weight,
 				ud.height,
-				ud.user_address
+				ud.user_address,
+				um.user_password
 		FROM	users um LEFT OUTER JOIN user_details ud ON um.user_id = ud.user_id
 		WHERE	um.user_id = #{id}
 	</select>
@@ -34,11 +35,12 @@
 				um.membership_level as membership_lvl,
 				um.reg_date,
 				um.upd_date,
-				CASE IFNULL(ud.gender,'1') WHEN '2' THEN '여' ELSE '남' END,
+				CASE IFNULL(ud.gender,'1') WHEN '2' THEN '여' ELSE '남' END as gender,
 				ud.age,
 				ud.user_weight,
 				ud.height,
-				ud.user_address
+				IFNULL(ud.user_address,'') AS user_address,
+				um.user_password
 		FROM	users um LEFT OUTER JOIN user_details ud ON um.user_id = ud.user_id
 		WHERE	um.email = #{email}
 	</select>
@@ -47,5 +49,25 @@
 		UPDATE	users
 		SET		user_password = #{user_password}
 		WHERE 	user_id = #{user_id}
+	</update>
+	<!-- 사용자 사용 로그등록 -->
+	<insert id="insertUserLog" parameterType="com.foodychat.user.vo.UserLogVO">
+		INSERT INTO	user_logs(user_id, login_time, logout_time, ip_address, user_agent, login_status, failure_reason)
+		VALUES(#{userId},#{loginTime},#{logoutTime},#{ipAddress},#{userAgent},#{loginStatus},#{failureReason});
+	</insert>
+	<!--  마지막로그인 정보 확인 -->
+	<select id="selectLastSuccessfulLogByUserId" parameterType="long" resultType="com.foodychat.user.vo.UserLogVO">
+		SELECT	* 
+		FROM	user_logs
+	    WHERE	user_id = #{user_id}
+	      AND	login_status = '1'
+	    ORDER BY login_time DESC
+	    LIMIT 1
+	</select>
+	<!-- 로그아웃시간 수정 -->
+	<update id="updateLogoutTime" parameterType="com.foodychat.user.vo.UserLogVO">
+		UPDATE	user_logs
+		SET		logout_time = #{logoutTime}
+		WHERE 	id = #{id}
 	</update>
 </mapper>
