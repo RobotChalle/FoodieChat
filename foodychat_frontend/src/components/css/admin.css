@@ -292,3 +292,22 @@ body {
   outline: none;
   box-shadow: 0 0 0 2px rgba(78, 115, 223, 0.2);
 }
+.pagination {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.page-button {
+  margin: 0 5px;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  background-color: white;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.page-button.active {
+  background-color: #4CAF50;
+  color: white;
+  font-weight: bold;
+}

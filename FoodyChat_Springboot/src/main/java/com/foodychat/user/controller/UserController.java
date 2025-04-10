@@ -1,7 +1,10 @@
 package com.foodychat.user.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import jakarta.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,10 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.foodychat.user.service.UserService;
 import com.foodychat.user.vo.GoogleUserInfo;
@@ -22,26 +22,24 @@ import com.foodychat.user.vo.UserDetailsVO;
 import com.foodychat.user.vo.UserVO;
 import com.foodychat.util.GoogleTokenVerifier;
 
-import jakarta.servlet.http.HttpSession;
-
-/**
- * 사용자 관리 컨트롤러
- */
 @RestController
 @RequestMapping("/users")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class UserController {
-	@Autowired
-    UserService userService;
-	
-	@Autowired
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
     private AuthenticationManager authenticationManager;
-	
+
+    // 🟢 일반 로그인
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserVO loginRequest, HttpSession session) {
-    	System.out.println("로그인 요청: " + loginRequest.getUser_name());
+        System.out.println("로그인 요청: " + loginRequest.getUser_name());
         UsernamePasswordAuthenticationToken token =
                 new UsernamePasswordAuthenticationToken(loginRequest.getUser_name(), loginRequest.getUser_password());
-        System.out.println(token);
+
         try {
             Authentication auth = authenticationManager.authenticate(token);
             SecurityContextHolder.getContext().setAuthentication(auth);
@@ -51,42 +49,36 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 실패");
         }
     }
-    
-    // 회원가입+구글 API
-    
+
+    // 🟢 일반 회원가입
     @PostMapping("/signup")
     public ResponseEntity<Map<String, Object>> signup(@RequestBody UserVO userVO) {
-        userService.registerUser(userVO); // 회원가입 수행, user_id가 userVO에 세팅되어야 함
-
+        userService.registerUser(userVO);
         Map<String, Object> response = new HashMap<>();
         response.put("message", "회원가입 성공");
-        response.put("user_id", userVO.getUser_id()); // 👉 user_id 포함
-
+        response.put("user_id", userVO.getUser_id());
         return ResponseEntity.ok(response);
     }
 
+    // 🟢 구글 회원가입
     @PostMapping("/google")
     public ResponseEntity<?> googleSignup(@RequestBody Map<String, String> body) {
         String token = body.get("token");
-        GoogleUserInfo userInfo = GoogleTokenVerifier.verify(token); // 직접 구현
+        GoogleUserInfo userInfo = GoogleTokenVerifier.verify(token);
 
-        // 이미 존재하는 유저인지 확인
         UserVO existingUser = userService.getUserByEmail(userInfo.getEmail());
         if (existingUser != null) {
             return ResponseEntity.ok(Map.of("user_id", existingUser.getUser_id()));
         }
 
-        // 신규 유저 생성
         UserVO user = new UserVO();
         user.setEmail(userInfo.getEmail());
         user.setGoogle_id(userInfo.getGoogleId());
         user.setUser_name(userInfo.getName());
-        user.setPhone("010-1234-5678"); // ✅ 기본값 설정
+        user.setPhone("010-1234-5678");
         user.setMembership_lvl("regular");
 
         userService.registerGoogleUser(user);
-
-        // 다시 조회해서 user_id 가져오기
         UserVO savedUser = userService.getUserByEmail(userInfo.getEmail());
 
         if (savedUser == null) {
@@ -96,7 +88,7 @@ public class UserController {
         return ResponseEntity.ok(Map.of("user_id", savedUser.getUser_id()));
     }
 
-    
+    // 🟢 유저 상세정보 저장
     @PostMapping("/details")
     public ResponseEntity<?> saveUserDetails(@RequestBody UserDetailsVO details) {
         if (details.getUser_id() == null) {
@@ -106,4 +98,35 @@ public class UserController {
         return ResponseEntity.ok("추가 정보 저장 성공");
     }
 
+    // 🟡 관리자용 유저 목록
+    @GetMapping("/admin/users")
+    public ResponseEntity<?> getUserList(
+        @RequestParam(name = "page", defaultValue = "1") int page,
+        @RequestParam(name = "size", defaultValue = "10") int size
+    ) {
+        List<UserVO> users = userService.getUserList(page, size);
+        int total = userService.getTotalUserCount();
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("users", users);
+        result.put("total", total);
+        return ResponseEntity.ok(result);
+    }
+
+    // 🟡 관리자용 유저 삭제
+    @DeleteMapping("/admin/users/{userId}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
+        userService.deleteUser(userId);
+        return ResponseEntity.ok("삭제 성공");
+    }
+    // 🟡 관리자용 유저 등급 변경
+    @PatchMapping("/users/admin/users/{userId}/membership")
+    public ResponseEntity<?> updateMembershipLevel(
+        @PathVariable Long userId,
+        @RequestBody Map<String, String> request
+    ) {
+        String newLevel = request.get("membershipLevel"); // <- key 이름 정확히!
+        userService.updateMembershipLevel(userId, newLevel);
+        return ResponseEntity.ok().build();
+    }
 }

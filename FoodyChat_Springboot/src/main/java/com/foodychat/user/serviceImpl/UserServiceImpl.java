@@ -1,5 +1,7 @@
 package com.foodychat.user.serviceImpl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -38,5 +40,23 @@ public class UserServiceImpl implements UserService {
     @Override
     public void saveUserDetails(UserDetailsVO details) {
         userDAO.insertUserDetails(details);
+    }
+    @Override
+    public List<UserVO> getUserList(int page, int size) {
+        int offset = (page - 1) * size;
+        return userDAO.getUserList(size, offset);
+    }
+    @Override
+    public int getTotalUserCount() {
+        return userDAO.getTotalUserCount();
+    }
+    @Override
+    public void deleteUser(Long userId) {
+    	
+        userDAO.deleteUser(userId);
+    }
+    @Override
+    public void updateMembershipLevel(Long userId, String level) {
+        userDAO.updateMembershipLevel(userId, level);
     }
 }
