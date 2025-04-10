@@ -1,66 +1,56 @@
+// src/components/MainPage.jsx
+
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import NavBar from './NavBar';
+import Carousel from './Carousel'; // ✅ 캐러셀 추가
 import './css/main.css';
 
 export default function MainPage() {
+  const [userInfo, setUserInfo] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUserInfo(JSON.parse(storedUser));
+    }
+  }, []);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
   }, [darkMode]);
 
   useEffect(() => {
-    if (menuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
+    document.body.style.overflow = menuOpen ? 'hidden' : '';
   }, [menuOpen]);
+
+  const handleLogout = async () => {
+    try {
+      await axios.post('http://localhost:8080/users/logout',
+        new URLSearchParams({
+          user_id: userInfo.user_id,
+        }),
+        {
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          withCredentials: true,
+        }
+      );
+      localStorage.removeItem('user');
+      navigate('/login');
+    } catch (err) {
+      console.error('로그아웃 실패:', err);
+      alert('로그아웃 중 오류가 발생했습니다.');
+    }
+  };
 
   return (
     <>
-      <nav className="glass-navbar">
-        <div className="navbar-container">
-          <div className="navbar-left">
-            <Link to="/" className="logo">🍽 <span>FoodyChat</span></Link>
-          </div>
-
-          <div className="navbar-center desktop-menu">
-            <Link to="/chatbot" className="nav-link">🤖 <span>챗봇</span></Link>
-            <Link to="/image-analysis" className="nav-link">🍱 <span>이미지 분석</span></Link>
-          </div>
-
-          <div className="navbar-right desktop-menu">
-            <Link to="/login" className="nav-button">로그인</Link>
-            <Link to="/signup" className="nav-button signup">회원가입</Link>
-            <button
-              className="darkmode-toggle"
-              onClick={() => setDarkMode(!darkMode)}
-              aria-label="Dark mode toggle"
-            >
-              {darkMode ? '☀️' : '🌙'}
-            </button>
-          </div>
-
-          <div
-            className={`hamburger ${menuOpen ? 'open' : ''}`}
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Menu toggle"
-          >
-            <span />
-            <span />
-            <span />
-          </div>
-        </div>
-      </nav>
-
-      <div className={`mobile-menu ${menuOpen ? 'show' : ''}`}>
-        <Link to="/chatbot" onClick={() => setMenuOpen(false)}>🤖 챗봇</Link>
-        <Link to="/image-analysis" onClick={() => setMenuOpen(false)}>🍱 이미지 분석</Link>
-        <Link to="/login" onClick={() => setMenuOpen(false)}>로그인</Link>
-        <Link to="/signup" onClick={() => setMenuOpen(false)}>회원가입</Link>
-      </div>
+      <NavBar />
+      <Carousel /> {/* ✅ 슬라이드 영역 */}
     </>
   );
 }

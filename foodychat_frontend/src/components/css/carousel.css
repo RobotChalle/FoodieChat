@@ -1,0 +1,92 @@
+/* src/components/css/carousel.css */
+
+.carousel-container {
+  position: relative;
+  width: 100%;
+  max-width: 1000px;
+  margin: 40px auto;
+}
+
+.carousel-title {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 700;
+  color: #222;
+  padding: 20px 0 10px;
+}
+
+.carousel-slide {
+  text-align: center;
+  height: 500px; /* ✅ 폼 높이 통일 (이미지 기준) */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carousel-slide img {
+  width: 100%;
+  max-height: 500px; /* ✅ 이미지 최대 높이 제한 */
+  object-fit: contain; /* ✅ 비율 유지하며 축소 */
+  border-radius: 16px;
+  display: block;
+  margin: 0 auto;
+  background-color: #f4f4f4; /* 여백이 흰색일 때 대비 */
+}
+
+.carousel-caption {
+  position: absolute;
+  bottom: 30px;
+  left: 30px;
+  padding: 16px;
+  border-radius: 12px;
+  max-width: 60%;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.carousel-caption h3 {
+  font-size: 22px;
+  margin: 0 0 5px;
+}
+
+.carousel-caption p {
+  font-size: 16px;
+  margin: 0;
+}
+
+.carousel-description {
+  margin-top: 20px;
+  padding: 0 30px;
+  font-size: 16px;
+  line-height: 1.6;
+  background-color: transparent; /* ✅ 배경 투명 */
+  text-align: center;
+  font-weight: 500;
+}
+
+.left-arrow, .right-arrow {
+  background: rgba(0, 0, 0, 0.4);
+  border: none;
+  color: white;
+  font-size: 26px;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  border-radius: 50%;
+}
+
+.left-arrow:hover,
+.right-arrow:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.left-arrow {
+  left: 10px;
+}
+.right-arrow {
+  right: 10px;
+}

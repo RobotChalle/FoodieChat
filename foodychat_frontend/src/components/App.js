@@ -7,6 +7,8 @@ import Login from './Login';
 import SignupForm from './SignupForm';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import UserDetailsForm from './UserDetailsForm';
+import AdminPage from './AdminPage';
+import NavBar from './NavBar';
 
 function App() {
   return (
@@ -17,6 +19,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignupForm />} />
           <Route path="/user-details" element={<UserDetailsForm />} />
+          <Route path="/adminpage" element={<AdminPage />} />
+          <Route path="/navbar" element={<NavBar />} />
         </Routes>
       </Router>
     </GoogleOAuthProvider>
