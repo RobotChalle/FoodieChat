@@ -3,6 +3,7 @@ package com.foodychat.user.controller;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.foodychat.config.EmailService;
 import com.foodychat.config.GoogleTokenVerifier;
 import com.foodychat.user.service.UserService;
 import com.foodychat.user.vo.GoogleUserInfo;
@@ -32,6 +34,10 @@ import jakarta.servlet.http.HttpSession;
 public class UserController {
 	@Autowired
     UserService userService;
+	
+	@Autowired
+	EmailService emailService;
+
 	
 	@Autowired
 	PasswordEncoder passwordEncoder;
@@ -158,11 +164,9 @@ public class UserController {
     									  HttpSession session) {
         String token = body.get("token");
         GoogleUserInfo googleInfo = GoogleTokenVerifier.verify(token); // 직접 구현
-        System.out.println(googleInfo);
 
         // 1. 사용자 조회
     	UserVO vo = userService.getUserByEmail(googleInfo.getEmail());
-    	System.out.println(vo);
     	
     	UserLogVO log = new UserLogVO();
         log.setIpAddress(request.getRemoteAddr());
@@ -199,5 +203,100 @@ public class UserController {
         userInfo.put("upd_date", vo.getUpd_date());
 
         return ResponseEntity.ok(userInfo);
+    }
+    
+    @PostMapping("/updateUser")
+    public ResponseEntity<String> updateUser(@RequestParam("user_id") String userId,
+							        		 @RequestParam("user_name") String userName,
+							        		 @RequestParam("phone") String phone,
+							        		 @RequestParam("age") int age,
+							        		 @RequestParam("user_weight") float weight,
+							        		 @RequestParam("height") float height,
+							        		 @RequestParam("user_address") String address,
+	    									 HttpSession session,
+	    									 HttpServletRequest request) {
+        try {
+        	UserVO updatedUser = new UserVO();
+            updatedUser.setUser_id(Long.parseLong(userId));
+            updatedUser.setUser_name(userName);
+            updatedUser.setPhone(phone);
+            updatedUser.setAge(age);
+            updatedUser.setUser_weight(weight);
+            updatedUser.setHeight(height);
+            updatedUser.setUser_address(address);
+            
+            UserVO svo = (UserVO)session.getAttribute("user");
+            updatedUser.setLogin_id(svo.getUser_id());
+            updatedUser.setLogin_ip(request.getRemoteAddr());
+
+            UserVO vo = userService.getUserDetailById(updatedUser.getUser_id());
+            
+            userService.updateUser(updatedUser);
+            if(vo == null) {
+            	userService.insertUserDetail(updatedUser);
+            }else {
+            	userService.updateUserDetail(updatedUser);
+            }
+
+            return ResponseEntity.ok("업데이트 성공");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("업데이트 실패");
+        }
+    }
+    
+    @PostMapping("/findId")
+    public ResponseEntity<String> findIdByNameAndPhone(@RequestParam("user_name") String userName,
+							        	 			   @RequestParam("phone") String phone,
+							        	 			   HttpSession session,
+							        	 			   HttpServletRequest request) {
+        try {
+            String email = userService.getIdByNameAndPhone(userName,phone);
+            return ResponseEntity.ok(email);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("업데이트 실패");
+        }
+    }
+    
+    @PostMapping("/findPassword")
+    public ResponseEntity<?> sendPasswordResetLink(@RequestParam("email") String email) {
+        boolean valid = userService.validateUserInfo(email);
+        if (!valid) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("입력하신 정보와 일치하는 계정을 찾을 수 없습니다.");
+        }
+
+        // 토큰 생성
+        String token = UUID.randomUUID().toString();
+
+        // 토큰 저장
+        userService.savePasswordResetToken(email, token);
+
+        // 비밀번호 재설정 링크 생성
+        String resetLink = "http://localhost:3000/reset-password?token=" + token;
+
+        // 이메일 발송
+        String subject = "비밀번호 재설정 안내";
+        String body = "아래 링크를 클릭하여 비밀번호를 재설정하세요:\n" + resetLink;
+
+        emailService.sendEmail(email, subject, body);
+
+        return ResponseEntity.ok("비밀번호 재설정 링크를 이메일로 전송했습니다.");
+    }
+    
+    @PostMapping("/resetPassword")
+    public ResponseEntity<?> resetPassword(@RequestParam("token") String token,
+                                           @RequestParam("newPassword") String newPassword) {
+        try {
+            boolean success = userService.resetPassword(token, newPassword);
+            if (success) {
+                return ResponseEntity.ok("비밀번호가 성공적으로 변경되었습니다.");
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("토큰이 유효하지 않거나 만료되었습니다.");
+            }
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("비밀번호 변경 중 오류가 발생했습니다.");
+        }
     }
 }

@@ -37,4 +37,44 @@ public interface UserService {
 	 * 로그아웃시간 저장
 	 * */
 	void updateLogoutTime(UserLogVO lastLog);
+
+	/**
+	 * 회원정보 수정
+	 * */
+	void updateUser(UserVO updatedUser);
+
+	/**
+	 * 회원상세정보 수정
+	 * */
+	void updateUserDetail(UserVO updatedUser);
+
+	/**
+	 * 회원상세정보 존재여부
+	 * */
+	UserVO getUserDetailById(long user_id);
+
+	/**
+	 * 회원상세정보 등록
+	 * */
+	void insertUserDetail(UserVO updatedUser);
+
+	/**
+	 * 이름, 전화번호로 아이디찾기
+	 * */
+	String getIdByNameAndPhone(String userName, String phone);
+
+	/**
+	 * 유저정보 validation
+	 * */
+	boolean validateUserInfo(String email);
+
+	/**
+	 * 비밀번호 초기화
+	 * */
+	void savePasswordResetToken(String email, String token);
+
+	/**
+	 * 비밀번호 변경
+	 * */
+	boolean resetPassword(String token, String newPassword);
 }

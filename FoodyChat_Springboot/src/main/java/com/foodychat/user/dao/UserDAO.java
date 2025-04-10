@@ -1,5 +1,7 @@
 package com.foodychat.user.dao;
 
+import java.util.Map;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -57,5 +59,47 @@ public class UserDAO {
 	 * */
 	public void updateLogoutTime(UserLogVO lastLog) {
 		sqlSession.update(mapperQuery + ".updateLogoutTime", lastLog);
+	}
+
+	/**
+	 * 회원정보 수정
+	 * */
+	public void updateUser(UserVO updatedUser) {
+		sqlSession.update(mapperQuery + ".updateUser", updatedUser);
+	}
+
+	/**
+	 * 회원상세정보 수정
+	 * */
+	public void updateUserDetail(UserVO updatedUser) {
+		sqlSession.update(mapperQuery + ".updateUserDetail", updatedUser);
+	}
+
+	/**
+	 * 회원상세정보 존재여부
+	 * */
+	public UserVO getUserDetailById(long user_id) {
+		return sqlSession.selectOne(mapperQuery + ".getUserDetailById", user_id);
+	}
+
+	/**
+	 * 회원상세정보 등록
+	 * */
+	public void insertUserDetail(UserVO updatedUser) {
+		sqlSession.insert(mapperQuery + ".insertUserDetail", updatedUser);
+	}
+
+	/**
+	 * 이름, 전화번호로 아이디찾기
+	 * */
+	public String getIdByNameAndPhone(Map<String, String> map) {
+		return sqlSession.selectOne(mapperQuery + ".selectIdByNameAndPhone", map);
+	}
+
+	/**
+	 * 비밀번호 변경
+	 * */
+	public void updateUserPasswordByEmail(Map<String, String> map) {
+		sqlSession.update(mapperQuery + ".updateUserPasswordByEmail", map);
 	}
 }
