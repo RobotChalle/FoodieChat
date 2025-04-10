@@ -85,6 +85,7 @@ export default function Mypage() {
         try {
             const payload = new URLSearchParams({
                 user_id: userInfo.user_id,
+                user_name: userInfo.user_name,
                 phone,
                 age: formData.age,
                 user_weight: formData.weight,
@@ -92,7 +93,7 @@ export default function Mypage() {
                 user_address: formData.address
             });
 
-            const response = await axios.post('http://localhost:8080/users/updateProfile', payload, {
+            const response = await axios.post('http://localhost:8080/users/updateUser', payload, {
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 withCredentials: true
             });
@@ -133,6 +134,15 @@ export default function Mypage() {
                         <div className="form-section">
                             <div className="form-pair">
                                 <div className="form-group">
+                                    <label>이름</label>
+                                    <input
+                                        type="text"
+                                        value={userInfo?.user_name || ''}
+                                        disabled
+                                    />
+                                    <small className="helper-text">가입 시 입력된 이름입니다.</small>
+                                </div>
+                                <div className="form-group">
                                     <label>연락처</label>
                                     <InputMask
                                         mask="999-9999-9999"
@@ -156,23 +166,24 @@ export default function Mypage() {
 
                             <div className="form-group full-width">
                                 <label htmlFor="address">주소</label>
-                                <input
-                                    type="text"
-                                    name="address"
-                                    value={formData.address}
-                                    onChange={handleInputChange}
-                                />
-                                <div className="input-group-append">
+                                <div className="address-input-wrap">
+                                    <input
+                                        type="text"
+                                        name="address"
+                                        value={formData.address}
+                                        onChange={handleInputChange}
+                                    />
                                     <button
                                         type="button"
-                                        className="btn btn-outline-secondary"
+                                        className="address-button"
                                         onClick={handleAddressSearch}
-                                    >
+                                        > 
                                         주소 검색
                                     </button>
                                 </div>
                                 <small className="helper-text">정확한 주소를 입력해주세요.</small>
                             </div>
+
 
                             <div className="form-triple">
                                 <div className="form-group">
@@ -227,6 +238,9 @@ export default function Mypage() {
                     <div className="button-group">
                         <button onClick={handleSave} className="mypage-button">저장</button>
                         <button onClick={() => navigate('/change-password')} className="mypage-button secondary">비밀번호 변경</button>
+                        {userInfo && userInfo.membership_lvl !== 'regular' && (
+                            <button onClick={() => navigate('/meal-plan')} className="mypage-button secondary">식단 조회</button>
+                        )}
                         <button onClick={handleLogout} className="mypage-button logout">로그아웃</button>
                     </div>
                 </div>

@@ -110,7 +110,6 @@ export default function NavBar() {
                 {userInfo && userInfo.membership_lvl === 'admin' && (
                     <Link to="/adminpage" onClick={() => setMenuOpen(false)}>🍱 관리자페이지</Link>
                 )}
-                <Link to="/mypage" className="nav-link">🍱 <span>마이페이지</span></Link>
                 {userInfo && (
                     <button onClick={() => { setMenuOpen(false); handleLogout(); }} className="mobile-logout-button">
                         로그아웃
