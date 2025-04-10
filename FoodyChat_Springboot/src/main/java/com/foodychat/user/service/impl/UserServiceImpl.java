@@ -1,8 +1,15 @@
 package com.foodychat.user.service.impl;
 
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.foodychat.config.PasswordResetToken;
+import com.foodychat.config.PasswordResetTokenMapper;
 import com.foodychat.user.dao.UserDAO;
 import com.foodychat.user.service.UserService;
 import com.foodychat.user.vo.UserLogVO;
@@ -15,10 +22,12 @@ import com.foodychat.user.vo.UserVO;
 public class UserServiceImpl implements UserService {
 	private final UserDAO userDao;
     private final PasswordEncoder passwordEncoder;
+    private final PasswordResetTokenMapper tokenMapper;
 
-    public UserServiceImpl(UserDAO userDao, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserDAO userDao, PasswordEncoder passwordEncoder, PasswordResetTokenMapper tokenMapper) {
         this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;
+        this.tokenMapper = tokenMapper;
     }
 
 	/**
@@ -82,4 +91,93 @@ public class UserServiceImpl implements UserService {
 	public void updateLogoutTime(UserLogVO lastLog) {
 		userDao.updateLogoutTime(lastLog);
 	}
+
+	/**
+	 * 회원정보 수정
+	 * */
+	@Override
+	public void updateUser(UserVO updatedUser) {
+		userDao.updateUser(updatedUser);
+	}
+
+	/**
+	 * 회원상세정보 수정
+	 * */
+	@Override
+	public void updateUserDetail(UserVO updatedUser) {
+		userDao.updateUserDetail(updatedUser);
+	}
+
+	/**
+	 * 회원상세정보 존재여부
+	 * */
+	@Override
+	public UserVO getUserDetailById(long user_id) {
+		return userDao.getUserDetailById(user_id);
+	}
+
+	/**
+	 * 회원상세정보 등록
+	 * */
+	@Override
+	public void insertUserDetail(UserVO updatedUser) {
+		userDao.insertUserDetail(updatedUser);
+	}
+
+	/**
+	 * 이름, 전화번호로 아이디찾기
+	 * */
+	@Override
+	public String getIdByNameAndPhone(String userName, String phone) {
+		Map<String,String> map = new HashMap<String,String>();
+		map.put("user_name", userName);
+		map.put("phone", phone);
+		return userDao.getIdByNameAndPhone(map);
+	}
+	
+	/**
+	 * 유저정보 validation
+	 * */
+	@Override
+    public boolean validateUserInfo(String email) {
+        UserVO user = userDao.getUserByEmail(email);
+        return user != null &&
+               user.getEmail().equals(email);
+    }
+
+	/**
+	 * 비밀번호 초기화
+	 * */
+    @Override
+    public void savePasswordResetToken(String email, String token) {
+        UserVO user = userDao.getUserByEmail(email);
+
+        if (user == null) {
+            throw new IllegalArgumentException("사용자를 찾을 수 없습니다.");
+        }
+
+        PasswordResetToken tokenVO = new PasswordResetToken();
+        tokenVO.setToken(token);
+        tokenVO.setEmail(email);
+        tokenVO.setExpiryDate(LocalDateTime.now().plusHours(1));
+        tokenVO.setUserId(user.getUser_id());
+
+        tokenMapper.insertToken(tokenVO);
+    }
+
+    @Override
+    @Transactional
+    public boolean resetPassword(String token, String newPassword) {
+    	PasswordResetToken tokenVO = tokenMapper.findByToken(token);
+        if (tokenVO == null || tokenVO.getExpiryDate().isBefore(LocalDateTime.now())) {
+            return false;
+        }
+
+        Map<String,String> map = new HashMap<String,String>();
+		map.put("email", tokenVO.getEmail());
+		map.put("password", passwordEncoder.encode(newPassword));
+        userDao.updateUserPasswordByEmail(map);
+        tokenMapper.deleteToken(token);
+        return true;
+    }
 }

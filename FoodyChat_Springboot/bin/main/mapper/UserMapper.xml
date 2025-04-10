@@ -70,4 +70,53 @@
 		SET		logout_time = #{logoutTime}
 		WHERE 	id = #{id}
 	</update>
+	<!-- 회원정보 수정 -->
+	<update id="updateUser" parameterType="com.foodychat.user.vo.UserVO">
+		UPDATE	users
+		SET		user_name = #{user_name},
+				phone = #{phone},
+				upd_id = #{login_id},
+				upd_ip = #{login_ip},
+				upd_date = NOW()
+		WHERE 	user_id = #{user_id}
+	</update>
+	<!-- 회원상세정보 수정 -->
+	<update id="updateUserDetail" parameterType="com.foodychat.user.vo.UserVO">
+		UPDATE	user_details
+		SET		gender = #{gender},
+				age = #{age},
+				user_weight = #{user_weight},
+				height = #{height},
+				user_address = #{user_address},
+				upd_id = #{login_id},
+				upd_ip = #{login_ip},
+				upd_date = NOW()
+		WHERE 	user_id = #{user_id}
+	</update>
+	<!--  마지막로그인 정보 확인 -->
+	<select id="getUserDetailById" parameterType="long" resultType="com.foodychat.user.vo.UserVO">
+		SELECT	*
+		FROM	user_details
+	    WHERE	user_id = #{user_id}
+	    LIMIT 1
+	</select>
+	<!-- 회원상세정보 수정 -->
+	<insert id="insertUserDetail" parameterType="com.foodychat.user.vo.UserVO">
+		INSERT INTO	user_details(user_id, gender, age, user_weight, height, user_address, reg_id, reg_ip)
+		VALUES(#{user_id},#{gender},#{age},#{user_weight},#{height},#{user_address},#{login_id},#{login_ip})
+	</insert>
+	<!--  마지막로그인 정보 확인 -->
+	<select id="selectIdByNameAndPhone" parameterType="java.util.Map" resultType="string">
+		SELECT	email
+		FROM	users
+	    WHERE	user_name = #{user_name}
+	    	AND	phone like CONCAT('%',#{phone},'%')
+	    LIMIT 1
+	</select>
+	<!--  비밀번호 변경 -->
+	<update id="updateUserPasswordByEmail" parameterType="java.util.Map">
+		UPDATE	users
+		SET		user_password = #{password}
+		WHERE	email = #{email}
+	</update>
 </mapper>
