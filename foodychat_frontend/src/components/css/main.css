@@ -21,12 +21,14 @@ body {
 }
 
 .glass-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
   backdrop-filter: blur(var(--glass-blur));
   background: var(--bg-glass);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
   padding: 1rem 2rem;
-  position: sticky;
-  top: 0;
   z-index: 999;
 }
 
@@ -138,3 +140,40 @@ body {
     display: flex;
   }
 }
+
+.nav-button.logout {
+  background-color: #e74c3c;
+  color: white;
+  margin-left: 10px;
+}
+
+.mobile-logout-button {
+  background: none;
+  border: none;
+  color: #e74c3c;
+  font-size: 1.1rem;
+  padding: 10px 0;
+  cursor: pointer;
+}
+
+/* src/components/css/main.css */
+.img-section-1 {
+  background-image: url('../img/img11.png');  /* ← 여기 중요! */
+  background-size: cover;
+  background-position: center;
+  height: 300px;
+  width: 100%;
+}
+
+.img-section-2 {
+  background-image: url('../img/img22.png');  /* ← 여기 중요! */
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 300px;
+  width: 100%;
+}
+
+
+
+
