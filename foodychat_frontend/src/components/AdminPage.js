@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import NavBar from '../components/NavBar.js';
 import './css/admin.css';
 const PAGE_SIZE = 10;
 axios.defaults.baseURL = 'http://localhost:8080';
@@ -8,6 +9,7 @@ export default function AdminPage() {
   const [users, setUsers] = useState([]);
   const [totalUsers, setTotalUsers] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchKeyword, setSearchKeyword] = useState('');
 
   const fetchUsers = async (page) => {
     try {
@@ -33,7 +35,7 @@ export default function AdminPage() {
     try {
       await axios.patch(
         `/users/admin/users/${userId}/membership`,
-        { membershipLevel: newLevel },
+        { membership_level: newLevel },
         {
           headers: {
             "Content-Type": "application/json",
@@ -55,8 +57,19 @@ export default function AdminPage() {
   const totalPages = Math.ceil(totalUsers / PAGE_SIZE);
 
   return (
+    <>
+    <NavBar />
     <div className="container">
       <h2 className="section-title">회원 목록</h2>
+      <div className="search-row">
+      <input
+        type="text"
+        className="search-input"
+        placeholder="이메일 또는 이름으로 검색"
+        value={searchKeyword}
+        onChange={(e) => setSearchKeyword(e.target.value)}
+      />
+    </div>
       <table className="admin-table">
         <thead>
           <tr>
@@ -68,18 +81,24 @@ export default function AdminPage() {
           </tr>
         </thead>
         <tbody>
-          {users.map(user => (
+          {users
+          .filter(user =>
+            user.email.toLowerCase().includes(searchKeyword.toLowerCase()) ||
+            user.name?.toLowerCase().includes(searchKeyword.toLowerCase())
+          )
+          .map(user => (
             <tr key={user.user_id}>
               <td>{user.user_id}</td>
               <td>{user.email}</td>
               <td>
               <select
               className="dropdown-select"
-              value={user.membership_level || ''}
-              onChange={(e) => handleLevelChange(user.user_id, e.target.value)}
+              value={user.membership_level} // ✅ DB 값으로 설정
+             onChange={(e) => handleLevelChange(user.user_id, e.target.value)}
               >
                 <option value="regular">기본</option>
-                <option value="premium">프리미엄</option>
+                <option value="business">비즈니스</option>
+                <option value="admin">관리자</option>
               </select>
               </td>
               <td>{user.join_date}</td>
@@ -103,5 +122,6 @@ export default function AdminPage() {
         ))}
       </div>
     </div>
+    </>
   );
 }

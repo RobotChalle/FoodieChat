@@ -28,8 +28,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     	http.csrf(csrf -> csrf.disable())
+    	.cors(cors -> cors.configurationSource(corsConfigurationSource()))
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/users/**", "/loginUser").permitAll()
+            .requestMatchers("/users/**", "/loginUser","/users/admin/**").permitAll()
             .anyRequest().authenticated()
         )
         .sessionManagement(session -> session
@@ -47,7 +48,7 @@ public class SecurityConfig {
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")); // ✅ PATCH 포함
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
-
+        
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;

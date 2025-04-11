@@ -20,7 +20,7 @@ public class UserVO {
 	private String user_password;		// 암호
 	private String user_name;			// 회원이름
 	private String phone;				// 회원전화번호
-	private String membership_lvl;		// 회원등급
+	private String membership_level;		// 회원등급
 	
 	/* 테이블명 user_details */
 	private int gender;

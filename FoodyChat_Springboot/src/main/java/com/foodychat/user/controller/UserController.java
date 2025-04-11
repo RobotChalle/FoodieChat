@@ -76,7 +76,7 @@ public class UserController {
         user.setGoogle_id(userInfo.getGoogleId());
         user.setUser_name(userInfo.getName());
         user.setPhone("010-1234-5678");
-        user.setMembership_lvl("regular");
+        user.setMembership_level("regular");
 
         userService.registerGoogleUser(user);
         UserVO savedUser = userService.getUserByEmail(userInfo.getEmail());
@@ -120,13 +120,14 @@ public class UserController {
         return ResponseEntity.ok("삭제 성공");
     }
     // 🟡 관리자용 유저 등급 변경
-    @PatchMapping("/users/admin/users/{userId}/membership")
+    @PatchMapping("/admin/users/{userId}/membership")
     public ResponseEntity<?> updateMembershipLevel(
-        @PathVariable Long userId,
+        @PathVariable("userId") Long userId, // ✅ "userId" 명시!
         @RequestBody Map<String, String> request
     ) {
-        String newLevel = request.get("membershipLevel"); // <- key 이름 정확히!
+        String newLevel = request.get("membership_level");
         userService.updateMembershipLevel(userId, newLevel);
         return ResponseEntity.ok().build();
     }
+
 }
