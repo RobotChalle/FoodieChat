@@ -59,7 +59,7 @@ export default function Signup() {
                     return;
                 }
 
-                localStorage.setItem("user_id", userId); // ✅ 저장
+                localStorage.setItem("user_id", userId);
                 setSuccess('회원가입이 완료되었습니다!');
                 setTimeout(() => {
                     navigate('/user-details');
