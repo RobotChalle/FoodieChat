@@ -1,4 +1,4 @@
-package com.foodychat.util;
+package com.foodychat.config;
 
 import java.util.Collections;
 

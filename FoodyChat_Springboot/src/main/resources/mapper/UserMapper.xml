@@ -5,50 +5,49 @@
 
 <mapper namespace="com.foodychat.user.dao.UserDAO">
 
-<!-- 회원가입 (user 테이블 insert) -->
+    <!-- 회원가입 (users 테이블 insert) -->
     <insert id="insertUser" parameterType="UserVO" useGeneratedKeys="true" keyProperty="user_id">
-		INSERT INTO users (
+        INSERT INTO users (
             email, google_id, user_password, user_name, phone, membership_level,
             reg_ip, reg_date
         ) VALUES (
-            #{email}, #{google_id}, #{user_password}, #{user_name}, #{phone},'regular',
+            #{email}, #{google_id}, #{user_password}, #{user_name}, #{phone}, 'regular',
             #{login_ip}, NOW()
         )
     </insert>
 
     <!-- 회원가입 (user_details 테이블 insert) -->
     <insert id="insertUserDetails" parameterType="com.foodychat.user.vo.UserDetailsVO">
-    INSERT INTO user_details (user_id, gender, age, user_weight, height, user_address, health_goal)
-    VALUES (#{user_id}, #{gender}, #{age}, #{user_weight}, #{height}, #{user_address}, #{health_goal})
-	</insert>
-
+        INSERT INTO user_details (user_id, gender, age, user_weight, height, user_address, health_goal)
+        VALUES (#{user_id}, #{gender}, #{age}, #{user_weight}, #{height}, #{user_address}, #{health_goal})
+    </insert>
 
     <!-- 이메일 중복 확인 -->
     <select id="checkEmailExists" parameterType="String" resultType="int">
-        SELECT COUNT(*) FROM user WHERE email = #{email}
+        SELECT COUNT(*) FROM users WHERE email = #{email}
     </select>
 
     <!-- 이메일로 사용자 조회 -->
-	<select id="findByEmail" parameterType="string" resultType="UserVO">
-    	SELECT u.*, ud.age, ud.user_weight, ud.height, ud.user_address
-    	FROM users u
-    	LEFT JOIN user_details ud ON u.user_id = ud.user_id
-    	WHERE u.email = #{email}
-	</select>
+    <select id="findByEmail" parameterType="string" resultType="UserVO">
+        SELECT u.*, ud.age, ud.user_weight, ud.height, ud.user_address
+        FROM users u
+        LEFT JOIN user_details ud ON u.user_id = ud.user_id
+        WHERE u.email = #{email}
+    </select>
 
     <!-- 구글 ID로 사용자 조회 -->
     <select id="findByGoogleId" parameterType="String" resultType="com.foodychat.user.vo.UserVO">
         SELECT u.*, ud.age, ud.user_weight, ud.height, ud.user_address
-        FROM users
+        FROM users u
         LEFT JOIN user_details ud ON u.user_id = ud.user_id
         WHERE u.google_id = #{googleId}
     </select>
 
     <!-- 구글 로그인 시 신규 등록 -->
-   	<insert id="insertGoogleUser" parameterType="UserVO" useGeneratedKeys="true" keyProperty="user_id">
-    INSERT INTO users (email, google_id, user_name, phone, membership_level)
-    VALUES (#{email}, #{google_id}, #{user_name}, #{phone}, 'regular');
-	</insert>
+    <insert id="insertGoogleUser" parameterType="UserVO" useGeneratedKeys="true" keyProperty="user_id">
+        INSERT INTO users (email, google_id, user_name, phone, membership_level)
+        VALUES (#{email}, #{google_id}, #{user_name}, #{phone}, 'regular');
+    </insert>
 
     <!-- 로그인 정보 업데이트 -->
     <update id="updateLoginInfo">
@@ -64,29 +63,157 @@
         JOIN user_details ud ON u.user_id = ud.user_id
         WHERE u.user_id = #{user_id}
     </select>
-	
-	<!--유저 목록 조회+페이지네이션-->
-	<select id="getUserList" resultType="UserVO">
-    	SELECT user_id, email, membership_level, reg_date
-    	FROM users
-    	ORDER BY reg_date DESC
-    	LIMIT #{limit} OFFSET #{offset}
+
+    <!-- 유저 목록 조회 + 페이지네이션 -->
+    <select id="getUserList" resultType="UserVO">
+        SELECT user_id, email, membership_level, reg_date
+        FROM users
+        ORDER BY reg_date DESC
+        LIMIT #{limit} OFFSET #{offset}
     </select>
-    
-	<!--유저 전체 숫자-->
-	<select id="getTotalUserCount" resultType="int">
-    	SELECT COUNT(*) FROM users
-	</select>
-	
-	<!--유저 삭제-->
-	<delete id="deleteUser" parameterType="long">
-    	DELETE FROM users WHERE user_id = #{userId}
-	</delete>
-	
-	<!--유저 등급 조정-->
-	<update id="updateMembershipLevel">
-    UPDATE users
-    SET membership_level = #{level}
-    WHERE user_id = #{userId}
-	</update>
+
+    <!-- 유저 전체 숫자 -->
+    <select id="getTotalUserCount" resultType="int">
+        SELECT COUNT(*) FROM users
+    </select>
+
+    <!-- 유저 삭제 -->
+    <delete id="deleteUser" parameterType="long">
+        DELETE FROM users WHERE user_id = #{userId}
+    </delete>
+
+    <!-- 유저 등급 조정 -->
+    <update id="updateMembershipLevel">
+        UPDATE users
+        SET membership_level = #{level}
+        WHERE user_id = #{userId}
+    </update>
+
+    <!-- 사용자 조회(아이디) -->
+    <select id="selectUserById" parameterType="long" resultType="com.foodychat.user.vo.UserVO">
+        SELECT um.user_id,
+               um.email,
+               IFNULL(um.google_id,'') AS google_id,
+               IFNULL(um.user_password,'') AS user_password,
+               um.user_name,
+               um.phone,
+               um.membership_level AS membership_lvl,
+               um.reg_date,
+               um.upd_date,
+               CASE IFNULL(ud.gender,'1') WHEN '2' THEN '여' ELSE '남' END AS gender,
+               ud.age,
+               ud.user_weight,
+               ud.height,
+               ud.user_address
+        FROM users um
+        LEFT OUTER JOIN user_details ud ON um.user_id = ud.user_id
+        WHERE um.user_id = #{id}
+    </select>
+
+    <!-- 사용자 조회(이메일) -->
+    <select id="selectUserByEmail" parameterType="string" resultType="com.foodychat.user.vo.UserVO">
+        SELECT um.user_id,
+               um.email,
+               IFNULL(um.google_id,'') AS google_id,
+               IFNULL(um.user_password,'') AS user_password,
+               um.user_name,
+               um.phone,
+               um.membership_level AS membership_lvl,
+               um.reg_date,
+               um.upd_date,
+               CASE IFNULL(ud.gender,'1') WHEN '2' THEN '여' ELSE '남' END AS gender,
+               ud.age,
+               ud.user_weight,
+               ud.height,
+               IFNULL(ud.user_address,'') AS user_address
+        FROM users um
+        LEFT OUTER JOIN user_details ud ON um.user_id = ud.user_id
+        WHERE um.email = #{email}
+    </select>
+
+    <!-- 사용자 비밀번호 수정 -->
+    <update id="updatePasswordUser" parameterType="com.foodychat.user.vo.UserVO">
+        UPDATE users
+        SET user_password = #{user_password}
+        WHERE user_id = #{user_id}
+    </update>
+
+    <!-- 사용자 사용 로그 등록 -->
+    <insert id="insertUserLog" parameterType="com.foodychat.user.vo.UserLogVO">
+        INSERT INTO user_logs(user_id, login_time, logout_time, ip_address, user_agent, login_status, failure_reason)
+        VALUES(#{userId}, #{loginTime}, #{logoutTime}, #{ipAddress}, #{userAgent}, #{loginStatus}, #{failureReason})
+    </insert>
+
+    <!-- 마지막 로그인 정보 확인 -->
+    <select id="selectLastSuccessfulLogByUserId" parameterType="long" resultType="com.foodychat.user.vo.UserLogVO">
+        SELECT *
+        FROM user_logs
+        WHERE user_id = #{user_id}
+          AND login_status = '1'
+        ORDER BY login_time DESC
+        LIMIT 1
+    </select>
+
+    <!-- 로그아웃 시간 수정 -->
+    <update id="updateLogoutTime" parameterType="com.foodychat.user.vo.UserLogVO">
+        UPDATE user_logs
+        SET logout_time = #{logoutTime}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 회원 정보 수정 -->
+    <update id="updateUser" parameterType="com.foodychat.user.vo.UserVO">
+        UPDATE users
+        SET user_name = #{user_name},
+            phone = #{phone},
+            upd_id = #{login_id},
+            upd_ip = #{login_ip},
+            upd_date = NOW()
+        WHERE user_id = #{user_id}
+    </update>
+
+    <!-- 회원 상세 정보 수정 -->
+    <update id="updateUserDetail" parameterType="com.foodychat.user.vo.UserVO">
+        UPDATE user_details
+        SET gender = #{gender},
+            age = #{age},
+            user_weight = #{user_weight},
+            height = #{height},
+            user_address = #{user_address},
+            upd_id = #{login_id},
+            upd_ip = #{login_ip},
+            upd_date = NOW()
+        WHERE user_id = #{user_id}
+    </update>
+
+    <!-- 회원 상세 정보 조회 -->
+    <select id="getUserDetailById" parameterType="long" resultType="com.foodychat.user.vo.UserVO">
+        SELECT *
+        FROM user_details
+        WHERE user_id = #{user_id}
+        LIMIT 1
+    </select>
+
+    <!-- 회원 상세 정보 신규 입력 -->
+    <insert id="insertUserDetail" parameterType="com.foodychat.user.vo.UserVO">
+        INSERT INTO user_details(user_id, gender, age, user_weight, height, user_address, reg_id, reg_ip)
+        VALUES(#{user_id}, #{gender}, #{age}, #{user_weight}, #{height}, #{user_address}, #{login_id}, #{login_ip})
+    </insert>
+
+    <!-- 이름 + 전화번호로 이메일 조회 -->
+    <select id="selectIdByNameAndPhone" parameterType="java.util.Map" resultType="string">
+        SELECT email
+        FROM users
+        WHERE user_name = #{user_name}
+          AND phone LIKE CONCAT('%', #{phone}, '%')
+        LIMIT 1
+    </select>
+
+    <!-- 비밀번호 변경 (이메일 기반) -->
+    <update id="updateUserPasswordByEmail" parameterType="java.util.Map">
+        UPDATE users
+        SET user_password = #{password}
+        WHERE email = #{email}
+    </update>
+
 </mapper>

@@ -29,6 +29,7 @@ export default function NavBar() {
     const handleLogout = async () => {
         try {
             await axios.post( 
+
                 'http://localhost:8080/users/logout',
                 new URLSearchParams({ user_id: userInfo.user_id }),
                 {
@@ -61,9 +62,7 @@ export default function NavBar() {
                     <div className="navbar-center desktop-menu">
                         <Link to="/chatbot" className="nav-link">🤖 <span>챗봇</span></Link>
                         <Link to="/image-analysis" className="nav-link">🍱 <span>이미지 분석</span></Link>
-                        {userInfo && userInfo.membership_lvl !== 'admin' && (
-                            <Link to="/mypage" className="nav-link">🍱 <span>마이페이지</span></Link>
-                        )}
+                        <Link to="/mypage" className="nav-link">🍱 <span>마이페이지</span></Link>
                         {userInfo && userInfo.membership_lvl === 'admin' && (
                             <Link to="/adminpage" className="nav-link">🍱 <span>관리자페이지</span></Link>
                         )}

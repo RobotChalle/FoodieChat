@@ -3,7 +3,6 @@ package com.foodychat.user.vo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 /**
  * 사용자 정보 VO 클래스
@@ -11,7 +10,6 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = {"user_password", "login_ip", "login_id"})
 public class UserVO {
 	/* 테이블명 users */
 	private long user_id;				// 회원아이디(고유) - 자동세팅
@@ -21,6 +19,8 @@ public class UserVO {
 	private String user_name;			// 회원이름
 	private String phone;				// 회원전화번호
 	private String membership_level;		// 회원등급
+	private String reg_date;			// 가입일시
+	private String upd_date;			// 수정일시
 	
 	/* 테이블명 user_details */
 	private int gender;
@@ -29,6 +29,6 @@ public class UserVO {
 	private float height;
 	private String user_address;
 	
-	private String login_id;			// 로그인아이디
+	private long login_id;			// 로그인아이디
 	private String login_ip;			// 로그인아이피
 }
