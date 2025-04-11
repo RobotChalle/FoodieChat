@@ -70,6 +70,7 @@ export default function AdminPage() {
         onChange={(e) => setSearchKeyword(e.target.value)}
       />
     </div>
+
       <table className="admin-table">
         <thead>
           <tr>
@@ -87,6 +88,7 @@ export default function AdminPage() {
             user.name?.toLowerCase().includes(searchKeyword.toLowerCase())
           )
           .map(user => (
+
             <tr key={user.user_id}>
               <td>{user.user_id}</td>
               <td>{user.email}</td>

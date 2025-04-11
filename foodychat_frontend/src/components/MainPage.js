@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import NavBar from './NavBar';
 import Carousel from './Carousel'; // ✅ 캐러셀 추가
+
 import './css/main.css';
 
 export default function MainPage() {
@@ -19,6 +20,13 @@ export default function MainPage() {
       setUserInfo(JSON.parse(storedUser));
     }
   }, []);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+          setUserInfo(JSON.parse(storedUser));
+      }
+    }, []);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
