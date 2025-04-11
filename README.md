@@ -21,9 +21,10 @@
 ## 🏆 주요 기능
 
 ✅ **음식 이미지 분석 (CNN 적용)**  
+✅ **고객정보와 먹었던 음식 데이터로 챗봇 상담 서비스 제공(RAG 기반 LLM 적용)**  
 ✅ **음식 칼로리 및 영양 정보 제공**  
 ✅ **회원별 식단 기록 및 건강 목표 설정 (체중 감량, 건강 유지 등)**  
-✅ **챗봇을 통한 맞춤 식단 추천 (RAG 기반 LLM 적용)**  
+✅ **LLM을 통한 맞춤 식단 추천**  
 ✅ **Google 계정 연동 로그인 지원**  
 ✅ **Gradio를 활용한 데이터 시각화 대시보드 제공**  
 
@@ -51,7 +52,6 @@
 | ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white) | 웹 스타일링 적용 |
 | ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=JavaScript&logoColor=white) | 동적 기능 및 클라이언트 측 로직 구현 |
 | ![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=white) | DOM 조작 및 Ajax 요청 처리 |
-| ![JSP](https://img.shields.io/badge/JSP-007396?style=for-the-badge&logo=java&logoColor=white) | 동적 웹 페이지 생성 |
 
 ---
 
