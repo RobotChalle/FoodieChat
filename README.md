@@ -52,7 +52,6 @@
 | ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white) | 웹 스타일링 적용 |
 | ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=JavaScript&logoColor=white) | 동적 기능 및 클라이언트 측 로직 구현 |
 | ![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=white) | DOM 조작 및 Ajax 요청 처리 |
-
 ---
 
 ### **🖥️ 백엔드**
