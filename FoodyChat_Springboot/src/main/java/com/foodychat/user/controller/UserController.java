@@ -1,21 +1,24 @@
 package com.foodychat.user.controller;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import jakarta.servlet.http.HttpSession;
-import java.sql.Timestamp;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.foodychat.config.EmailService;
 import com.foodychat.config.GoogleTokenVerifier;
@@ -24,8 +27,10 @@ import com.foodychat.user.vo.GoogleUserInfo;
 import com.foodychat.user.vo.UserDetailsVO;
 import com.foodychat.user.vo.UserLogVO;
 import com.foodychat.user.vo.UserVO;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 /**
  * 사용자 관리 컨트롤러
@@ -36,12 +41,9 @@ import jakarta.servlet.http.HttpServletResponse;
 public class UserController {
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
 	
-	@Autowired
-	EmailService emailService;
+    @Autowired
+    private EmailService emailService;
 
 	@Autowired
 	PasswordEncoder passwordEncoder;
@@ -91,7 +93,7 @@ public class UserController {
         userInfo.put("user_id", vo.getUser_id());
         userInfo.put("email", vo.getEmail());
         userInfo.put("phone", vo.getPhone());
-        userInfo.put("membership_lvl", vo.getMembership_level());
+        userInfo.put("membership_level", vo.getMembership_level());
         userInfo.put("gender", vo.getGender());
         userInfo.put("height", vo.getHeight());
         userInfo.put("user_weight", vo.getUser_weight());
@@ -136,7 +138,7 @@ public class UserController {
         data.put("user_id", vo.getUser_id());
         data.put("email", vo.getEmail());
         data.put("phone", vo.getPhone());
-        data.put("membership_lvl", vo.getMembership_level());
+        data.put("membership_level", vo.getMembership_level());
         data.put("gender", vo.getGender());
         data.put("height", vo.getHeight());
         data.put("age", vo.getAge());
@@ -150,10 +152,10 @@ public class UserController {
     
     @PostMapping("/changePassword")
     public ResponseEntity<?> changePassword(@RequestParam("currentPassword") String currentPassword,
-								    	    @RequestParam("newPassword") String newPassword) {
-    	UserVO userVO = new UserVO();
-    	userVO.setEmail("admin@gmail.com");
-        String userEmail = userVO.getEmail(); // 로그인된 사용자
+								    	    @RequestParam("newPassword") String newPassword,
+	    									HttpSession session) {
+    	UserVO svo = (UserVO)session.getAttribute("user");
+        String userEmail = svo.getEmail(); // 로그인된 사용자
         boolean success = userService.changePassword(userEmail, currentPassword, newPassword);
         if (success) {
             return ResponseEntity.ok("비밀번호 변경 성공");
@@ -199,7 +201,7 @@ public class UserController {
         userInfo.put("user_id", vo.getUser_id());
         userInfo.put("email", vo.getEmail());
         userInfo.put("phone", vo.getPhone());
-        userInfo.put("membership_lvl", vo.getMembership_level());
+        userInfo.put("membership_level", vo.getMembership_level());
         userInfo.put("gender", vo.getGender());
         userInfo.put("height", vo.getHeight());
         userInfo.put("user_weight", vo.getUser_weight());
@@ -310,8 +312,9 @@ public class UserController {
     public ResponseEntity<Map<String, Object>> signup(@RequestBody UserVO userVO) {
         userService.registerUser(userVO);
         Map<String, Object> response = new HashMap<>();
+        UserVO vo = userService.getUserByEmail(userVO.getEmail());
         response.put("message", "회원가입 성공");
-        response.put("user_id", userVO.getUser_id());
+        response.put("user_id", vo.getUser_id());
         return ResponseEntity.ok(response);
     }
 
@@ -370,7 +373,8 @@ public class UserController {
 
     // 🟡 관리자용 유저 삭제
     @DeleteMapping("/admin/users/{userId}")
-    public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
+    public ResponseEntity<?> deleteUser(@PathVariable("userId") Long userId) {
+    	System.out.println(userId);
         userService.deleteUser(userId);
         return ResponseEntity.ok("삭제 성공");
     }

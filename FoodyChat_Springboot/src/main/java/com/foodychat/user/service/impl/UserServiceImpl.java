@@ -9,10 +9,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.foodychat.config.PasswordResetToken;
-import com.foodychat.config.PasswordResetTokenMapper;
+import com.foodychat.user.dao.PasswordResetTokenMapper;
 import com.foodychat.user.dao.UserDAO;
 import com.foodychat.user.service.UserService;
+import com.foodychat.user.vo.PasswordResetToken;
 import com.foodychat.user.vo.UserDetailsVO;
 import com.foodychat.user.vo.UserLogVO;
 import com.foodychat.user.vo.UserVO;
@@ -88,8 +88,8 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public boolean changePassword(String userEmail, String currentPassword, String newPassword) {
-		userEmail = "1";
-		UserVO user = userDao.getUserById(Long.parseLong(userEmail));
+		//userEmail = "1";
+		UserVO user = userDao.getUserByEmail(userEmail);
         if (user == null) return false;
 
         // 현재 비밀번호 일치 여부 확인
