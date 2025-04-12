@@ -53,7 +53,7 @@ export default function Signup() {
 
             if (response.status === 200 || response.status === 201) {
                 const userId = response.data.user_id;
-
+                console.error(userId);
                 if (!userId) {
                     setError('서버로부터 사용자 ID를 받지 못했습니다.');
                     return;
@@ -63,7 +63,7 @@ export default function Signup() {
                 setSuccess('회원가입이 완료되었습니다!');
                 setTimeout(() => {
                     navigate('/user-details');
-                }, 2000);
+                }, 1000);
             }
         } catch (err) {
             console.error(err);

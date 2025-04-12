@@ -1,215 +1,197 @@
-/* mypage.css */
-*, *::before, *::after {
-  box-sizing: border-box;
-}
-
-body {
-  background: #f5f7fa;
-  font-family: 'Noto Sans KR', sans-serif;
-  margin: 0;
-  padding: 0;
-}
-
+/* MyPage 전체 컨테이너 */
 .mypage-grid-container {
-  max-width: 1000px;
-  margin: 50px auto;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  gap: 1rem; /* 여백 줄임 */
-  padding: 0 1rem;
-}
-
-.mypage-grid-row.profile {
+  background: #f4f6f8;
+  min-height: 100vh;
+  padding: 40px 20px;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 
+/* 프로필 박스 */
 .profile-sidebar {
-  background: white;
-  padding: 2rem;
-  border-radius: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.08);
   text-align: center;
-  width: 100%;
-  max-width: 300px;
+  width: 80%;
+  max-width: 400px;
+  margin-bottom: 30px;
 }
 
-.profile-picture img {
+.profile-sidebar img {
   width: 100px;
   height: 100px;
   border-radius: 50%;
   object-fit: cover;
-  margin-bottom: 1rem;
+  margin-bottom: 20px;
 }
 
 .profile-sidebar h3 {
-  margin: 0.5rem 0;
-  font-size: 1.5rem;
-  color: #333;
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 8px;
 }
 
 .profile-sidebar p {
-  margin: 0.2rem 0;
+  font-size: 14px;
   color: #666;
+  margin: 2px 0;
 }
 
-.mypage-grid-row.info {
-  display: flex;
-  justify-content: center;
-}
-
+/* 내 정보 섹션 */
 .mypage-content {
-  background: #fff;
-  padding: 2rem;
-  border-radius: 20px;
-  width: 100%;
-  max-width: 700px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.08);
+  width: 80%;
+  max-width: 800px;
 }
 
 .mypage-title {
-  font-size: 1.6rem;
-  font-weight: 600;
-  color: #2c3e50;
-  margin-bottom: 1.2rem; /* 여백 살짝 줄임 */
   text-align: center;
+  font-size: 26px;
+  font-weight: bold;
+  margin-bottom: 30px;
+  color: #1f2937;
 }
 
+/* 폼 부분 */
 .form-section {
   display: flex;
   flex-direction: column;
-  gap: 1rem; /* 여백 줄임 */
+  gap: 20px;
 }
 
 .form-pair {
   display: flex;
-  gap: 0.8rem; /* 여백 줄임 */
-}
-
-.form-triple {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.8rem; /* 여백 줄임 */
+  gap: 20px;
+  flex-wrap: wrap;
 }
 
 .form-group {
+  flex: 1;
   display: flex;
   flex-direction: column;
 }
 
 .form-group label {
-  font-weight: 500;
-  margin-bottom: 0.3rem;
-  color: #34495e;
+  font-weight: 600;
+  margin-bottom: 6px;
 }
 
-input, select {
-  padding: 0.6rem;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  font-size: 1rem;
-  background: #fafafa;
+.form-group input,
+.form-group select {
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
 }
 
-input:focus, select:focus {
-  outline: none;
-  border-color: #5dade2;
-  background: #fff;
+.form-group input:disabled,
+.form-group select:disabled {
+  background-color: #f3f4f6;
+  color: #9ca3af;
 }
 
-.helper-text {
-  font-size: 0.8rem;
-  color: #888;
-  margin-top: 0.2rem;
+.form-group .helper-text {
+  font-size: 12px;
+  color: #9ca3af;
+  margin-top: 4px;
 }
 
-.full-width {
-  width: 100%;
-}
-
-.mypage-grid-row.actions {
-  display: flex;
-  justify-content: center;
-}
-
-.button-group {
-  display: flex;
-  gap: 0.8rem; /* 여백 줄임 */
-  flex-wrap: wrap;
-}
-
-.mypage-button {
-  background-color: #3498db;
-  color: white;
-  padding: 0.7rem 1.5rem;
-  font-size: 1rem;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.mypage-button:hover {
-  background-color: #2980b9;
-}
-
-.mypage-button.secondary {
-  background-color: #95a5a6;
-}
-
-.mypage-button.secondary:hover {
-  background-color: #7f8c8d;
-}
-
-.mypage-button.logout {
-  background-color: #e74c3c;
-}
-
-.mypage-button.logout:hover {
-  background-color: #c0392b;
-}
-
-.error-message {
-  color: red;
-  font-weight: 500;
-  text-align: center;
-}
-
+/* 주소 입력 줄 */
 .address-input-wrap {
   display: flex;
-  gap: 0.5rem;
-  align-items: center;
+  gap: 10px;
 }
 
 .address-input-wrap input {
   flex: 1;
-  padding: 0.6rem;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  font-size: 1rem;
-  background: #fafafa;
-  height: 42px; /* 버튼 높이와 맞춤 */
 }
 
 .address-button {
-  background-color: #3498db;
+  padding: 10px 16px;
+  background-color: #2563eb;
   color: white;
-  padding: 0.6rem 1rem;
-  font-size: 1rem;
+  font-weight: 600;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
   cursor: pointer;
-  height: 42px; /* 입력칸과 동일한 높이로 설정 */
-  transition: background 0.3s ease;
+  font-size: 14px;
   white-space: nowrap;
 }
 
 .address-button:hover {
-  background-color: #2980b9;
+  background-color: #1e40af;
 }
 
-.address-input-wrap input,
-.address-button {
-  height: 42px;
-  box-sizing: border-box; /* 패딩/보더 포함한 전체 높이 계산 */
+/* 나이, 체중, 키 3개 나열 */
+.form-triple {
+  display: flex;
+  gap: 20px;
+}
+
+.form-triple .form-group {
+  flex: 1;
+}
+
+/* 버튼 그룹 */
+.button-group {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 30px;
+  gap: 15px;
+}
+
+.mypage-button {
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.mypage-button.primary {
+  background-color: #2563eb;
+  color: white;
+}
+
+.mypage-button.secondary {
+  background-color: #6b7280;
+  color: white;
+}
+
+.mypage-button.logout {
+  background-color: #ef4444;
+  color: white;
+}
+
+.mypage-button:hover {
+  opacity: 0.9;
+}
+
+/* 에러 메시지 */
+.error-message {
+  color: #ef4444;
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .profile-sidebar,
+  .mypage-content {
+    width: 95%;
+  }
+  
+  .form-pair, .form-triple {
+    flex-direction: column;
+  }
 }

@@ -120,7 +120,7 @@ export default function Mypage() {
                                 </div>
                                 <h3>{userInfo.user_name}</h3>
                                 <p>{userInfo.email}</p>
-                                <p>회원등급: {userInfo.membership_lvl}</p>
+                                <p>회원등급: {userInfo.membership_level}</p>
                             </>
                         )}
                     </div>
@@ -238,7 +238,7 @@ export default function Mypage() {
                     <div className="button-group">
                         <button onClick={handleSave} className="mypage-button">저장</button>
                         <button onClick={() => navigate('/change-password')} className="mypage-button secondary">비밀번호 변경</button>
-                        {userInfo && userInfo.membership_lvl !== 'regular' && (
+                        {userInfo && userInfo.membership_level !== 'regular' && (
                             <button onClick={() => navigate('/meal-plan')} className="mypage-button secondary">식단 조회</button>
                         )}
                         <button onClick={handleLogout} className="mypage-button logout">로그아웃</button>

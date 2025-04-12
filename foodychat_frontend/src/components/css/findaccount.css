@@ -1,105 +1,79 @@
-/* findaccount.css */
-.container {
-  width: 100%;
-  min-width: 400px;
-  padding: 20px;
-  margin: 0 auto;
-  margin-top: 50px;
+.find-account-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: #f7f7f7;
 }
 
-.text-center {
+.find-account-form {
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  width: 350px;
+}
+
+.find-account-form input {
+  width: 100%;
+  height: 45px;
+  margin-bottom: 15px;
+  padding: 0 12px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.find-account-form button {
+  width: 100%;
+  height: 45px;
+  background-color: #4CAF50;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+.find-account-form button:hover {
+  background-color: #45a049;
+}
+
+.message {
+  margin-top: 10px;
+  font-size: 14px;
+  color: red;
   text-align: center;
 }
 
-h1 {
-  font-size: 24px;
-  color: #202123;
-  margin-bottom: 40px;
-}
-
-.tabs {
+.tab-menu {
   display: flex;
-  margin-bottom: 24px;
-  border-bottom: 1px solid #e5e5e5;
+  justify-content: center;
+  margin-bottom: 20px;
 }
 
 .tab-button {
-  flex: 1;
-  padding: 12px;
+  background: #eee;
   border: none;
-  background: none;
+  padding: 10px 20px;
   font-size: 16px;
-  color: #6e6e80;
   cursor: pointer;
-  transition: all 0.3s ease;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  margin: 0 5px;
+  transition: background-color 0.3s;
+}
+
+.tab-button:hover {
+  background: #ddd;
 }
 
 .tab-button.active {
-  color: #10a37f;
-  border-bottom: 2px solid #10a37f;
-}
-
-.form-group {
-  margin-bottom: 16px;
-}
-
-.form-control {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #e5e5e5;
-  border-radius: 6px;
-  font-size: 16px;
-  box-sizing: border-box;
-}
-
-.btn {
-  width: 100%;
-  padding: 12px;
-  border: none;
-  border-radius: 6px;
-  font-size: 16px;
-  cursor: pointer;
-  margin-bottom: 16px;
-}
-
-.btn-primary {
-  background-color: #10a37f;
+  background: #4CAF50;
   color: white;
-}
-
-.error-message {
-  color: #dc3545;
-  font-size: 14px;
-  margin-bottom: 16px;
-  text-align: center;
-  padding: 8px;
-  border-radius: 4px;
-  background-color: rgba(220, 53, 69, 0.1);
-}
-
-.success-message {
-  color: #10a37f;
-  font-size: 14px;
-  margin-bottom: 16px;
-  text-align: center;
-  padding: 8px;
-  border-radius: 4px;
-  background-color: rgba(16, 163, 127, 0.1);
-}
-
-.small {
-  font-size: 14px;
-  color: #10a37f;
-  text-decoration: none;
-}
-
-.small:hover {
-  text-decoration: underline;
-}
-
-/* findaccount.css 에 추가 */
-.clickable-email {
-  color: #007bff;
-  cursor: pointer;
-  text-decoration: underline;
+  font-weight: bold;
 }

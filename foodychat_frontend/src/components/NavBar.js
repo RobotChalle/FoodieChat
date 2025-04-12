@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './css/main.css';
 
@@ -43,7 +43,7 @@ export default function NavBar() {
             setUserInfo(null);
 
             setTimeout(() => {
-                navigate('/login');
+                navigate('/');
             }, 1000);
         } catch (err) {
             console.error('로그아웃 실패:', err);
@@ -63,8 +63,8 @@ export default function NavBar() {
                         <Link to="/chatbot" className="nav-link">🤖 <span>챗봇</span></Link>
                         <Link to="/image-analysis" className="nav-link">🍱 <span>이미지 분석</span></Link>
                         <Link to="/mypage" className="nav-link">🍱 <span>마이페이지</span></Link>
-                        {userInfo && userInfo.membership_lvl === 'admin' && (
-                            <Link to="/adminpage" className="nav-link">🍱 <span>관리자페이지</span></Link>
+                        {userInfo && userInfo.membership_level === 'admin' && (
+                            <Link to="/users/admin" className="nav-link">🍱 <span>관리자페이지</span></Link>
                         )}
                         {userInfo && (
                             <button onClick={handleLogout} className="nav-button logout">로그아웃</button>
@@ -102,11 +102,11 @@ export default function NavBar() {
             <div className={`mobile-menu ${menuOpen ? 'show' : ''}`}>
                 <Link to="/chatbot" onClick={() => setMenuOpen(false)}>🤖 챗봇</Link>
                 <Link to="/image-analysis" onClick={() => setMenuOpen(false)}>🍱 이미지 분석</Link>
-                {userInfo && userInfo.membership_lvl !== 'admin' && (
+                {userInfo && userInfo.membership_level !== 'admin' && (
                     <Link to="/mypage" onClick={() => setMenuOpen(false)}>🍱 마이페이지</Link>
                 )}
-                {userInfo && userInfo.membership_lvl === 'admin' && (
-                    <Link to="/adminpage" onClick={() => setMenuOpen(false)}>🍱 관리자페이지</Link>
+                {userInfo && userInfo.membership_level === 'admin' && (
+                    <Link to="/users/admin" onClick={() => setMenuOpen(false)}>🍱 관리자페이지</Link>
                 )}
                 {userInfo && (
                     <button onClick={() => { setMenuOpen(false); handleLogout(); }} className="mobile-logout-button">
@@ -120,9 +120,6 @@ export default function NavBar() {
                     </>
                 )}
             </div>
-
-            {/* 토스트 메시지 표시 */}
-            <ToastContainer position="top-right" autoClose={2000} />
         </>
     );
 }

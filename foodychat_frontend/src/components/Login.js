@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom'; // 👈 페이지 이동을 위해 추가
 import { GoogleLogin } from '@react-oauth/google';
+import { toast } from 'react-toastify';
 import './css/login.css';
 
 function Login() {
@@ -25,14 +26,16 @@ function Login() {
       );
 
       if (res.status === 200) {
-        alert('로그인 성공!');
+        toast.success('로그인 성공!');
         console.log(res.data); // 👈 유저 정보 확인
 
         // 유저 정보 저장 (예: localStorage)
         localStorage.setItem('user', JSON.stringify(res.data));
 
         // 페이지 이동
-        navigate('/');
+        setTimeout(() => {
+          navigate('/');
+        }, 1000);
       }
     } catch (err) {
         console.error(err);
@@ -57,14 +60,16 @@ function Login() {
       );
 
       if (response.status === 200) {
-        alert('로그인 성공!');
+        toast.success('로그인 성공!');
         console.log(response.data); // 👈 유저 정보 확인
 
         // 유저 정보 저장 (예: localStorage)
         localStorage.setItem('user', JSON.stringify(response.data));
 
         // 페이지 이동
-        navigate('/');
+        setTimeout(() => {
+          navigate('/');
+        }, 1000);
       }
     } catch (err) {
       setError('로그인 실패: 아이디 또는 비밀번호를 확인하세요.');

@@ -62,7 +62,7 @@ export default function Signup2() {
         try {
             await axios.post('http://localhost:8080/users/details', formData);
             setSuccess('건강 정보가 성공적으로 저장되었습니다!');
-            setTimeout(() => navigate('/main'), 2000);
+            setTimeout(() => navigate('/login'), 1000);
         } catch (err) {
             setError('정보 저장 실패: 다시 시도해주세요.');
             console.error(err);
