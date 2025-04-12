@@ -1,4 +1,4 @@
-package com.foodychat.config;
+package com.foodychat.user.vo;
 
 import java.time.LocalDateTime;
 

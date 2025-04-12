@@ -6,7 +6,7 @@
 <mapper namespace="com.foodychat.user.dao.UserDAO">
 
     <!-- 회원가입 (users 테이블 insert) -->
-    <insert id="insertUser" parameterType="UserVO" useGeneratedKeys="true" keyProperty="user_id">
+    <insert id="insertUser" parameterType="com.foodychat.user.vo.UserVO">
         INSERT INTO users (
             email, google_id, user_password, user_name, phone, membership_level,
             reg_ip, reg_date
@@ -97,7 +97,7 @@
                IFNULL(um.user_password,'') AS user_password,
                um.user_name,
                um.phone,
-               um.membership_level AS membership_lvl,
+               um.membership_level AS membership_level,
                um.reg_date,
                um.upd_date,
                CASE IFNULL(ud.gender,'1') WHEN '2' THEN '여' ELSE '남' END AS gender,
@@ -118,7 +118,7 @@
                IFNULL(um.user_password,'') AS user_password,
                um.user_name,
                um.phone,
-               um.membership_level AS membership_lvl,
+               um.membership_level AS membership_level,
                um.reg_date,
                um.upd_date,
                CASE IFNULL(ud.gender,'1') WHEN '2' THEN '여' ELSE '남' END AS gender,
