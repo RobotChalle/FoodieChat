@@ -24,6 +24,7 @@ export default function AdminPage() {
   const deleteUser = async (userId) => {
     if (window.confirm('정말로 이 사용자를 삭제하시겠습니까?')) {
       try {
+        console.error(userId)
         await axios.delete(`/users/admin/users/${userId}`);
         fetchUsers(currentPage);
       } catch (error) {

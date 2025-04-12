@@ -1,25 +1,43 @@
-/* css/main.css */
+/* 기본 설정 */
+html, body {
+  font-size: 16px;
+  font-family: 'Segoe UI', 'Noto Sans KR', sans-serif;
+  background: #f4f6f8;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* 루트 변수 */
 :root {
   --bg-glass: rgba(255, 255, 255, 0.1);
   --glass-blur: 20px;
   --text-dark: #333;
   --text-light: #fff;
   --transition-fast: 0.3s ease;
+  --primary-color: #4a90e2;
+  --accent-color: #6c757d;
 }
 
+/* 루트 컨테이너 */
+#root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+/* 다크 모드 */
 [data-theme="dark"] {
   --bg-glass: rgba(0, 0, 0, 0.2);
   --text-dark: #eee;
 }
 
-body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background-color: var(--bg-glass);
-  color: var(--text-dark);
-  transition: background-color var(--transition-fast), color var(--transition-fast);
-}
-
+/* ===== NavBar 영역 (건들지 않음) ===== */
 .glass-navbar {
   position: fixed;
   top: 0;
@@ -103,11 +121,9 @@ body {
 .hamburger.open span:nth-child(1) {
   transform: rotate(45deg) translate(5px, 5px);
 }
-
 .hamburger.open span:nth-child(2) {
   opacity: 0;
 }
-
 .hamburger.open span:nth-child(3) {
   transform: rotate(-45deg) translate(5px, -5px);
 }
@@ -126,53 +142,111 @@ body {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
   transition: transform var(--transition-fast);
 }
-
 .mobile-menu.show {
   display: flex;
 }
 
-@media screen and (max-width: 768px) {
-  .desktop-menu {
-    display: none;
-  }
+/* ===== NavBar 영역 끝 ===== */
 
-  .hamburger {
-    display: flex;
-  }
+/* 공통 input 스타일 */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+select,
+textarea {
+  width: 100%;
+  padding: 12px 16px;
+  margin-top: 4px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  background: white;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
-.nav-button.logout {
-  background-color: #e74c3c;
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--primary-color);
+  outline: none;
+  box-shadow: 0 0 5px rgba(74, 144, 226, 0.4);
+}
+
+/* 버튼 스타일 통일 */
+button,
+.mypage-button,
+.address-button {
+  padding: 12px 20px;
+  font-size: 1rem;
+  background-color: var(--primary-color);
   color: white;
-  margin-left: 10px;
-}
-
-.mobile-logout-button {
-  background: none;
   border: none;
-  color: #e74c3c;
-  font-size: 1.1rem;
-  padding: 10px 0;
+  border-radius: 8px;
   cursor: pointer;
+  transition: background-color var(--transition-fast), transform var(--transition-fast);
 }
 
-/* src/components/css/main.css */
-.img-section-1 {
-  background-image: url('../img/img11.png');  /* ← 여기 중요! */
-  background-size: cover;
-  background-position: center;
-  height: 300px;
-  width: 100%;
+button:hover,
+.mypage-button:hover,
+.address-button:hover {
+  background-color: #357ABD;
+  transform: translateY(-2px);
 }
 
-.img-section-2 {
-  background-image: url('../img/img22.png');  /* ← 여기 중요! */
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  height: 300px;
-  width: 100%;
+/* secondary 버튼 */
+button.secondary,
+.mypage-button.secondary {
+  background-color: var(--accent-color);
 }
 
+button.secondary:hover,
+.mypage-button.secondary:hover {
+  background-color: #5a6268;
+}
 
+/* logout 버튼 */
+button.logout,
+.mypage-button.logout {
+  background-color: #e74c3c;
+}
 
+button.logout:hover,
+.mypage-button.logout:hover {
+  background-color: #c0392b;
+}
+
+/* 제목 스타일 */
+h1, h2, h3, h4, h5 {
+  margin: 10px 0;
+  color: var(--text-dark);
+}
+
+/* form 안내문구 */
+small.helper-text {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.8rem;
+  color: #777;
+}
+
+/* form 그룹 정렬 */
+.form-group {
+  margin-bottom: 20px;
+}
+
+/* 버튼 그룹 */
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  #root {
+    padding: 20px 10px;
+  }
+}
