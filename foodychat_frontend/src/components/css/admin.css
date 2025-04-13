@@ -1,75 +1,46 @@
-body {
-  background-color: #f5f7fa;
-  font-family: 'Segoe UI', 'Noto Sans KR', sans-serif;
-  margin: 0;
-  padding: 0;
-  color: #333;
-}
-
-.container {
-  margin-top: 100px;
-  max-width: 1100px;
-  margin: 30px auto;
-  padding: 100px 24px 24px 24px;  /* padding-top을 100px으로 설정 */
-  background: rgb(255, 255, 255);
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-.navbar {
+/* AdminPage 전체 감싸는 배경 */
+.admin-wrapper {
+  width: 100%; /* ✅ 항상 100% */
   display: flex;
-  align-items: center;
-  margin-bottom: 20px;
+  justify-content: center;
+  padding: 40px 45px;
+  background: #f4f6f8;
+  min-height: calc(100vh - 80px); /* ✅ NavBar 높이 제외하고 화면 채우기 */
+  box-sizing: border-box;
 }
 
-.navbar-left .logo {
-  font-size: 20px;
-  font-weight: 600;
-  text-decoration: none;
-  color: #111;
-}
-
-.logo span {
-  margin-left: 6px;
-}
-
-.section-header {
+/* AdminPage 안쪽 컨텐츠 */
+.admin-inner {
+  width: 100%;
+  max-width: 1200px; /* ✅ Carousel과 통일 */
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
 }
 
+/* 섹션 제목 */
 .section-title {
-  font-size: 20px;
-  font-weight: 600;
+  font-size: 28px;
+  font-weight: bold;
+  color: #1f2937;
+  margin-bottom: 30px;
+  text-align: center;
 }
 
-.search-icon {
-  font-size: 18px;
-  color: #4e73df;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-}
-
-.search-icon:hover {
-  transform: scale(1.2);
-}
-
+/* 검색 */
 .search-row {
   display: flex;
-  gap: 8px;
-  margin-bottom: 16px;
-  align-items: center;
+  gap: 10px;
+  margin-bottom: 30px;
+  justify-content: center;
 }
 
 .search-input {
-  flex: 1;
+  width: 300px;
   padding: 10px 14px;
-  font-size: 14px;
-  height: 40px;
+  font-size: 16px;
   border: 1px solid #ccc;
-  border-radius: 6px;
+  border-radius: 8px;
   background-color: #f8f9fc;
 }
 
@@ -80,146 +51,105 @@ body {
   background-color: #4e73df;
   color: #fff;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.2s ease;
 }
 
 .btn-search:hover {
   background-color: #395ab7;
 }
 
-.filter-row {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-}
-
-.filter-select {
-  height: 40px;
-  padding: 6px 12px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  background-color: #fff;
-}
-
-.btn-sort,
-.btn-reset {
-  height: 40px;
-  padding: 0 14px;
-  font-size: 14px;
-  border-radius: 6px;
-  border: 1px solid #4e73df;
-  background-color: white;
-  color: #4e73df;
-  cursor: pointer;
-  transition: 0.2s ease;
-}
-
-.btn-sort:hover,
-.btn-reset:hover {
-  background-color: #4e73df;
-  color: white;
-}
-
+/* 테이블 */
 .admin-table {
   width: 100%;
+  max-width: 1150px; /* ✅ 1200px 안에서 자연스럽게 */
+  table-layout: fixed; /* ✅ 추가 */
+  margin: 0 auto;
   border-collapse: collapse;
-  border-radius: 10px;
-  overflow: hidden;
   background-color: #fdfdfd;
-  font-size: 14px;
+  font-size: 15px;
+  margin-top: 20px;
 }
 
 .admin-table th {
-  background-color: #4e73df; /* 강조색 */
+  background-color: #4e73df;
   color: #ffffff;
-  font-weight: 600;
+  font-weight: bold;
+  padding: 12px;
 }
 
 .admin-table td {
   padding: 12px;
   text-align: center;
   border-bottom: 1px solid #e2e8f0;
-  background-color: #f9fbfd; /* 연한 회색 배경 */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
-/* 줄마다 배경색 다르게 */
+
 .admin-table tr:nth-child(even) td {
   background-color: #f4f6fa;
 }
 
-.admin-table tr:nth-child(odd) td {
-  background-color: #ffffff;
-}
-
-/* Hover 시 좀 더 강조 */
 .admin-table tr:hover td {
   background-color: #dfeaf7;
 }
 
-.button-row {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-.btn {
-  padding: 10px 16px;
+/* 드롭다운 */
+.dropdown-select {
+  width: 100%;
+  height: 40px;
+  padding: 8px 12px;
   font-size: 14px;
-  border-radius: 6px;
-  font-weight: 500;
-  border: none;
-  cursor: pointer;
-  white-space: nowrap;
+  border: 1px solid #d0d5dd;
+  border-radius: 8px;
+  background-color: #fff;
 }
 
-.btn-primary {
-  background-color: #36b9cc;
-  color: white;
-}
-
+/* 삭제 버튼 */
 .btn-danger {
+  padding: 8px 12px;
   background-color: #e74a3b;
   color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
 }
 
-.btn-success {
-  background-color: #1cc88a;
-  color: white;
+.btn-danger:hover {
+  background-color: #dc2626;
 }
 
-.btn-warning {
-  background-color: #f6c23e;
-  color: white;
+/* 페이지네이션 */
+.pagination {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
 }
 
-.btn-outline {
-  background-color: transparent;
-  border: 1px solid #4e73df;
-  color: #4e73df;
-  padding: 6px 12px;
-  font-size: 13px;
+.page-button {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  background-color: white;
   border-radius: 6px;
   cursor: pointer;
-  transition: all 0.2s ease;
 }
 
-.btn-outline:hover {
-  background-color: #4e73df;
-  color: #fff;
+.page-button.active {
+  background-color: #4CAF50;
+  color: white;
+  font-weight: bold;
 }
 
+/* 모달 */
 .modal-backdrop {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  top: 0; left: 0; right: 0; bottom: 0;
   background-color: rgba(0, 0, 0, 0.35);
   display: flex;
   justify-content: center;
@@ -228,96 +158,81 @@ body {
 }
 
 .modal {
-  background-color: #fff;
+  background: #fff;
   padding: 24px;
   border-radius: 12px;
   max-width: 500px;
   width: 100%;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-  animation: fadeIn 0.2s ease;
 }
 
 .modal h3 {
   margin-top: 0;
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 20px;
-  color: #333;
-}
-
-.detail-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 14px;
-  margin-bottom: 16px;
-}
-
-.detail-table td {
-  padding: 10px 8px;
-  border-top: 1px solid #f0f0f0;
-  color: #444;
-}
-
-.detail-table tr:first-child td {
-  border-top: none;
-}
-
-.detail-table td:first-child {
-  width: 35%;
-  font-weight: 500;
-  color: #666;
-  background-color: #f9fafb;
-}
-
-.detail-table td:last-child {
-  width: 65%;
-}
-
-.modal-buttons {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.dropdown-select {
-  width: 100%;
-  height: 40px;
-  padding: 8px 12px;
-  font-size: 14px;
-  color: #333;
-  background-color: #fff;
-  border: 1px solid #d0d5dd;
-  border-radius: 6px;
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg fill='gray' viewBox='0 0 20 20'%3E%3Cpath d='M7 7l3-3 3 3m0 6l-3 3-3-3'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  background-size: 16px 16px;
-  cursor: pointer;
-}
-
-.dropdown-select:focus {
-  border-color: #4e73df;
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(78, 115, 223, 0.2);
-}
-.pagination {
-  margin-top: 20px;
-  text-align: center;
-}
-
-.page-button {
-  margin: 0 5px;
-  padding: 6px 12px;
-  border: 1px solid #ccc;
-  background-color: white;
-  cursor: pointer;
-  border-radius: 4px;
-}
-
-.page-button.active {
-  background-color: #4CAF50;
-  color: white;
+  font-size: 20px;
   font-weight: bold;
+  margin-bottom: 20px;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .admin-inner {
+    padding: 20px;
+  }
+
+  .search-input {
+    width: 90%;
+  }
+}
+
+/* 기본적으로 모든 색상 변경에 부드러운 전환 효과 */
+.admin-inner,
+.mypage-inner,
+.admin-table th,
+.admin-table td,
+.search-input,
+.dropdown-select,
+.page-button {
+  transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease;
+}
+
+/* 다크모드 스타일 */
+html[data-theme="dark"] .admin-inner,
+html[data-theme="dark"] .mypage-inner {
+  background: #1f2937;
+  color: #f3f4f6;
+}
+
+html[data-theme="dark"] .admin-table th {
+  background-color: #374151;
+}
+
+html[data-theme="dark"] .admin-table td {
+  background-color: #1f2937;
+  color: #f3f4f6;
+}
+
+html[data-theme="dark"] .admin-table tr:nth-child(even) td {
+  background-color: #111827;
+}
+
+html[data-theme="dark"] .admin-table tr:hover td {
+  background-color: #4b5563;
+}
+
+html[data-theme="dark"] .search-input {
+  background-color: #374151;
+  color: #f3f4f6;
+  border: 1px solid #6b7280;
+}
+
+html[data-theme="dark"] .dropdown-select {
+  background-color: #374151;
+  color: #f3f4f6;
+  border: 1px solid #6b7280;
+}
+
+html[data-theme="dark"] .page-button {
+  background-color: #374151;
+  color: #f3f4f6;
+  border: 1px solid #6b7280;
 }

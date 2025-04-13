@@ -378,6 +378,7 @@ public class UserController {
         userService.deleteUser(userId);
         return ResponseEntity.ok("삭제 성공");
     }
+    
     // 🟡 관리자용 유저 등급 변경
     @PatchMapping("/admin/users/{userId}/membership")
     public ResponseEntity<?> updateMembershipLevel(
@@ -389,4 +390,28 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/ses")
+    public ResponseEntity<?> sessionConfirm(HttpSession session) {
+    	UserVO svo = (UserVO)session.getAttribute("user");
+    	
+    	if(svo != null) {
+	    	// 3. 유저 정보에서 민감한 정보 제외하고 응답
+	        Map<String, Object> userInfo = new HashMap<>();
+	        userInfo.put("user_name", svo.getUser_name());
+	        userInfo.put("user_id", svo.getUser_id());
+	        userInfo.put("email", svo.getEmail());
+	        userInfo.put("phone", svo.getPhone());
+	        userInfo.put("membership_level", svo.getMembership_level());
+	        userInfo.put("gender", svo.getGender());
+	        userInfo.put("height", svo.getHeight());
+	        userInfo.put("user_weight", svo.getUser_weight());
+	        userInfo.put("user_address", svo.getUser_address());
+	        userInfo.put("reg_date", svo.getReg_date());
+	        userInfo.put("upd_date", svo.getUpd_date());
+	
+	        return ResponseEntity.ok(userInfo);
+    	}else {
+    		return ResponseEntity.ok(null);
+    	}
+    }
 }

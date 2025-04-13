@@ -58,7 +58,11 @@ export default function MainPage() {
   return (
     <>
       <NavBar />
-      <Carousel /> {/* ✅ 슬라이드 영역 */}
+      <div className="hero-image-only">
+        <div className="carousel-wrapper">
+          <Carousel />
+        </div>
+      </div>
     </>
   );
 }
