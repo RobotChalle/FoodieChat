@@ -1,47 +1,45 @@
 // src/components/Carousel.jsx
 
-import React, { useState } from 'react';
+import React from 'react';
+import Slider from 'react-slick';
 import carouselData from './CarouselData';
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
 import './css/carousel.css';
 
 export default function Carousel() {
-  const [current, setCurrent] = useState(0);
-  const currentSlide = carouselData[current];
-  const length = carouselData.length;
-
-  const nextSlide = () => {
-    setCurrent((prev) => (prev + 1) % length);
-  };
-
-  const prevSlide = () => {
-    setCurrent((prev) => (prev - 1 + length) % length);
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 800,           // ✅ 좀 부드럽게
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000,
+    arrows: true,
   };
 
   return (
     <div className="carousel-container">
-      <div className="carousel-title"></div>
-
-      <button className="left-arrow" onClick={prevSlide}>&lt;</button>
-
-      <div className="carousel-slide">
-        <img src={currentSlide.image} alt={`slide-${current}`} />
-        <div
-          className="carousel-caption"
-          style={currentSlide.captionStyle}
-        >
-          <h3>{currentSlide.title}</h3>
-          <p>{currentSlide.sub}</p>
-        </div>
-      </div>
-
-      <div
-        className="carousel-description"
-        style={currentSlide.descriptionStyle} // ✅ 글자 색상만 적용
-      >
-        {currentSlide.description}
-      </div>
-
-      <button className="right-arrow" onClick={nextSlide}>&gt;</button>
+      <Slider {...settings}>
+        {carouselData.map(item => (
+          <div className="carousel-slide" key={item.id}>
+            <img src={item.image} alt={item.title} />
+            <div className="carousel-overlay">
+              <div className="carousel-caption animate-text">
+                <h3>{item.title}</h3>
+                <p>{item.sub}</p>
+              </div>
+              <div
+                className="carousel-description animate-text"
+                style={item.descriptionStyle}
+              >
+                {item.description}
+              </div>
+            </div>
+          </div>
+        ))}
+      </Slider>
     </div>
   );
 }

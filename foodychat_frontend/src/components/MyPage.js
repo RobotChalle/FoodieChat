@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import NavBar from './NavBar';
 import './css/mypage.css';
+import './css/main.css';
 import InputMask from 'react-input-mask';
 
 export default function Mypage() {
@@ -110,138 +111,143 @@ export default function Mypage() {
     return (
         <>
             <NavBar />
-            <div className="mypage-grid-container">
-                <div className="mypage-grid-row profile">
-                    <div className="profile-sidebar">
-                        {userInfo && (
-                            <>
-                                <div className="profile-picture">
-                                    <img src="/default-profile.png" alt="프로필" />
-                                </div>
-                                <h3>{userInfo.user_name}</h3>
-                                <p>{userInfo.email}</p>
-                                <p>회원등급: {userInfo.membership_level}</p>
-                            </>
-                        )}
-                    </div>
-                </div>
-
-                <div className="mypage-grid-row info">
-                    <div className="mypage-content">
-                        {error && <p className="error-message">{error}</p>}
-                        {userInfo && <h2 className="mypage-title">내 정보</h2>}
-
-                        <div className="form-section">
-                            <div className="form-pair">
-                                <div className="form-group">
-                                    <label>이름</label>
-                                    <input
-                                        type="text"
-                                        value={userInfo?.user_name || ''}
-                                        disabled
-                                    />
-                                    <small className="helper-text">가입 시 입력된 이름입니다.</small>
-                                </div>
-                                <div className="form-group">
-                                    <label>연락처</label>
-                                    <InputMask
-                                        mask="999-9999-9999"
-                                        value={phone}
-                                        onChange={(e) => setPhone(e.target.value)}
-                                    >
-                                        {(inputProps) => <input type="text" {...inputProps} />}
-                                    </InputMask>
-                                    <small className="helper-text">형식: 010-1234-5678</small>
-                                </div>
-
-                                <div className="form-group">
-                                    <label htmlFor="gender">성별</label>
-                                    <select id="gender" defaultValue={userInfo?.gender} disabled>
-                                        <option value="1">남성</option>
-                                        <option value="2">여성</option>
-                                    </select>
-                                    <small className="helper-text">가입 시 선택된 성별입니다.</small>
-                                </div>
+            <div className="mypage-wrapper">
+                <div className="mypage-inner">
+                    <h1 className="mypage-title">마이페이지</h1>
+                    <div className="mypage-grid-container">
+                        <div className="mypage-grid-row profile">
+                            <div className="profile-sidebar">
+                                {userInfo && (
+                                    <>
+                                        <div className="profile-picture">
+                                            <img src="/default-profile.png" alt="프로필" />
+                                        </div>
+                                        <h3>{userInfo.user_name}</h3>
+                                        <p>{userInfo.email}</p>
+                                        <p>회원등급: {userInfo.membership_level}</p>
+                                    </>
+                                )}
                             </div>
+                        </div>
 
-                            <div className="form-group full-width">
-                                <label htmlFor="address">주소</label>
-                                <div className="address-input-wrap">
-                                    <input
-                                        type="text"
-                                        name="address"
-                                        value={formData.address}
-                                        onChange={handleInputChange}
-                                    />
-                                    <button
-                                        type="button"
-                                        className="address-button"
-                                        onClick={handleAddressSearch}
-                                        > 
-                                        주소 검색
-                                    </button>
-                                </div>
-                                <small className="helper-text">정확한 주소를 입력해주세요.</small>
-                            </div>
+                        <div className="mypage-grid-row info">
+                            <div className="mypage-content">
+                                {error && <p className="error-message">{error}</p>}
+                                {userInfo && <h2 className="mypage-title">내 정보</h2>}
+
+                                <div className="form-section">
+                                    <div className="form-pair">
+                                        <div className="form-group">
+                                            <label>이름</label>
+                                            <input
+                                                type="text"
+                                                value={userInfo?.user_name || ''}
+                                                disabled
+                                            />
+                                            <small className="helper-text">가입 시 입력된 이름입니다.</small>
+                                        </div>
+                                        <div className="form-group">
+                                            <label>연락처</label>
+                                            <InputMask
+                                                mask="999-9999-9999"
+                                                value={phone}
+                                                onChange={(e) => setPhone(e.target.value)}
+                                            >
+                                                {(inputProps) => <input type="text" {...inputProps} />}
+                                            </InputMask>
+                                            <small className="helper-text">형식: 010-1234-5678</small>
+                                        </div>
+
+                                        <div className="form-group">
+                                            <label htmlFor="gender">성별</label>
+                                            <select id="gender" defaultValue={userInfo?.gender} disabled>
+                                                <option value="1">남성</option>
+                                                <option value="2">여성</option>
+                                            </select>
+                                            <small className="helper-text">가입 시 선택된 성별입니다.</small>
+                                        </div>
+                                    </div>
+
+                                    <div className="form-group full-width">
+                                        <label htmlFor="address">주소</label>
+                                        <div className="address-input-wrap">
+                                            <input
+                                                type="text"
+                                                name="address"
+                                                value={formData.address}
+                                                onChange={handleInputChange}
+                                            />
+                                            <button
+                                                type="button"
+                                                className="address-button"
+                                                onClick={handleAddressSearch}
+                                                > 
+                                                주소 검색
+                                            </button>
+                                        </div>
+                                        <small className="helper-text">정확한 주소를 입력해주세요.</small>
+                                    </div>
 
 
-                            <div className="form-triple">
-                                <div className="form-group">
-                                    <label htmlFor="age">나이</label>
-                                    <input
-                                        type="number"
-                                        name="age"
-                                        value={formData.age}
-                                        onChange={handleInputChange}
-                                        inputMode="numeric"
-                                        pattern="\d*"
-                                        min="0"
-                                    />
-                                    <small className="helper-text">정확한 나이를 입력해주세요.</small>
-                                </div>
+                                    <div className="form-triple">
+                                        <div className="form-group">
+                                            <label htmlFor="age">나이</label>
+                                            <input
+                                                type="number"
+                                                name="age"
+                                                value={formData.age}
+                                                onChange={handleInputChange}
+                                                inputMode="numeric"
+                                                pattern="\d*"
+                                                min="0"
+                                            />
+                                            <small className="helper-text">정확한 나이를 입력해주세요.</small>
+                                        </div>
 
-                                <div className="form-group">
-                                    <label htmlFor="weight">체중 (kg)</label>
-                                    <input
-                                        type="number"
-                                        step="0.01"
-                                        name="weight"
-                                        value={formData.weight}
-                                        onChange={handleInputChange}
-                                        inputMode="numeric"
-                                        pattern="\d*"
-                                        min="0"
-                                    />
-                                    <small className="helper-text">예: 65.5</small>
-                                </div>
+                                        <div className="form-group">
+                                            <label htmlFor="weight">체중 (kg)</label>
+                                            <input
+                                                type="number"
+                                                step="0.01"
+                                                name="weight"
+                                                value={formData.weight}
+                                                onChange={handleInputChange}
+                                                inputMode="numeric"
+                                                pattern="\d*"
+                                                min="0"
+                                            />
+                                            <small className="helper-text">예: 65.5</small>
+                                        </div>
 
-                                <div className="form-group">
-                                    <label htmlFor="height">키 (cm)</label>
-                                    <input
-                                        type="number"
-                                        step="0.01"
-                                        name="height"
-                                        value={formData.height}
-                                        onChange={handleInputChange}
-                                        inputMode="numeric"
-                                        pattern="\d*"
-                                        min="0"
-                                    />
-                                    <small className="helper-text">예: 175.2</small>
+                                        <div className="form-group">
+                                            <label htmlFor="height">키 (cm)</label>
+                                            <input
+                                                type="number"
+                                                step="0.01"
+                                                name="height"
+                                                value={formData.height}
+                                                onChange={handleInputChange}
+                                                inputMode="numeric"
+                                                pattern="\d*"
+                                                min="0"
+                                            />
+                                            <small className="helper-text">예: 175.2</small>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
 
-                <div className="mypage-grid-row actions">
-                    <div className="button-group">
-                        <button onClick={handleSave} className="mypage-button">저장</button>
-                        <button onClick={() => navigate('/change-password')} className="mypage-button secondary">비밀번호 변경</button>
-                        {userInfo && userInfo.membership_level !== 'regular' && (
-                            <button onClick={() => navigate('/meal-plan')} className="mypage-button secondary">식단 조회</button>
-                        )}
-                        <button onClick={handleLogout} className="mypage-button logout">로그아웃</button>
+                        <div className="mypage-grid-row actions">
+                            <div className="button-group">
+                                <button onClick={handleSave} className="button">저장</button>
+                                <button onClick={() => navigate('/change-password')} className="button secondary">비밀번호 변경</button>
+                                {userInfo && userInfo.membership_level !== 'regular' && (
+                                    <button onClick={() => navigate('/meal-plan')} className="button secondary">식단 조회</button>
+                                )}
+                                <button onClick={handleLogout} className="button logout">로그아웃</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

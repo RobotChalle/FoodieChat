@@ -1,11 +1,30 @@
 /* MyPage 전체 컨테이너 */
-.mypage-grid-container {
-  background: #f4f6f8;
-  min-height: 100vh;
+.mypage-wrapper {
+  width: 100%; /* ✅ 항상 100% */
+  display: flex;
+  justify-content: center;
   padding: 40px 20px;
+  background: #f4f6f8;
+  min-height: calc(100vh - 80px); /* ✅ NavBar 높이 제외하고 화면 채우기 */
+  box-sizing: border-box;
+}
+
+/* 안쪽 컨텐츠 */
+.mypage-inner {
+  width: 100%;
+  max-width: 1200px; /* ✅ Carousel과 통일 */
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+/* 프로필 + 내정보 전체 그리드 */
+.mypage-grid-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  justify-content: center;
+  width: 100%;
 }
 
 /* 프로필 박스 */
@@ -15,9 +34,9 @@
   border-radius: 16px;
   box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.08);
   text-align: center;
-  width: 80%;
+  flex: 1;
+  min-width: 280px;
   max-width: 400px;
-  margin-bottom: 30px;
 }
 
 .profile-sidebar img {
@@ -46,7 +65,8 @@
   padding: 40px;
   border-radius: 16px;
   box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.08);
-  width: 80%;
+  flex: 2;
+  min-width: 280px;
   max-width: 800px;
 }
 
@@ -56,50 +76,6 @@
   font-weight: bold;
   margin-bottom: 30px;
   color: #1f2937;
-}
-
-/* 폼 부분 */
-.form-section {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.form-pair {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.form-group {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.form-group label {
-  font-weight: 600;
-  margin-bottom: 6px;
-}
-
-.form-group input,
-.form-group select {
-  padding: 10px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-size: 14px;
-}
-
-.form-group input:disabled,
-.form-group select:disabled {
-  background-color: #f3f4f6;
-  color: #9ca3af;
-}
-
-.form-group .helper-text {
-  font-size: 12px;
-  color: #9ca3af;
-  margin-top: 4px;
 }
 
 /* 주소 입력 줄 */
@@ -138,44 +114,6 @@
   flex: 1;
 }
 
-/* 버튼 그룹 */
-.button-group {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-top: 30px;
-  gap: 15px;
-}
-
-.mypage-button {
-  padding: 10px 24px;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 600;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.mypage-button.primary {
-  background-color: #2563eb;
-  color: white;
-}
-
-.mypage-button.secondary {
-  background-color: #6b7280;
-  color: white;
-}
-
-.mypage-button.logout {
-  background-color: #ef4444;
-  color: white;
-}
-
-.mypage-button:hover {
-  opacity: 0.9;
-}
-
 /* 에러 메시지 */
 .error-message {
   color: #ef4444;
@@ -186,9 +124,14 @@
 
 /* 반응형 */
 @media (max-width: 768px) {
+  .mypage-grid-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  
   .profile-sidebar,
   .mypage-content {
-    width: 95%;
+    width: 100%;
   }
   
   .form-pair, .form-triple {

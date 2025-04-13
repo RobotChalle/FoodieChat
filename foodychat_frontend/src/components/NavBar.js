@@ -19,6 +19,26 @@ export default function NavBar() {
     }, []);
 
     useEffect(() => {
+        const fetchSession = async () => {
+            try {
+                const res = await axios.get('http://localhost:8080/users/ses', { withCredentials: true });
+                setUserInfo(res.data);
+                localStorage.setItem('user', JSON.stringify(res.data));
+            } catch (err) {
+                console.log('세션 없음, localStorage 정리');
+                localStorage.removeItem('user');
+                setUserInfo(null);
+            }
+        };
+        
+        fetchSession();
+    }, []);
+
+    useEffect(() => {
+        console.log('userInfo 변경:', userInfo);
+    }, [userInfo]);
+
+    useEffect(() => {
         document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
     }, [darkMode]);
 
@@ -66,13 +86,14 @@ export default function NavBar() {
                         {userInfo && userInfo.membership_level === 'admin' && (
                             <Link to="/users/admin" className="nav-link">🍱 <span>관리자페이지</span></Link>
                         )}
-                        {userInfo && (
-                            <button onClick={handleLogout} className="nav-button logout">로그아웃</button>
-                        )}
                     </div>
 
                     <div className="navbar-right desktop-menu">
-                        {!userInfo && (
+                        {userInfo ? (
+                            <>
+                                <span onClick={handleLogout} className="nav-link logout-link">로그아웃</span> {/* ✅ 변경 */}
+                            </>
+                        ) : (
                             <>
                                 <Link to="/login" className="nav-button">로그인</Link>
                                 <Link to="/signup" className="nav-button signup">회원가입</Link>
@@ -102,18 +123,15 @@ export default function NavBar() {
             <div className={`mobile-menu ${menuOpen ? 'show' : ''}`}>
                 <Link to="/chatbot" onClick={() => setMenuOpen(false)}>🤖 챗봇</Link>
                 <Link to="/image-analysis" onClick={() => setMenuOpen(false)}>🍱 이미지 분석</Link>
-                {userInfo && userInfo.membership_level !== 'admin' && (
-                    <Link to="/mypage" onClick={() => setMenuOpen(false)}>🍱 마이페이지</Link>
-                )}
+                <Link to="/mypage" onClick={() => setMenuOpen(false)}>🍱 마이페이지</Link>
                 {userInfo && userInfo.membership_level === 'admin' && (
                     <Link to="/users/admin" onClick={() => setMenuOpen(false)}>🍱 관리자페이지</Link>
                 )}
-                {userInfo && (
+                {userInfo ? (
                     <button onClick={() => { setMenuOpen(false); handleLogout(); }} className="mobile-logout-button">
                         로그아웃
                     </button>
-                )}
-                {!userInfo && (
+                ) : (
                     <>
                         <Link to="/login" onClick={() => setMenuOpen(false)}>로그인</Link>
                         <Link to="/signup" onClick={() => setMenuOpen(false)}>회원가입</Link>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import NavBar from '../components/NavBar.js';
 import './css/admin.css';
+import './css/main.css';
 const PAGE_SIZE = 10;
 axios.defaults.baseURL = 'http://localhost:8080';
 axios.defaults.withCredentials = true;
@@ -60,69 +61,71 @@ export default function AdminPage() {
   return (
     <>
     <NavBar />
-    <div className="container">
+    <div className="admin-wrapper">
+      <div className="admin-inner">
       <h2 className="section-title">회원 목록</h2>
-      <div className="search-row">
-      <input
-        type="text"
-        className="search-input"
-        placeholder="이메일 또는 이름으로 검색"
-        value={searchKeyword}
-        onChange={(e) => setSearchKeyword(e.target.value)}
-      />
-    </div>
+        <div className="search-row">
+          <input
+            type="text"
+            className="search-input"
+            placeholder="이메일 또는 이름으로 검색"
+            value={searchKeyword}
+            onChange={(e) => setSearchKeyword(e.target.value)}
+          />
+        </div>
 
-      <table className="admin-table">
-        <thead>
-          <tr>
-            <th>유저 ID</th>
-            <th>이메일</th>
-            <th>등급</th>
-            <th>가입일</th>
-            <th>삭제</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users
-          .filter(user =>
-            user.email.toLowerCase().includes(searchKeyword.toLowerCase()) ||
-            user.name?.toLowerCase().includes(searchKeyword.toLowerCase())
-          )
-          .map(user => (
-
-            <tr key={user.user_id}>
-              <td>{user.user_id}</td>
-              <td>{user.email}</td>
-              <td>
-              <select
-              className="dropdown-select"
-              value={user.membership_level}
-             onChange={(e) => handleLevelChange(user.user_id, e.target.value)}
-              >
-                <option value="regular">기본</option>
-                <option value="business">비즈니스</option>
-                <option value="admin">관리자</option>
-              </select>
-              </td>
-              <td>{user.join_date}</td>
-              <td>
-                <button className="btn btn-danger" onClick={() => deleteUser(user.user_id)}>삭제</button>
-              </td>
+        <table className="admin-table">
+          <thead>
+            <tr>
+              <th>유저 ID</th>
+              <th>이메일</th>
+              <th>등급</th>
+              <th>가입일</th>
+              <th>삭제</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {users
+            .filter(user =>
+              user.email.toLowerCase().includes(searchKeyword.toLowerCase()) ||
+              user.name?.toLowerCase().includes(searchKeyword.toLowerCase())
+            )
+            .map(user => (
 
-      <div className="pagination">
-        {[...Array(totalPages)].map((_, i) => (
-          <button
-            key={i}
-            className={`page-btn ${currentPage === i + 1 ? 'active' : ''}`}
-            onClick={() => setCurrentPage(i + 1)}
-          >
-            {i + 1}
-          </button>
-        ))}
+              <tr key={user.user_id}>
+                <td>{user.user_id}</td>
+                <td>{user.email}</td>
+                <td>
+                <select
+                className="dropdown-select"
+                value={user.membership_level}
+              onChange={(e) => handleLevelChange(user.user_id, e.target.value)}
+                >
+                  <option value="regular">기본</option>
+                  <option value="business">비즈니스</option>
+                  <option value="admin">관리자</option>
+                </select>
+                </td>
+                <td>{user.join_date}</td>
+                <td>
+                  <button className="btn btn-danger" onClick={() => deleteUser(user.user_id)}>삭제</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        <div className="pagination">
+          {[...Array(totalPages)].map((_, i) => (
+            <button
+              key={i}
+              className={`page-button ${currentPage === i + 1 ? 'active' : ''}`}
+              onClick={() => setCurrentPage(i + 1)}
+            >
+              {i + 1}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
     </>
