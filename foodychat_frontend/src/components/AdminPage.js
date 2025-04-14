@@ -98,7 +98,7 @@ export default function AdminPage() {
                 <td>
                 <select
                 className="dropdown-select"
-                value={user.membership_level}
+                value={user.membership_level?.toLowerCase()}
               onChange={(e) => handleLevelChange(user.user_id, e.target.value)}
                 >
                   <option value="regular">기본</option>
