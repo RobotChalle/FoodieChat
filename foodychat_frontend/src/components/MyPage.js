@@ -160,7 +160,7 @@ export default function Mypage() {
 
                                         <div className="form-group">
                                             <label htmlFor="gender">성별</label>
-                                            <select id="gender" defaultValue={userInfo?.gender} disabled>
+                                            <select id="gender" value={userInfo?.gender || ''} disabled>
                                                 <option value="1">남성</option>
                                                 <option value="2">여성</option>
                                             </select>
@@ -242,7 +242,7 @@ export default function Mypage() {
                             <div className="button-group">
                                 <button onClick={handleSave} className="button">저장</button>
                                 <button onClick={() => navigate('/change-password')} className="button secondary">비밀번호 변경</button>
-                                {userInfo && userInfo.membership_level !== 'regular' && (
+                                {userInfo && userInfo.membership_level?.toLowerCase() !== 'regular' && (
                                     <button onClick={() => navigate('/meal-plan')} className="button secondary">식단 조회</button>
                                 )}
                                 <button onClick={handleLogout} className="button logout">로그아웃</button>

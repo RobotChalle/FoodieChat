@@ -83,7 +83,7 @@ export default function NavBar() {
                         <Link to="/chatbot" className="nav-link">🤖 <span>챗봇</span></Link>
                         <Link to="/image-analysis" className="nav-link">🍱 <span>이미지 분석</span></Link>
                         <Link to="/mypage" className="nav-link">🍱 <span>마이페이지</span></Link>
-                        {userInfo && userInfo.membership_level === 'admin' && (
+                        {userInfo && userInfo.membership_level?.toLowerCase() === 'admin' && (
                             <Link to="/users/admin" className="nav-link">🍱 <span>관리자페이지</span></Link>
                         )}
                     </div>
@@ -124,7 +124,7 @@ export default function NavBar() {
                 <Link to="/chatbot" onClick={() => setMenuOpen(false)}>🤖 챗봇</Link>
                 <Link to="/image-analysis" onClick={() => setMenuOpen(false)}>🍱 이미지 분석</Link>
                 <Link to="/mypage" onClick={() => setMenuOpen(false)}>🍱 마이페이지</Link>
-                {userInfo && userInfo.membership_level === 'admin' && (
+                {userInfo && userInfo.membership_level?.toLowerCase() === 'admin' && (
                     <Link to="/users/admin" onClick={() => setMenuOpen(false)}>🍱 관리자페이지</Link>
                 )}
                 {userInfo ? (

@@ -146,7 +146,7 @@ public class UserController {
         data.put("user_address", vo.getUser_address());
         data.put("reg_date", vo.getReg_date());
         data.put("upd_date", vo.getUpd_date());
-
+        
         return ResponseEntity.ok(data);
     }
     
@@ -363,6 +363,7 @@ public class UserController {
         @RequestParam(name = "size", defaultValue = "10") int size
     ) {
         List<UserVO> users = userService.getUserList(page, size);
+        System.out.println(users);
         int total = userService.getTotalUserCount();
 
         Map<String, Object> result = new HashMap<>();
