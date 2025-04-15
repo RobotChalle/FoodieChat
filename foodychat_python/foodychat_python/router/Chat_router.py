@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel
 from LLM_model import ask_llm
 from LLM_prompt import format_prompt, RAG_PROMPT, PRIVATE_PROMPT, HEALTH_PROMPT, PROFILE_PROMPT
+from services.reg_service import query_gemini_rag
 
 router = APIRouter(prefix="/chat", tags=["chat"])
 
@@ -26,3 +27,13 @@ async def get_chat_response(request: ChatRequest, mode: str = Query("default", e
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+class ChatInput(BaseModel):
+    user_id: int
+    question: str
+
+@router.post("/chat")
+def chat_with_gemini(input: ChatInput):
+    answer = query_gemini_rag(input.user_id, input.question)
+    return {"answer": answer}

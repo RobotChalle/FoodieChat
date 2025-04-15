@@ -1,0 +1,93 @@
+.scroll-container {
+    height: 100vh;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+  }
+  
+  .scroll-item {
+    scroll-snap-align: start;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    text-align: center;
+  }
+  
+  /* 기본 이미지 스타일 */
+  .snap-img {
+    width: 70%;
+    max-width: 800px;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    margin-bottom: 1.5rem;
+    object-fit: cover;
+  }
+  
+  /* ✅ 2번 이미지만 별도로 확 줄이기 */
+  .snap-img.smaller-height {
+    /*width: 45%;*/         /* ← ✅ 전체적으로 더 작게 보이게 만듦 */
+    max-height: 600px;  /* ← ✅ 세로도 확실히 줄임 */
+  }
+  
+
+  .scroll-item.image-section {
+    padding-top: 2rem;
+    padding-bottom: 1rem; /* ✅ 하단 여백 줄이기 */
+  }
+  
+  
+  
+  .overlay-box {
+    max-width: 600px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+  
+  .overlay-box h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .overlay-box p {
+    font-size: 1rem;
+  }
+  
+  @media (max-width: 768px) {
+    .snap-img {
+      width: 85%;
+    }
+  
+    .overlay-box h3 {
+      font-size: 1.2rem;
+    }
+  
+    .overlay-box p {
+      font-size: 0.95rem;
+    }
+  }
+
+  /* ✨ 1번 이미지: 신선한 민트 배경 */
+  .bg-upload {
+        background-color: #b2f0e6; /* 더 진한 민트 */
+  }
+  
+  /* ✨ 2번 이미지: 따뜻한 코랄 색 */
+  .bg-nutrition {
+    background-color: #ffcfc9; /* 진한 코랄 살몬 */
+  }
+
+  /* 이미지가 배경색에 딱 붙지 않도록 여백 확보 */
+  .image-section {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+    box-sizing: border-box;
+  }
+  
+  
