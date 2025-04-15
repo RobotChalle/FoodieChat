@@ -1,17 +1,9 @@
 package com.foodychat.user.service;
-import com.foodychat.user.vo.UserDetailsVO;
-import com.foodychat.user.vo.UserVO;
-
 import java.util.List;
 
+import com.foodychat.user.vo.UserDetailsVO;
 import com.foodychat.user.vo.UserLogVO;
-import com.foodychat.user.vo.UserVO;
-import com.foodychat.user.vo.UserVO;
-import com.foodychat.user.vo.UserVO;
-import com.foodychat.user.vo.UserVO;
-
-import com.foodychat.user.vo.UserVO;
-
+import com.foodychat.user.vo.UserMealsVO;
 import com.foodychat.user.vo.UserVO;/**
 
 
@@ -95,4 +87,9 @@ public interface UserService {
 	 * 비밀번호 변경
 	 * */
 	boolean resetPassword(String token, String newPassword);
+	
+	/**
+	 * 회원 식단정보 가져오기
+	 * */
+	List<UserMealsVO> getMeals(long user_id);
 }

@@ -4,9 +4,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import com.foodychat.config.EmailService;
 import com.foodychat.config.GoogleTokenVerifier;
@@ -27,6 +32,7 @@ import com.foodychat.user.vo.GoogleUserInfo;
 import com.foodychat.user.vo.UserDetailsVO;
 import com.foodychat.user.vo.UserLogVO;
 import com.foodychat.user.vo.UserVO;
+import com.foodychat.user.vo.UserMealsVO;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -415,4 +421,45 @@ public class UserController {
     		return ResponseEntity.ok(null);
     	}
     }
+    
+    /**
+   	 * 유저 식단 조회
+   	 * */
+    @GetMapping("/meals")
+    public ResponseEntity<List<Map<String, String>>> getMeals(HttpSession session) {
+    	UserVO svo = (UserVO)session.getAttribute("user");
+        List<UserMealsVO> meals = userService.getMeals(svo.getUser_id());
+	    // 필요한 필드만 추출해서 반환
+        List<Map<String, String>> simplifiedMeals = meals.stream()
+        		.map(meal -> {
+        			Map<String, String> map = new HashMap<>();
+        			map.put("meal_date", meal.getMeal_date());
+        			map.put("meal_type_nm", meal.getMeal_type_nm());
+        			map.put("meal_text", meal.getMeal_text());
+        			return map;
+        		})
+        		.collect(Collectors.toList());
+        return ResponseEntity.ok(simplifiedMeals);
+    }
+    
+    /**
+   	 * 유저 식단 조회
+   	 * */
+   @PostMapping("/meals")
+   public ResponseEntity<String> queryLLM(@RequestBody Map<String, Object> payload) {
+	   String userQuery = (String) payload.get("userQuery");
+       List<?> meals = (List<?>) payload.get("meals");
+
+       RestTemplate restTemplate = new RestTemplate();
+       HttpHeaders headers = new HttpHeaders();
+       headers.setContentType(MediaType.APPLICATION_JSON);
+
+       Map<String, Object> requestBody = new HashMap<>();
+       requestBody.put("query", userQuery);
+       requestBody.put("meals", meals);
+
+       HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
+       ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:8000/query", entity, String.class);
+       return ResponseEntity.ok(response.getBody());
+   }
 }
