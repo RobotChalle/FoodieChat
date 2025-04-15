@@ -1,5 +1,7 @@
 from sqlalchemy.orm import Session
 from sqlalchemy.sql import text
+from models import schemas
+from models import models  # SQLAlchemy 모델
 
 # 사용자 쿼리 기반 CRUD 수행
 def query_foods(db: Session, query: str, params: dict = {}):
@@ -25,3 +27,12 @@ def query_foods(db: Session, query: str, params: dict = {}):
     except Exception as e:
         db.rollback()  # 오류 발생 시 롤백
         return {"error": str(e)}  # 에러 메시지 반환
+
+def get_user_details(db: Session, user_id: int):
+    return db.query(models.UserDetails).filter(models.UserDetails.user_id == user_id).first()
+
+def get_bmi_history(db: Session, user_id: int):
+    return db.query(models.BMIHistory).filter(models.BMIHistory.user_id == user_id).order_by(models.BMIHistory.reg_date.desc()).limit(3).all()
+
+def get_uploaded_foods(db: Session, user_id: int):
+    return db.query(models.Foods).filter(models.Foods.reg_id == user_id).order_by(models.Foods.created_at.desc()).limit(3).all()

@@ -12,6 +12,7 @@ import NavBar from './NavBar';
 import FindAccount from './FindAccount';
 import ResetPassword from './ResetPassword';
 import { ToastContainer } from 'react-toastify';
+import UserMealSearch from './UserMealSearch';
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function App() {
             <Route path="/mypage" element={<MyPage />} />
             <Route path="/findaccount" element={<FindAccount />} />
             <Route path="/change-password" element={<ChangePassword />} />
+            <Route path="/meal-plan" element={<UserMealSearch />} />
             <Route path="/reset-password" element={<ResetPassword />} />
           </Routes>
         </div>
