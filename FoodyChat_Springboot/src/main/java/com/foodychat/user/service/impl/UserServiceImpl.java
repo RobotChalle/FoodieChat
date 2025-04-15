@@ -15,6 +15,7 @@ import com.foodychat.user.service.UserService;
 import com.foodychat.user.vo.PasswordResetToken;
 import com.foodychat.user.vo.UserDetailsVO;
 import com.foodychat.user.vo.UserLogVO;
+import com.foodychat.user.vo.UserMealsVO;
 import com.foodychat.user.vo.UserVO;
 
 /**
@@ -216,5 +217,12 @@ public class UserServiceImpl implements UserService {
         userDao.updateUserPasswordByEmail(map);
         tokenMapper.deleteToken(token);
         return true;
+    }
+    
+    /**
+	 * 회원 식단정보 가져오기
+	 * */
+    public List<UserMealsVO> getMeals(long user_id) {
+        return userDao.getMeals(user_id);
     }
 }
