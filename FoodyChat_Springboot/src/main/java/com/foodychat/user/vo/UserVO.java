@@ -28,6 +28,7 @@ public class UserVO {
 	private float user_weight;
 	private float height;
 	private String user_address;
+	private String health_goal;
 	
 	private long login_id;			// 로그인아이디
 	private String login_ip;			// 로그인아이피

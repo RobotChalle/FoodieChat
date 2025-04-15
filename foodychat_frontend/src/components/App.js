@@ -13,6 +13,9 @@ import FindAccount from './FindAccount';
 import ResetPassword from './ResetPassword';
 import { ToastContainer } from 'react-toastify';
 import UserMealSearch from './UserMealSearch';
+import Imageanalysis from './ImageAnalysis';
+import MealRecommend from './MealRecommend';
+import CafeRecommend from './CafeRecommend';
 
 function App() {
   return (
@@ -45,6 +48,9 @@ function App() {
             <Route path="/change-password" element={<ChangePassword />} />
             <Route path="/meal-plan" element={<UserMealSearch />} />
             <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/image-analysis" element={<Imageanalysis />} />
+            <Route path="/meal-recommend" element={<MealRecommend />} />
+            <Route path="/cafe-recommend/:foodName" element={<CafeRecommend/>} />
           </Routes>
         </div>
       </Router>
