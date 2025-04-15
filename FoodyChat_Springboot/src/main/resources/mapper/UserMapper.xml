@@ -100,7 +100,7 @@
                um.membership_level AS membership_level,
                um.reg_date,
                um.upd_date,
-               CASE IFNULL(ud.gender,'1') WHEN '2' THEN '여' ELSE '남' END AS gender,
+               IFNULL(ud.gender,'1') AS gender,
                ud.age,
                ud.user_weight,
                ud.height,
@@ -121,7 +121,7 @@
                um.membership_level AS membership_level,
                um.reg_date,
                um.upd_date,
-               CASE IFNULL(ud.gender,'1') WHEN '2' THEN '여' ELSE '남' END AS gender,
+               IFNULL(ud.gender,'1') AS gender,
                ud.age,
                ud.user_weight,
                ud.height,
@@ -216,4 +216,26 @@
         WHERE email = #{email}
     </update>
 
+	<!-- 식단정보 조회 -->
+	<select id="selectMeals" parameterType="long" resultType="com.foodychat.user.vo.UserMealsVO">
+	    SELECT 
+            u.user_id,
+	        u.email,
+	        u.google_id,
+	        u.user_name,
+	        m.meal_date,
+	        m.meal_type,
+	        CASE m.meal_type
+	            WHEN '1' THEN '조식'
+	            WHEN '2' THEN '중식'
+	            WHEN '3' THEN '석식'
+	            ELSE '기타'
+	        END AS meal_type_nm,
+	        m.meal_text,
+	        u.membership_level as membership_lvl
+        FROM user_meals m LEFT OUTER JOIN users u ON u.user_id = m.user_id
+        WHERE 1=1
+            AND m.user_id = #{user_id}
+        ORDER BY m.meal_date ASC
+	</select>
 </mapper>

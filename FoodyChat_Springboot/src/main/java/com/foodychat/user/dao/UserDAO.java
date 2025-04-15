@@ -4,12 +4,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.foodychat.user.vo.UserDetailsVO;
 import com.foodychat.user.vo.UserLogVO;
+import com.foodychat.user.vo.UserMealsVO;
 import com.foodychat.user.vo.UserVO;
 
 /**
@@ -117,4 +117,11 @@ public class UserDAO {
     public void updateUserPasswordByEmail(Map<String, String> map) {
         sqlSession.update(mapper + ".updateUserPasswordByEmail", map);
     }
+    
+    /**
+	 * 회원 식단정보 가져오기
+	 * */
+	public List<UserMealsVO> getMeals(long user_id) {
+		return sqlSession.selectList(mapper + ".selectMeals", user_id);
+	}
 }
