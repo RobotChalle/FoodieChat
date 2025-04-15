@@ -33,7 +33,10 @@ public class SecurityConfig {
                         "/index.html",
                         "/static/**",
                         "/favicon.ico",
-                        "/error").permitAll()
+                        "/error",
+                        "/analyze/recommend",
+                		"/analyze/food",
+                        "/analyze/store").permitAll()
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))

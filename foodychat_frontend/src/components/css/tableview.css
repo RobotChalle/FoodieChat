@@ -1,59 +1,38 @@
 .pretty-table-wrapper {
-  width: 100%; /* ✅ 무조건 가득 */
-  padding: 2rem;
-  margin: 0 auto;
-  box-sizing: border-box; /* ✅ padding 포함 계산 */
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .pretty-table-title {
-  text-align: center;
-  color: #ffffff;
-  font-size: 1.8rem;
-  margin-bottom: 1.5rem;
-  font-weight: bold;
+  margin-bottom: 12px;
+  font-size: 1.4rem;
+  font-weight: 600;
 }
 
 .pretty-table {
-  width: 100%; /* ✅ pretty-table 자체도 가득 */
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  gap: 6px;
 }
 
 .pretty-table-header,
 .pretty-table-row {
   display: grid;
-  grid-template-columns: 1fr 1fr 3fr;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(12px);
-  padding: 16px;
-  border-radius: 16px;
-  color: #fff;
-  font-size: 1rem;
-  font-weight: 500;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  width: 100%; /* ✅ 각 row도 가로 100% */
-  box-sizing: border-box;
+  grid-template-columns: 120px 100px 1fr; /* ✅ 날짜/구분/식단 */
+  gap: 12px;
+  padding: 8px 12px;
+  background-color: #f3f4f6;
+  border-radius: 8px;
+  font-size: 15px;
+  align-items: center;
+  word-break: break-word;     /* ✅ 긴 텍스트 자동 줄바꿈 */
 }
 
 .pretty-table-header {
-  background: linear-gradient(to right, #4e54c8, #8f94fb);
-  color: #ffffff;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-.pretty-table-row:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  transition: all 0.3s ease;
-}
-
-@media (max-width: 768px) {
-  .pretty-table-header,
-  .pretty-table-row {
-    grid-template-columns: 1fr 1fr 2fr;
-    font-size: 0.9rem;
-    padding: 12px;
-  }
+  font-weight: bold;
+  background-color: #e2e8f0;
 }

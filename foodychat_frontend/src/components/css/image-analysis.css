@@ -1,0 +1,113 @@
+/* MyPage 전체 컨테이너 */
+.analysis-wrapper {
+    width: 100%; /* ✅ 항상 100% */
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+    background: #f4f6f8;
+    min-height: calc(100vh - 80px); /* ✅ NavBar 높이 제외하고 화면 채우기 */
+    box-sizing: border-box;
+  }
+  
+  /* 안쪽 컨텐츠 */
+  .analysis-inner {
+    width: 100%;
+    max-width: 1200px; /* ✅ Carousel과 통일 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .analysis-title {
+    text-align: center;
+    font-size: 26px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    color: #1f2937;
+  }
+
+  /* 업로드 버튼 스타일 */
+.upload-button {
+    display: inline-block;
+    padding: 12px 24px;
+    margin-bottom: 20px;
+    background-color: #3b82f6;
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .upload-button:hover {
+    background-color: #2563eb;
+  }
+  
+/* 이미지 업로드 및 분석 결과 영역 추가 */
+
+.image-preview {
+    width: 33%;
+    max-width: 400px;
+    margin-bottom: 30px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .image-preview img {
+    width: 100%;
+    display: block;
+    border-radius: 12px;
+  }
+  
+  /* 분석 결과 카드 */
+  .result-card {
+    width: 100%;
+    max-width: 600px;
+    padding: 24px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  /* 예측된 클래스 텍스트 */
+  .predicted-class {
+    font-size: 22px;
+    font-weight: bold;
+    color: #1f2937;
+  }
+  
+  /* 신뢰도 표시 */
+  .confidence-score {
+    font-size: 16px;
+    color: #4b5563;
+  }
+  
+  /* 상위 클래스 리스트 */
+  .top-k-predictions {
+    width: 100%;
+    margin-top: 16px;
+  }
+  
+  .top-k-predictions li {
+    list-style: none;
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    background: #f1f5f9;
+    border-radius: 8px;
+    color: #1e293b;
+    font-weight: 500;
+  }
+  
+  /* 분석 결과 막대 그래프용 (예: Chart.js) */
+  .chart-container {
+    width: 100%;
+    max-width: 600px;
+    margin-top: 30px;
+  }
+  

@@ -193,7 +193,6 @@ public class UserController {
             userService.insertUserLog(log);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("이메일이 존재하지 않습니다.");
         }
-        
         session.setAttribute("user", vo); // 세션에 유저 저장 (인증 상태 유지)
         
         // 로그인 성공(로그 저장)
@@ -369,7 +368,6 @@ public class UserController {
         @RequestParam(name = "size", defaultValue = "10") int size
     ) {
         List<UserVO> users = userService.getUserList(page, size);
-        System.out.println(users);
         int total = userService.getTotalUserCount();
 
         Map<String, Object> result = new HashMap<>();
@@ -381,7 +379,6 @@ public class UserController {
     // 🟡 관리자용 유저 삭제
     @DeleteMapping("/admin/users/{userId}")
     public ResponseEntity<?> deleteUser(@PathVariable("userId") Long userId) {
-    	System.out.println(userId);
         userService.deleteUser(userId);
         return ResponseEntity.ok("삭제 성공");
     }
