@@ -1,14 +1,26 @@
 import uvicorn
-from fastapi import FastAPI
+from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from UserMealLLM_models import MealQueryRequest
 from UserMealLLM_service_gemini import build_prompt, query_openai
 from MealRecommendLLM_models import MealRequest
 from MealRecommendLLM_service import build_recommend_prompt, query_recommend_gemini, query_recommend_parser
+from CafeRecommendLLM_models import Store, StoreRequest
+from CafeRecommendLLM_service import build_cafe_recommend_prompt, query_cafe_recommend_gemini
 import json
 import re
+import requests
 from fastapi.responses import JSONResponse
+import torch
+from torchvision import transforms
+from PIL import Image
+import os
+import shutil
+from predict import predict_food
+import uuid
 
+if not os.path.exists("temp"):
+    os.makedirs("temp")
 
 app = FastAPI()
 
@@ -67,6 +79,23 @@ async def recommend(
     result_text = query_recommend_gemini(prompt)
     print("🔍 LLM 응답 원본:\n", result_text)
     return query_recommend_parser(result_text)  # ✅
+
+@app.post("/cafe-recommend")
+async def cafe_recommend(req: StoreRequest):
+    prompt = build_cafe_recommend_prompt(req.food, req.location, req.stores)
+    result = query_cafe_recommend_gemini(prompt)
+    print("🔍 Gemini 응답:\n", result)
+    return {"summary": result}
+
+@app.post("/predict")
+async def analyze_image(file: UploadFile = File(...)):
+    file_path = f"temp/{file.filename}"
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+
+    result = predict_food(file_path)
+    return result
+
     
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

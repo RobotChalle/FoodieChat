@@ -14,4 +14,6 @@ public class AnalyzeVO {
 	private float nut_carb;
 	private float nut_pro;
 	private float nut_fat;
+	private String food_name;
+	private String food_ko_name;
 }

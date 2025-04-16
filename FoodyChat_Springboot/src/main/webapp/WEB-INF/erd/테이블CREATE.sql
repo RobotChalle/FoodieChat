@@ -173,3 +173,5 @@ values('CM003',3,'건강한 생활 유지',1,'127.0.0.1');
 
 SELECT * FROM common_codes;
 SELECT * FROM common_code_details;
+
+ALTER TABLE users DROP INDEX phone;

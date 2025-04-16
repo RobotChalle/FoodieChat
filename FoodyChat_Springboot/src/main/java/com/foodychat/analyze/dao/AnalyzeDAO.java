@@ -1,5 +1,6 @@
 package com.foodychat.analyze.dao;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
@@ -33,5 +34,11 @@ public class AnalyzeDAO {
 
 	public AnalyzeVO selectFoodbyName(String foodName) {
 		return sqlSession.selectOne(mapper + ".selectFoodbyName", foodName);
+	}
+	/**
+   	 * 음식명칭 한글 목록
+   	 * */
+	public List<AnalyzeVO> getFoodTranslations() {
+		return sqlSession.selectList(mapper + ".selectFoodTranslations");
 	}
 }

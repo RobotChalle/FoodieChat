@@ -211,4 +211,55 @@
     text-align: center;
     margin-top: 20px;
   }
+
+  .input-group-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    margin-bottom: 16px;
+  }
+  
+  .input-item {
+    display: flex;
+    flex-direction: column;
+    min-width: 160px;
+    flex: 1;
+  }
+  
+  .input-item input,
+  .input-item select {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+  
+  .button-wrap {
+    flex: none;
+  }
+  
+  .input-item button {
+    padding: 8px 14px;
+    font-weight: bold;
+    background-color: #6366f1;
+    border: none;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .input-item button:disabled {
+    background-color: #999;
+    cursor: not-allowed;
+  }
+
+  .recommend-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 0%;    /* 🔽 줄임 */
+    margin-bottom: 10px; /* 🔽 줄임 */
+    text-align: center;
+  }
   

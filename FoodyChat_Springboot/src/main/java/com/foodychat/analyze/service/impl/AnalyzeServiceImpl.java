@@ -1,6 +1,7 @@
 package com.foodychat.analyze.service.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,5 +56,12 @@ public class AnalyzeServiceImpl implements AnalyzeService {
 	@Override
 	public AnalyzeVO selectFoodbyName(String foodName) {
 		return analyzeDao.selectFoodbyName(foodName);
+	}
+	/**
+   	 * 음식명칭 한글 목록
+   	 * */
+	@Override
+	public List<AnalyzeVO> getFoodTranslations() {
+		return analyzeDao.getFoodTranslations();
 	}
 }
