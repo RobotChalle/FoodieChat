@@ -11,42 +11,32 @@ export default function Imageanalysis() {
   const [analysisResult, setAnalysisResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const foodName = 'bibimbap';
 
   // 이미지 업로드 시 미리보기 + 분석 요청
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
-    if (file) {
-      setSelectedImage(file);
-      setPreviewUrl(URL.createObjectURL(file));
-      setAnalysisResult(null);
+    if (!file) return;
 
-      // 서버에 분석 요청
-      const payload = new URLSearchParams({
-        foodName: foodName
+    setSelectedImage(file);
+    setPreviewUrl(URL.createObjectURL(file));
+    setAnalysisResult(null);
+    setLoading(true);
+
+    try {
+      const formData = new FormData();
+      formData.append('file',file);
+
+      const response = await axios.post('http://localhost:8000/predict', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+        withCredentials: true
       });
 
-      try {
-        setLoading(true);
-        const payload = new URLSearchParams({
-          foodName: foodName
-        });
-
-        const response = await axios.post('http://localhost:8080/analyze/food', payload, {
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            withCredentials: true
-        });
-
-        if (response.status === 200) {
-          alert('정보가 성공적으로 저장되었습니다.');
-        }
-        console.log("return:"+JSON.stringify(response.data));
-        //setAnalysisResult(response);
-      } catch (error) {
-        console.error('분석 요청 실패:', error);
-      } finally {
-        setLoading(false);
-      }
+      setAnalysisResult(response.data);
+      console.log("🍽 예측 결과:", response.data);
+    } catch (error) {
+      console.error('❌ 예측 실패:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -83,48 +73,41 @@ export default function Imageanalysis() {
           {selectedImage && (
             <div className="result-card">
               <div className="predicted-class">
-                🍽️ 예측 결과:{' '}
-                {analysisResult?.predictedClass || '분석 전'}
+                🍽️ 예측 결과: <strong>{analysisResult.predicted_class}</strong>
               </div>
               <div className="confidence-score">
-                신뢰도:{' '}
-                {analysisResult
-                  ? `${(analysisResult.confidence * 100).toFixed(2)}%`
-                  : '--%'}
+                신뢰도: {(analysisResult.confidence * 100).toFixed(2)}%
               </div>
 
-              <ul className="top-k-predictions">
-                {analysisResult?.topK?.map((item, idx) => (
-                  <li key={idx}>
-                    {item.className} -{' '}
-                    {(item.probability * 100).toFixed(2)}%
-                  </li>
-                )) || <li>결과 대기 중...</li>}
-
-                {/* 🍱 영양정보 */}
-                {analysisResult && (
-                  <>
-                    <div className="predicted-class">🥗영양정보 </div>
-                    <div className="predicted-class">
-                      🍱 칼로리 : {analysisResult.calories} kcal
-                    </div>
-                    <div className="predicted-class">
-                      🍔 탄수화물 : {analysisResult.carbohydrates} g
-                    </div>
-                    <div className="predicted-class">
-                      🍖 단백질 : {analysisResult.protein} g
-                    </div>
-                    <div className="predicted-class">
-                      🍰 지방 : {analysisResult.fat} g
-                    </div>
-                  </>
-                )}
-              </ul>
+              {analysisResult.calories && (
+                <>
+                  <div className="predicted-class">🥗 영양정보</div>
+                  <div>🍱 칼로리 : {analysisResult.calories} kcal</div>
+                  <div>🍔 탄수화물 : {analysisResult.carbohydrates} g</div>
+                  <div>🍖 단백질 : {analysisResult.protein} g</div>
+                  <div>🍰 지방 : {analysisResult.fat} g</div>
+                </>
+              )}
             </div>
           )}
           <div className="button-group">
-          <button onClick={() => navigate(`/cafe-recommend/${foodName}`, {state: { foodName: foodName }})} className="button secondary">식당 추천</button>
-          <button onClick={() => navigate('/meal-recommend')} className="button secondary">식단 추천</button>
+          <button
+              onClick={() => {
+                if (analysisResult?.predicted_class) {
+                  navigate(`/cafe-recommend/${analysisResult.predicted_class}`);
+                }
+              }}
+              className="button secondary"
+              disabled={!analysisResult?.predicted_class}
+            >
+              식당 추천
+            </button>
+            <button
+              onClick={() => navigate('/meal-recommend')}
+              className="button secondary"
+            >
+              식단 추천
+            </button>
           </div>
         </div>
       </div>

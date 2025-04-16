@@ -1,5 +1,8 @@
 package com.foodychat.analyze.service;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.stereotype.Repository;
 
 import com.foodychat.analyze.vo.AnalyzeVO;
@@ -29,4 +32,8 @@ public interface AnalyzeService {
 	 * @return 
 	 * */
 	AnalyzeVO selectFoodbyName(String foodName);
+	/**
+   	 * 음식명칭 한글 목록
+   	 * */
+	List<AnalyzeVO> getFoodTranslations();
 }

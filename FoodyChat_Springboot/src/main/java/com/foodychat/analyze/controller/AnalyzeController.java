@@ -12,8 +12,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -127,6 +127,21 @@ public class AnalyzeController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 	                .body(Map.of("error", "알 수 없는 오류 발생", "details", e.getMessage()));
 	    }
+    }
+	
+	/**
+   	 * 음식명칭 한글 목록
+   	 * */
+	@GetMapping("/foods/translations")
+    public ResponseEntity<Map<String, String>> getFoodTranslations() {
+        List<AnalyzeVO> list = analyzeService.getFoodTranslations(); // DB에서 가져옴
+        
+        Map<String, String> result = new HashMap<>();
+    	for(int i=0;i<list.size();i++) {
+    		AnalyzeVO vo = list.get(i);
+    		result.put(vo.getFood_name(), vo.getFood_ko_name());
+        }
+        return ResponseEntity.ok(result);
     }
 	
 	/**

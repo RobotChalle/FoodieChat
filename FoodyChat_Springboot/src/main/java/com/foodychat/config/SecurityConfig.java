@@ -36,7 +36,8 @@ public class SecurityConfig {
                         "/error",
                         "/analyze/recommend",
                 		"/analyze/food",
-                        "/analyze/store").permitAll()
+                        "/analyze/store",
+                        "/analyze/foods/translations").permitAll()
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
