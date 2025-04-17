@@ -7,19 +7,14 @@ function ChatTest() {
   const [answer, setAnswer] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // ✅ 세션 기반 유저 ID 불러오기
   useEffect(() => {
     axios.get("http://localhost:8080/users/user-id", { withCredentials: true })
-      .then(res => {
-        console.log("📦 세션 유저 ID:", res.data);
-        setUserId(res.data);
-      })
+      .then(res => setUserId(res.data))
       .catch(err => {
-        console.error("❌ 세션 유저 정보를 불러오지 못했습니다.", err.response || err);
+        console.error("❌ 유저 정보 로딩 실패", err);
       });
   }, []);
 
-  // ✅ 질문 전송
   const handleSend = async () => {
     if (!question.trim()) return;
     if (!userId) {
@@ -28,15 +23,14 @@ function ChatTest() {
     }
 
     setLoading(true);
+    setAnswer(""); // 로딩 중 이전 응답 초기화
     try {
-      console.log("📨 전송할 userId:", userId);
       const res = await axios.post("http://localhost:8000/chat/chat", {
         user_id: userId,
         question,
       });
       setAnswer(res.data.answer);
     } catch (err) {
-      console.error("❌ FastAPI 에러:", err.response || err);
       setAnswer(`⚠️ 서버 오류: ${err.response?.data?.detail || err.message}`);
     } finally {
       setLoading(false);
@@ -44,38 +38,130 @@ function ChatTest() {
   };
 
   return (
-    <div className="chat-container" style={{ padding: "2rem", fontFamily: "sans-serif" }}>
-      <h2>🗨️ Gemini 챗봇</h2>
+    <div style={styles.container}>
+      <h1 style={styles.header}>🤖 Gemini 챗봇</h1>
+
       {!userId ? (
-        <p>🔐 로그인 유저 정보를 불러오는 중입니다...</p>
+        <p style={styles.status}>🔐 로그인 유저 정보를 불러오는 중입니다...</p>
       ) : (
         <>
-          <textarea
-            value={question}
-            onChange={(e) => setQuestion(e.target.value)}
-            placeholder="질문을 입력하세요"
-            rows="5"
-            cols="50"
-            style={{ padding: "1rem", fontSize: "1rem" }}
-          />
-          <br />
-          <button
-            onClick={handleSend}
-            disabled={loading}
-            style={{ marginTop: "0.5rem", padding: "0.5rem 1rem", fontSize: "1rem" }}
-          >
-            {loading ? "질문 전송 중..." : "질문 보내기"}
-          </button>
-          <div style={{ marginTop: "1.5rem" }}>
-            <strong>💬 응답:</strong>
-            <div style={{ whiteSpace: "pre-wrap", marginTop: "0.5rem", lineHeight: "1.7" }}>
-              {answer}
-            </div>
+          <div style={styles.chatBox}>
+            {/* 사용자 질문 말풍선 */}
+            {question && (
+              <div style={{ ...styles.bubble, ...styles.userBubble }}>
+                {question}
+              </div>
+            )}
+
+            {/* 챗봇 응답 말풍선 */}
+            {loading ? (
+              <div style={{ ...styles.bubble, ...styles.botBubble }}>
+                <span className="blinking">💬 생각 중...</span>
+              </div>
+            ) : (
+              answer && (
+                <div style={{ ...styles.bubble, ...styles.botBubble }}>
+                  <pre style={styles.pre}>{answer}</pre>
+                </div>
+              )
+            )}
+          </div>
+
+          <div style={styles.inputArea}>
+            <textarea
+              value={question}
+              onChange={(e) => setQuestion(e.target.value)}
+              placeholder="질문을 입력하세요"
+              rows="4"
+              style={styles.textarea}
+            />
+            <button onClick={handleSend} disabled={loading} style={styles.button}>
+              {loading ? "전송 중..." : "질문 보내기"}
+            </button>
           </div>
         </>
       )}
     </div>
   );
 }
+
+const styles = {
+  container: {
+    maxWidth: "800px",
+    margin: "0 auto",
+    padding: "2rem",
+    fontFamily: "Segoe UI, sans-serif",
+    background: "#f9f9f9",
+    minHeight: "100vh",
+  },
+  header: {
+    fontSize: "2rem",
+    marginBottom: "1rem",
+    textAlign: "center",
+    color: "#333",
+  },
+  status: {
+    fontStyle: "italic",
+    color: "#666",
+  },
+  chatBox: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "1rem",
+    marginBottom: "1.5rem",
+    padding: "1rem",
+    backgroundColor: "#fff",
+    borderRadius: "12px",
+    boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+    minHeight: "200px",
+  },
+  bubble: {
+    padding: "0.75rem 1rem",
+    borderRadius: "16px",
+    maxWidth: "100%", // ✅ 전체 컨테이너 기준 최대
+    wordBreak: "break-word", // ✅ 단어 분할 허용
+    overflowWrap: "break-word", // ✅ 줄바꿈
+    whiteSpace: "pre-wrap", // ✅ 개행 유지 + 자동 줄바꿈
+    lineHeight: "1.6",
+  },
+  userBubble: {
+    backgroundColor: "#DCF8C6",
+    alignSelf: "flex-end",
+  },
+  botBubble: {
+    backgroundColor: "#ECECEC",
+    alignSelf: "flex-start",
+  },
+  inputArea: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "0.5rem",
+  },
+  textarea: {
+    width: "100%",
+    padding: "1rem",
+    fontSize: "1rem",
+    borderRadius: "8px",
+    border: "1px solid #ccc",
+    resize: "none",
+  },
+  button: {
+    alignSelf: "flex-end",
+    backgroundColor: "#4F46E5",
+    color: "#fff",
+    padding: "0.75rem 1.25rem",
+    border: "none",
+    borderRadius: "8px",
+    cursor: "pointer",
+    fontSize: "1rem",
+  },
+  pre: {
+    margin: 0,
+    fontFamily: "inherit",
+    wordBreak: "break-word",
+    overflowWrap: "break-word",
+    whiteSpace: "pre-wrap",
+  },
+};
 
 export default ChatTest;
