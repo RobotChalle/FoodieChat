@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.foodychat.user.dao.PasswordResetTokenMapper;
 import com.foodychat.user.dao.UserDAO;
 import com.foodychat.user.service.UserService;
+import com.foodychat.user.vo.BmiHistoryVO;
+import com.foodychat.user.vo.FoodRecognitionHistoryVO;
 import com.foodychat.user.vo.PasswordResetToken;
 import com.foodychat.user.vo.UserDetailsVO;
 import com.foodychat.user.vo.UserLogVO;
@@ -74,6 +76,14 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserVO getUserById(long id) {
 		return userDao.getUserById(id);
+	}
+
+	/**
+     * 유저 int id로 조회
+     */
+	@Override
+	public UserVO getUserInfoByUserId(int userId) {
+    	return userDao.selectUserByUserId(userId);
 	}
 	
 	/**
@@ -232,5 +242,16 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean isEmailExists(String email) {
 	    return userDao.isEmailExists(email);  // 정확한 메서드 이름 사용 확인
+	}
+
+	//BMI 히스토리 
+	@Override
+	public List<BmiHistoryVO> getBmiHistory(Long userId) {
+    	return userDao.selectBmiHistoryByUserId(userId);
+	}
+	//음식 히스토리 
+	@Override
+	public List<FoodRecognitionHistoryVO> getFoodHistory(Long userId) {
+    	return userDao.selectFoodHistoryByUserId(userId);
 	}
 }

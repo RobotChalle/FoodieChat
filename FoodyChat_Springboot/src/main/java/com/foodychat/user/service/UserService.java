@@ -1,6 +1,8 @@
 package com.foodychat.user.service;
 import java.util.List;
 
+import com.foodychat.user.vo.BmiHistoryVO;
+import com.foodychat.user.vo.FoodRecognitionHistoryVO;
 import com.foodychat.user.vo.UserDetailsVO;
 import com.foodychat.user.vo.UserLogVO;
 import com.foodychat.user.vo.UserMealsVO;
@@ -22,6 +24,7 @@ public interface UserService {
 	void deleteUser(Long userId); 				//삭제 유저
 	void updateMembershipLevel(Long userId, String level); //유저 등급 변경.
 	UserVO getUserById(long id);
+	UserVO getUserInfoByUserId(int userId);		//유저 정보 고유 int id로 찾기
 	
 	/**
 	 * 이메일로 사용자 조회
@@ -97,4 +100,10 @@ public interface UserService {
 	 * 이메일 중복여부 체크
 	 * */
 	boolean isEmailExists(String email);
+
+	// BMI 기록 리스트
+    List<BmiHistoryVO> getBmiHistory(Long userId);
+
+    // 음식 기록 리스트
+    List<FoodRecognitionHistoryVO> getFoodHistory(Long userId);
 }

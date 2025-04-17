@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-function ChatBot() {
+function ChatTest() {
   const [userId, setUserId] = useState(null);
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
@@ -164,4 +164,4 @@ const styles = {
   },
 };
 
-export default ChatBot;
+export default ChatTest;
