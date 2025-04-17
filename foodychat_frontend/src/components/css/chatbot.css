@@ -1,0 +1,323 @@
+.chatbot-wrapper {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  
+  .chatbot-wrapper.dark-mode {
+    background-color: #1e2a38;
+    color: #ffffff;
+  }
+  
+  .chatbot-wrapper.light-mode {
+    background-color: #ffffff;
+    color: #333333;
+  }
+  
+  /* === 상단 네비게이션 === */
+  .chatbot-navbar {
+    position: relative;  /* ✅ 필수 */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 64px;
+    padding: 0 32px;
+    background-color: #fff;
+    z-index: 1000;
+  }
+  
+  .logo {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .logo-icon {
+    font-size: 1.5rem;
+    margin-right: 8px;
+  }
+  
+  .logo-text {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #ff595e;
+  }
+  
+  .navbar-center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 64px; /* 네비게이션 바 높이와 동일 */
+    width: 64px;  /* 아이콘 크기만큼만 */
+    z-index: 10;
+  }
+  
+  /* 툴팁 업로드 버튼 */
+  .tooltip-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .upload-icon-btn {
+    font-size: 2.4rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+  }
+  
+  .upload-icon-btn:hover {
+    transform: scale(1.2);
+  }
+  
+  /* 툴팁 텍스트 */
+  .tooltip-text {
+    visibility: hidden;
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    font-size: 0.75rem;
+    padding: 6px 10px;
+    border-radius: 6px;
+    position: absolute;
+    bottom: -45px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  
+  .tooltip-text::after {
+    content: "";
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 6px;
+    border-style: solid;
+    border-color: transparent transparent #000 transparent;
+  }
+  
+  .tooltip-wrapper:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+  }
+  
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+  }
+  
+  .theme-icon-btn {
+    background: none;
+    border: none;
+    font-size: 1.3rem;
+    cursor: pointer;
+    padding: 4px;
+    color: #333;
+    transition: transform 0.2s ease;
+  }
+  
+  .theme-icon-btn:hover {
+    transform: scale(1.2);
+  }
+  
+  .dark-mode .theme-icon-btn {
+    color: #ffffff;
+  }
+  
+  .user-dropdown {
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .user-name {
+    font-weight: bold;
+    color: #333;
+    white-space: nowrap;
+  }
+  
+  .user-name:hover {
+    text-decoration: underline;
+  }
+  
+  .dropdown-menu {
+    position: absolute;
+    top: 30px;
+    right: 0;
+    background-color: #fff;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    z-index: 100;
+    min-width: 120px;
+  }
+  
+  .dropdown-item {
+    padding: 10px 14px;
+    font-size: 0.95rem;
+    cursor: pointer;
+  }
+  
+  .dropdown-item:hover {
+    background-color: #f9f9f9;
+  }
+  
+  .dark-mode .dropdown-menu {
+    background-color: #2c3e50;
+    color: #fff;
+    border-color: #444;
+  }
+  
+  .dark-mode .dropdown-item:hover {
+    background-color: #3b4a5a;
+  }
+  
+  /* === 메인 콘텐츠 === */
+  .chatbot-main {
+    display: flex;
+    flex: 1;
+  }
+  
+  .chat-feature-panel {
+    width: 70%;
+    padding: 30px;
+    overflow-y: auto;
+    border-right: 1px solid #ddd;
+  }
+  
+  .chatbot-panel {
+    width: 30%;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .chatbot-wrapper.light-mode .chat-feature-panel {
+    background-color: #fff3f3;
+    color: #333;
+  }
+  
+  .chatbot-wrapper.dark-mode .chat-feature-panel {
+    background-color: #2b3b4b;
+    color: #fff;
+  }
+  
+  .chatbot-wrapper.light-mode .chatbot-panel {
+    background-color: #ffffff;
+    color: #333;
+  }
+  
+  .chatbot-wrapper.dark-mode .chatbot-panel {
+    background-color: #34495e;
+    color: #ffffff;
+  }
+  
+  .chatbot-wrapper.light-mode .chatbot-window {
+    background-color: #fcecec;
+    border-color: #ffc4c4;
+  }
+  
+  .chatbot-wrapper.dark-mode .chatbot-window {
+    background-color: #3e556a;
+    border-color: #5c7a99;
+  }
+  
+  /* 챗봇 타이틀 바 + 아이콘 */
+  .chat-title-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  
+  .chat-icon {
+    font-size: 1.5rem;
+  }
+  
+  
+  .chat-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #ff595e;
+  }
+  
+  /* 채팅창 */
+  .chatbot-window {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+  }
+  
+  .message {
+    margin: 8px 0;
+    padding: 10px 14px;
+    border-radius: 20px;
+    max-width: 70%;
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+  
+  .message.user {
+    align-self: flex-end;
+    background-color: #ff595e;
+    color: white;
+    text-align: right;
+  }
+  
+  /* ✅ 세련된 챗봇 입력창 */
+  .chatbot-input-area {
+    display: flex;
+    background: #fff;
+    border-radius: 50px;
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+  
+  .chatbot-input-area input {
+    flex: 1;
+    border: none;
+    font-size: 1rem;
+    padding: 10px;
+    border-radius: 50px;
+    outline: none;
+  }
+  
+  .chatbot-input-area button {
+    background-color: #ff595e;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: 0.2s ease;
+  }
+  
+  .chatbot-input-area button:hover {
+    background-color: #e63946;
+  }
+  

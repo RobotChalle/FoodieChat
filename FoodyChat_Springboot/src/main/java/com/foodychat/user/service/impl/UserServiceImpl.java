@@ -225,4 +225,12 @@ public class UserServiceImpl implements UserService {
     public List<UserMealsVO> getMeals(long user_id) {
         return userDao.getMeals(user_id);
     }
+
+    /**
+	 * 이메일 중복 여부 확인 (회원가입 시 중복 방지용)
+	 */
+	@Override
+	public boolean isEmailExists(String email) {
+	    return userDao.isEmailExists(email);  // 정확한 메서드 이름 사용 확인
+	}
 }

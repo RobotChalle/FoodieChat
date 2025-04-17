@@ -16,6 +16,7 @@ import UserMealSearch from './UserMealSearch';
 import Imageanalysis from './ImageAnalysis';
 import MealRecommend from './MealRecommend';
 import CafeRecommend from './CafeRecommend';
+import ChatBot from './ChatBot';
 
 function App() {
   return (
@@ -51,6 +52,7 @@ function App() {
             <Route path="/image-analysis" element={<Imageanalysis />} />
             <Route path="/meal-recommend" element={<MealRecommend />} />
             <Route path="/cafe-recommend/:foodName" element={<CafeRecommend/>} />
+            <Route path="/chatbot" element={<ChatBot/>} />
           </Routes>
         </div>
       </Router>

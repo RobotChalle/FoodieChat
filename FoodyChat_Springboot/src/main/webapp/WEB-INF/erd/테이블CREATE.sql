@@ -175,3 +175,18 @@ SELECT * FROM common_codes;
 SELECT * FROM common_code_details;
 
 ALTER TABLE users DROP INDEX phone;
+
+CREATE TABLE llm_responses (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    question TEXT NOT NULL,
+    response TEXT NOT NULL,
+    context_used TEXT,
+    reg_id BIGINT,
+    reg_ip VARCHAR(50),
+    reg_date DATETIME DEFAULT CURRENT_TIMESTAMP,  -- 등록 시간 (자동 생성)
+    upd_id BIGINT,
+    upd_ip VARCHAR(50),
+    upd_date DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+);

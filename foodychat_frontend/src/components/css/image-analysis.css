@@ -1,113 +1,214 @@
-/* MyPage 전체 컨테이너 */
+/* 전체 컨테이너 */
 .analysis-wrapper {
-    width: 100%; /* ✅ 항상 100% */
-    display: flex;
-    justify-content: center;
-    padding: 40px 20px;
-    background: #f4f6f8;
-    min-height: calc(100vh - 80px); /* ✅ NavBar 높이 제외하고 화면 채우기 */
-    box-sizing: border-box;
-  }
-  
-  /* 안쪽 컨텐츠 */
-  .analysis-inner {
-    width: 100%;
-    max-width: 1200px; /* ✅ Carousel과 통일 */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 50px 20px;
+  background-color: #f4f7fa; /* 밝은 회색 배경 */
+  min-height: calc(100vh - 80px);
+  box-sizing: border-box;
+}
 
-  .analysis-title {
-    text-align: center;
-    font-size: 26px;
-    font-weight: bold;
-    margin-bottom: 30px;
-    color: #1f2937;
-  }
+/* 안쪽 컨텐츠 */
+.analysis-inner {
+  width: 100%;
+  max-width: 1000px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  padding: 40px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.8s ease-out; /* 페이드 인 애니메이션 */
+}
 
-  /* 업로드 버튼 스타일 */
+/* 페이드 인 애니메이션 */
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* 제목 */
+.analysis-title {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #333;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 10px;
+}
+
+/* 업로드 버튼 */
 .upload-button {
-    display: inline-block;
-    padding: 12px 24px;
-    margin-bottom: 20px;
-    background-color: #3b82f6;
-    color: #fff;
-    font-weight: bold;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .upload-button:hover {
-    background-color: #2563eb;
-  }
-  
-/* 이미지 업로드 및 분석 결과 영역 추가 */
+  padding: 14px 28px;
+  background-color: #1d72b8; /* 차분한 블루 색상 */
+  color: #fff;
+  font-weight: 700;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
 
+.upload-button:hover {
+  background-color: #155a8a;
+  transform: scale(1.05);
+}
+
+/* 이미지 미리보기 */
 .image-preview {
-    width: 33%;
-    max-width: 400px;
-    margin-bottom: 30px;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 420px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
+
+.image-preview img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+}
+
+/* 분석 결과 카드 */
+.result-card {
+  width: 100%;
+  max-width: 700px;
+  padding: 32px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 30px;
+}
+
+.predicted-class {
+  font-size: 28px;
+  font-weight: bold;
+  color: #333;
+}
+
+.confidence-score {
+  font-size: 18px;
+  color: #666;
+  margin-top: 10px;
+}
+
+/* 영양소 분석 카드 */
+.nutrition-card {
+  width: 100%;
+  max-width: 700px;
+  padding: 24px;
+  background: #f9fafb;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.nutrition-card h3 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.nutrition-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nutrition-list li {
+  font-size: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid #ddd;
+  color: #4b5563;
+  font-weight: 600;
+}
+
+.nutrition-list li:last-child {
+  border-bottom: none;
+}
+
+.nutrition-list li span {
+  color: #38b2ac; /* 강조 색상 */
+}
+
+/* 상위 클래스 리스트 */
+.top-k-predictions {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.top-k-predictions li {
+  list-style: none;
+  padding: 12px 24px;
+  margin-bottom: 12px;
+  background: #f7fafc;
+  border-radius: 10px;
+  color: #1e293b;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.top-k-predictions li:hover {
+  background: #e2e8f0;
+}
+
+/* 차트 컨테이너 */
+.chart-container {
+  width: 100%;
+  max-width: 700px;
+  margin-top: 40px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.button-group {
+  width: 50%;
+  display: flex;
+  gap: 16px;
+  justify-content: center;
   }
   
-  .image-preview img {
-    width: 100%;
-    display: block;
-    border-radius: 12px;
+  .btn.primary {
+  background: #ff7e5f;
+  color: #fff;
   }
-  
-  /* 분석 결과 카드 */
-  .result-card {
-    width: 100%;
-    max-width: 600px;
-    padding: 24px;
-    background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
+  .btn.secondary {
+  background: #fff;
+  color: #ff7e5f;
+  border: 2px solid #ff7e5f;
   }
-  
-  /* 예측된 클래스 텍스트 */
-  .predicted-class {
-    font-size: 22px;
-    font-weight: bold;
-    color: #1f2937;
+  .btn:hover {
+  transform: translateY(-2px);
   }
-  
-  /* 신뢰도 표시 */
-  .confidence-score {
-    font-size: 16px;
-    color: #4b5563;
+  /* .button alias for backward compatibility */
+.button {
+  display: inline-block;
   }
-  
-  /* 상위 클래스 리스트 */
-  .top-k-predictions {
-    width: 100%;
-    margin-top: 16px;
+  .btn.primary {
+  background: #ff7e5f;
+  color: #fff;
   }
-  
-  .top-k-predictions li {
-    list-style: none;
-    padding: 8px 12px;
-    margin-bottom: 8px;
-    background: #f1f5f9;
-    border-radius: 8px;
-    color: #1e293b;
-    font-weight: 500;
+  .btn.secondary {
+  background: #fff;
+  color: #ff7e5f;
+  border: 2px solid #ff7e5f;
   }
-  
-  /* 분석 결과 막대 그래프용 (예: Chart.js) */
-  .chart-container {
-    width: 100%;
-    max-width: 600px;
-    margin-top: 30px;
+  .btn:hover {
+  transform: translateY(-2px);
   }
-  

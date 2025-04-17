@@ -10,7 +10,7 @@ export default function Mypage() {
     const [userInfo, setUserInfo] = useState(null);
     const [error, setError] = useState('');
     const [phone, setPhone] = useState('');
-    const [formData, setFormData] = useState({ age: '', weight: '', height: '', address: '' });
+    const [formData, setFormData] = useState({ age: '', weight: '', height: '', address: '', addressDetail: '' });
     const navigate = useNavigate();
 
     const handleAddressSearch = () => {
@@ -27,29 +27,40 @@ export default function Mypage() {
     };
 
     useEffect(() => {
+        const saved = localStorage.getItem('myPageForm');
+        const localForm = saved ? JSON.parse(saved) : null;
+      
         const fetchUserInfo = async () => {
-            try {
-                const response = await axios.post("http://localhost:8080/users/myPage", {}, {
-                    withCredentials: true
-                });
-
-                if (response.status === 200) {
-                    setUserInfo(response.data);
-                    setFormData({
-                        age: response.data.age,
-                        weight: response.data.user_weight,
-                        height: response.data.height,
-                        address: response.data.user_address || ''
-                    });
-                }
-            } catch (err) {
-                setError('정보를 불러오는데 실패 했습니다.');
-                console.error(err);
+          try {
+            const response = await axios.post("http://localhost:8080/users/myPage", {}, {
+              withCredentials: true
+            });
+      
+            if (response.status === 200) {
+              setUserInfo(response.data);
+      
+              // 🔄 서버 값 + localStorage 병합
+              const merged = {
+                age: response.data.age,
+                weight: response.data.user_weight,
+                height: response.data.height,
+                address: response.data.user_address || '',
+                addressDetail: response.data.address_detail || ''
+              };
+      
+              // localStorage 값이 있다면 병합해서 덮어쓰기
+              setFormData(localForm ? { ...merged, ...localForm } : merged);
             }
+          } catch (err) {
+            setError('정보를 불러오는데 실패 했습니다.');
+            console.error(err);
+          }
         };
-
+      
         fetchUserInfo();
-    }, []);
+      }, []);
+      
+  
 
     useEffect(() => {
         if (userInfo?.phone) {
@@ -91,13 +102,17 @@ export default function Mypage() {
                 age: formData.age,
                 user_weight: formData.weight,
                 height: formData.height,
-                user_address: formData.address
+                user_address: formData.address,
+                address_detail: formData.addressDetail
             });
 
             const response = await axios.post('http://localhost:8080/users/updateUser', payload, {
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 withCredentials: true
             });
+
+            // ✅ localStorage에 저장
+            localStorage.setItem('myPageForm', JSON.stringify(formData));
 
             if (response.status === 200) {
                 alert('정보가 성공적으로 저장되었습니다.');
@@ -113,14 +128,13 @@ export default function Mypage() {
             <NavBar />
             <div className="mypage-wrapper">
                 <div className="mypage-inner">
-                    <h1 className="mypage-title">마이페이지</h1>
+                    <h1 className="mypage-title">My Page</h1>
                     <div className="mypage-grid-container">
                         <div className="mypage-grid-row profile">
                             <div className="profile-sidebar">
                                 {userInfo && (
                                     <>
                                         <div className="profile-picture">
-                                            <img src="/default-profile.png" alt="프로필" />
                                         </div>
                                         <h3>{userInfo.user_name}</h3>
                                         <p>{userInfo.email}</p>
@@ -155,7 +169,7 @@ export default function Mypage() {
                                             >
                                                 {(inputProps) => <input type="text" {...inputProps} />}
                                             </InputMask>
-                                            <small className="helper-text">형식: 010-1234-5678</small>
+                                            <small className="helper-text">'-' 이 자동으로 입력됩니다</small>
                                         </div>
 
                                         <div className="form-group">
@@ -167,13 +181,14 @@ export default function Mypage() {
                                             <small className="helper-text">가입 시 선택된 성별입니다.</small>
                                         </div>
                                     </div>
-
+                                    
                                     <div className="form-group full-width">
                                         <label htmlFor="address">주소</label>
                                         <div className="address-input-wrap">
                                             <input
                                                 type="text"
                                                 name="address"
+                                                placeholder="도로명 주소"
                                                 value={formData.address}
                                                 onChange={handleInputChange}
                                             />
@@ -185,6 +200,14 @@ export default function Mypage() {
                                                 주소 검색
                                             </button>
                                         </div>
+                                        <input
+                                            type="text"
+                                            name="addressDetail"
+                                            placeholder="상세 주소 (예: 아파트 동/호수)"
+                                            value={formData.addressDetail}
+                                            onChange={handleInputChange}
+                                            className="detail-address-input"
+                                        />
                                         <small className="helper-text">정확한 주소를 입력해주세요.</small>
                                     </div>
 

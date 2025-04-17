@@ -124,4 +124,10 @@ public class UserDAO {
 	public List<UserMealsVO> getMeals(long user_id) {
 		return sqlSession.selectList(mapper + ".selectMeals", user_id);
 	}
+
+	// 이메일 중복 여부 확인
+    public boolean isEmailExists(String email) {
+        Integer count = sqlSession.selectOne(mapper + ".isEmailExists", email);
+        return count != null && count > 0;
+    }
 }

@@ -37,7 +37,8 @@ public class SecurityConfig {
                         "/analyze/recommend",
                 		"/analyze/food",
                         "/analyze/store",
-                        "/analyze/foods/translations").permitAll()
+                        "/analyze/foods/translations",
+                        "/analyze/upload").permitAll()
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))

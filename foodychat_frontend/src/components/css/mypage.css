@@ -25,6 +25,7 @@
   gap: 40px;
   justify-content: center;
   width: 100%;
+  box-sizing: border-box;
 }
 
 /* 프로필 박스 */
@@ -53,21 +54,23 @@
   margin-bottom: 8px;
 }
 
-.profile-sidebar p {
-  font-size: 14px;
-  color: #666;
-  margin: 2px 0;
+.profile-sidebar {
+  flex: 1;
+  max-width: 260px;
+  min-width: 200px;
+  box-sizing: border-box;
 }
 
 /* 내 정보 섹션 */
 .mypage-content {
+  flex: 2;
+  min-width: 0;
+  max-width: 100%;
+  padding: 32px;
   background: #ffffff;
-  padding: 40px;
   border-radius: 16px;
   box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.08);
-  flex: 2;
-  min-width: 280px;
-  max-width: 800px;
+  box-sizing: border-box;
 }
 
 .mypage-title {
@@ -81,23 +84,27 @@
 /* 주소 입력 줄 */
 .address-input-wrap {
   display: flex;
-  gap: 10px;
+  gap: 8px; /* 주소 입력창과 버튼 사이 여백 */
+  margin-bottom: 8px; /* 상세주소 입력창과의 간격 */
 }
 
 .address-input-wrap input {
   flex: 1;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  box-sizing: border-box;
 }
 
-.address-button {
-  padding: 10px 16px;
-  background-color: #2563eb;
-  color: white;
-  font-weight: 600;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
+/* 상세주소 input도 동일한 스타일로 맞춤 */
+.detail-address-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
   font-size: 14px;
-  white-space: nowrap;
+  box-sizing: border-box;
 }
 
 .address-button:hover {
