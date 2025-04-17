@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import './css/signup2.css'; // 스타일 파일
+import NavBar from './NavBar';
+import './css/signup2.css';
 
 export default function Signup2() {
     const navigate = useNavigate();
@@ -19,7 +20,6 @@ export default function Signup2() {
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
 
-    // 👉 컴포넌트 마운트 시 user_id 불러오기
     useEffect(() => {
         const storedUserId = localStorage.getItem('user_id');
         if (storedUserId && !isNaN(storedUserId)) {
@@ -60,114 +60,122 @@ export default function Signup2() {
         }
 
         try {
-            await axios.post('http://localhost:8080/users/details', formData);
-            setSuccess('건강 정보가 성공적으로 저장되었습니다!');
-            setTimeout(() => navigate('/login'), 1000);
-        } catch (err) {
-            setError('정보 저장 실패: 다시 시도해주세요.');
-            console.error(err);
+            const response = await axios.post('http://localhost:8080/users/details', formData);
+            if (response.status === 200) {
+                setSuccess('건강 정보가 성공적으로 저장되었습니다!');
+                setTimeout(() => {
+                    navigate('/');
+                }, 1000);
+            }
+        } catch (error) {
+            console.error("저장 중 오류 발생:", error);
+            setError('저장 중 오류가 발생했습니다.');
         }
     };
 
     return (
-        <div className="container">
-            <div className="text-center">
-                <h1>추가 건강 정보 입력</h1>
-            </div>
-            <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label>성별</label>
-                    <select
-                    name="gender"
-                    value={formData.gender}
-                    onChange={handleChange}
-                    className="form-control"
-                    required
-                    >
-                      <option value="">선택</option>
-                      <option value="1">남성</option>
-                      <option value="2">여성</option>
-                      <option value="3">기타</option>
-                    </select>
-                </div>
-
-                <div className="form-group">
-                    <label>나이</label>
-                    <input
-                        type="number"
-                        name="age"
-                        value={formData.age}
-                        onChange={handleChange}
-                        className="form-control"
-                        required
-                    />
-                </div>
-
-                <div className="form-group">
-                    <label>키(cm)</label>
-                    <input
-                        type="number"
-                        name="height"
-                        value={formData.height}
-                        onChange={handleChange}
-                        className="form-control"
-                        required
-                    />
-                </div>
-
-                <div className="form-group">
-                    <label>몸무게(kg)</label>
-                    <input
-                        type="number"
-                        name="user_weight"
-                        value={formData.user_weight}
-                        onChange={handleChange}
-                        className="form-control"
-                        required
-                    />
-                </div>
-
-                <div className="form-group">
-                    <label>주소</label>
-                    <div className="input-group">
-                        <input
-                            type="text"
-                            name="user_address"
-                            value={formData.user_address}
-                            onChange={handleChange}
-                            className="form-control"
-                            readOnly
-                        />
-                        <div className="input-group-append">
-                            <button
-                                type="button"
-                                className="btn btn-outline-secondary"
-                                onClick={handleAddressSearch}
-                            >
-                                주소 검색
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <select
-                  name="health_goal"
-                  value={formData.health_goal}
-                  onChange={handleChange}
-                  className="form-control"
-                  required>
-                    <option value="">선택</option>
-                    <option value="1">체중 감량</option>
-                    <option value="2">근육 증가</option>
-                    <option value="3">건강 유지</option>
-                    </select>
-
-
-                {error && <div className="alert alert-danger mt-3">{error}</div>}
-                {success && <div className="alert alert-success mt-3">{success}</div>}
-
-                <button type="submit" className="btn btn-primary mt-4 w-100">제출하기</button>
-            </form>
+      <>
+      <NavBar />
+      <div className="container">
+        <div className="text-center">
+          <h1>추가 건강 정보 입력</h1>
         </div>
+
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <select
+              name="gender"
+              value={formData.gender}
+              onChange={handleChange}
+              className="form-control"
+              required
+            >
+              <option value="">성별 선택*</option>
+              <option value="1">남성</option>
+              <option value="2">여성</option>
+            </select>
+          </div>
+
+          <div className="form-group">
+            <input
+              type="number"
+              name="age"
+              placeholder="나이*"
+              value={formData.age}
+              onChange={handleChange}
+              className="form-control"
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <input
+              type="number"
+              name="height"
+              placeholder="키 (cm)*"
+              value={formData.height}
+              onChange={handleChange}
+              className="form-control"
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <input
+              type="number"
+              name="user_weight"
+              placeholder="몸무게 (kg)*"
+              value={formData.user_weight}
+              onChange={handleChange}
+              className="form-control"
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <div className="input-group">
+              <input
+                type="text"
+                name="user_address"
+                placeholder="주소*"
+                value={formData.user_address}
+                onChange={handleChange}
+                className="form-control"
+                readOnly
+              />
+              <div className="input-group-append">
+                <button
+                    type="button"
+                    className="btn btn-outline-secondary align-middle"
+                    onClick={handleAddressSearch}
+                >
+                    주소 검색
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="form-group">
+            <select
+              name="health_goal"
+              value={formData.health_goal}
+              onChange={handleChange}
+              className="form-control"
+              required
+            >
+              <option value="">건강 목표*</option>
+              <option value="1">체중 감량</option>
+              <option value="2">근육 증가</option>
+              <option value="3">건강 유지</option>
+            </select>
+          </div>
+
+          {error && <div className="error-message">{error}</div>}
+          {success && <div className="success-message">{success}</div>}
+
+          <button type="submit" className="btn btn-primary w-100">제출하기</button>
+        </form>
+      </div>
+    </>
     );
 }

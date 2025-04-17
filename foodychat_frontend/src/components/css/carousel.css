@@ -1,7 +1,7 @@
 /* Carousel 전체 감싸는 컨테이너 */
 .carousel-container {
   width: 100%;
-  max-width: 1200px;
+  max-width: 92%;
   margin: 0 auto;
   padding: 20px;
   border-radius: 20px;

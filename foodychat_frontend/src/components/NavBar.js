@@ -39,13 +39,20 @@ export default function NavBar() {
     }, [userInfo]);
 
     useEffect(() => {
-        document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
-    }, [darkMode]);
-
-    useEffect(() => {
         document.body.style.overflow = menuOpen ? 'hidden' : '';
     }, [menuOpen]);
-
+    
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth > 768 && menuOpen) {
+                setMenuOpen(false);
+            }
+        };
+    
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, [menuOpen]);
+    
     const handleLogout = async () => {
         try {
             await axios.post( 
@@ -81,8 +88,10 @@ export default function NavBar() {
 
                     <div className="navbar-center desktop-menu">
                         <Link to="/chatbot" className="nav-link">🤖 <span>챗봇</span></Link>
-                        <Link to="/image-analysis" className="nav-link">🍱 <span>이미지 분석</span></Link>
-                        <Link to="/mypage" className="nav-link">🍱 <span>마이페이지</span></Link>
+                        <Link to="/image-analysis" className="nav-link">🍜 <span>이미지 분석</span></Link>
+                        {userInfo && (
+                            <Link to="/mypage" className="nav-link">👩‍🍳 <span>마이페이지</span></Link>
+                        )}
                         {userInfo && userInfo.membership_level?.toLowerCase() === 'admin' && (
                             <Link to="/users/admin" className="nav-link">🍱 <span>관리자페이지</span></Link>
                         )}
@@ -99,13 +108,6 @@ export default function NavBar() {
                                 <Link to="/signup" className="nav-button signup">회원가입</Link>
                             </>
                         )}
-                        <button
-                            className="darkmode-toggle"
-                            onClick={() => setDarkMode(!darkMode)}
-                            aria-label="Dark mode toggle"
-                        >
-                            {darkMode ? '☀️' : '🌙'}
-                        </button>
                     </div>
 
                     <div
@@ -122,8 +124,8 @@ export default function NavBar() {
 
             <div className={`mobile-menu ${menuOpen ? 'show' : ''}`}>
                 <Link to="/chatbot" onClick={() => setMenuOpen(false)}>🤖 챗봇</Link>
-                <Link to="/image-analysis" onClick={() => setMenuOpen(false)}>🍱 이미지 분석</Link>
-                <Link to="/mypage" onClick={() => setMenuOpen(false)}>🍱 마이페이지</Link>
+                <Link to="/image-analysis" onClick={() => setMenuOpen(false)}>🍜 이미지 분석</Link>
+                <Link to="/mypage" onClick={() => setMenuOpen(false)}>👩‍🍳 마이페이지</Link>
                 {userInfo && userInfo.membership_level?.toLowerCase() === 'admin' && (
                     <Link to="/users/admin" onClick={() => setMenuOpen(false)}>🍱 관리자페이지</Link>
                 )}

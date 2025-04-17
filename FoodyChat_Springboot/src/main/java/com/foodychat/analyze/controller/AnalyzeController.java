@@ -1,10 +1,13 @@
 package com.foodychat.analyze.controller;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,14 +22,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.foodychat.analyze.service.AnalyzeService;
 import com.foodychat.analyze.vo.AnalyzeVO;
 import com.foodychat.analyze.vo.MealRecommendationVO;
 import com.foodychat.chat.controller.ChatController;
+import com.foodychat.config.PythonModelCaller;
 import com.foodychat.user.service.UserService;
 import com.foodychat.user.vo.UserVO;
 
@@ -206,5 +212,61 @@ public class AnalyzeController {
 	        ));
 	    }
 	}
+	
+	@PostMapping("/upload")
+    public ResponseEntity<?> analyzeImage(@RequestParam("file") MultipartFile file,
+                                          HttpServletRequest request,
+                                          HttpSession session) {
+		try {
+		    UserVO svo = (UserVO)session.getAttribute("user");
+		    if (svo == null) {
+	            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+	                                 .body("로그인이 필요합니다.");
+	        }
+		    
+		    // 원본 파일명과 확장자
+		    String originalFilename = file.getOriginalFilename();
+		    String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+		    
+		    String userId = String.valueOf(svo.getUser_id());;
+		    String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+		    String newFilename = userId + "_" + timestamp + extension;
+	
+		    // 3. 저장 경로 (static/upload 폴더)
+	        String uploadPath = new File("src/main/resources/static/upload/").getAbsolutePath();
+	        File saveDir = new File(uploadPath);
+	        if (!saveDir.exists()) {
+	            saveDir.mkdirs();
+	        }
+	
+	        // 4. 저장
+	        File saveFile = new File(saveDir, newFilename);
+	        file.transferTo(saveFile);
+	
+	        // 5. Python 예측 호출 (정확한 파일 경로 전달)
+	        JsonNode prediction = PythonModelCaller.predictJson(saveFile.getAbsolutePath());
 
+	        String predictedClass = prediction.get("predictedClass").asText();
+	        double confidence = prediction.get("confidence").asDouble();
+	
+	        // 6. DB에서 음식 정보 조회
+	        AnalyzeVO foodInfo = analyzeService.selectFoodbyName(predictedClass);
+
+	        // 7. 결과 반환
+	        Map<String, Object> result = new HashMap<>();
+	        result.put("predictedClass", predictedClass);
+	        result.put("confidence", confidence);
+	        result.put("calories", foodInfo.getCalories());
+	        result.put("nut_carb", foodInfo.getNut_carb());
+	        result.put("nut_pro", foodInfo.getNut_pro());
+	        result.put("nut_fat", foodInfo.getNut_fat());
+	        result.put("food_ko_name", foodInfo.getFood_ko_name());
+	        result.put("imageUrl", "/upload/" + newFilename); // 프론트 이미지 표시용
+	
+	        return ResponseEntity.ok(result);
+		} catch (Exception e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("업로드 실패");
+	    }
+    }
 }

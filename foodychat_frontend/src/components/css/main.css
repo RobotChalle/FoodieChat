@@ -327,3 +327,10 @@ nav.glass-navbar {
   color: #9ca3af;
   margin-top: 4px;
 }
+
+.navbar-center .nav-link,
+.navbar-right .nav-link {
+  display: inline-flex;            /* ✅ 가로 정렬 보장 */
+  align-items: center;
+  white-space: nowrap;             /* ✅ 줄바꿈 방지 */
+}

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom'; // 👈 페이지 이동을 위해 추가
 import { GoogleLogin } from '@react-oauth/google';
+import NavBar from './NavBar';
 import { toast } from 'react-toastify';
 import './css/login.css';
 
@@ -78,6 +79,8 @@ function Login() {
   };
 
   return (
+    <>
+    <NavBar />
     <div className="container">
       <div className="text-center">
           <h1>다시 오신 걸 환영합니다</h1>
@@ -128,6 +131,7 @@ function Login() {
           <Link to="/privacy" className="small">개인정보 보호 정책</Link>
       </div>
     </div>
+    </>
   );
 }
 

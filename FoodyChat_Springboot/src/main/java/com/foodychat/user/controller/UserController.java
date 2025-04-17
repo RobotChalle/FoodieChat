@@ -315,12 +315,28 @@ public class UserController {
     // 🟢 일반 회원가입
     @PostMapping("/signup")
     public ResponseEntity<Map<String, Object>> signup(@RequestBody UserVO userVO) {
-        userService.registerUser(userVO);
-        Map<String, Object> response = new HashMap<>();
-        UserVO vo = userService.getUserByEmail(userVO.getEmail());
-        response.put("message", "회원가입 성공");
-        response.put("user_id", vo.getUser_id());
-        return ResponseEntity.ok(response);
+    	try {
+            if (userService.isEmailExists(userVO.getEmail())) {
+                // ✅ 중복 시 409 반환 + JSON 형태의 메시지
+                Map<String, Object> errorResponse = new HashMap<>();
+                errorResponse.put("message", "이미 가입된 이메일입니다.");
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+            }
+
+            userService.registerUser(userVO);
+            UserVO vo = userService.getUserByEmail(userVO.getEmail());
+
+            Map<String, Object> successResponse = new HashMap<>();
+            successResponse.put("user_id", vo.getUser_id());
+            successResponse.put("message", "회원가입이 완료되었습니다.");
+            return ResponseEntity.status(HttpStatus.CREATED).body(successResponse);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("message", "회원가입 중 오류가 발생했습니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
     }
 
     // 🟢 구글 회원가입

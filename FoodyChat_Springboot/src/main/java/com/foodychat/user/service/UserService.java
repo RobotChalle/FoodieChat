@@ -92,4 +92,9 @@ public interface UserService {
 	 * 회원 식단정보 가져오기
 	 * */
 	List<UserMealsVO> getMeals(long user_id);
+	
+	/**
+	 * 이메일 중복여부 체크
+	 * */
+	boolean isEmailExists(String email);
 }

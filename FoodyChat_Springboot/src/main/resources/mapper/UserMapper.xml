@@ -257,4 +257,8 @@
             AND m.user_id = #{user_id}
         ORDER BY m.meal_date ASC
 	</select>
+	<!-- 이메일 중복 체크 -->
+	<select id="isEmailExists" resultType="int" parameterType="string">
+	  SELECT COUNT(*) FROM users WHERE email = #{email}
+	</select>
 </mapper>

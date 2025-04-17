@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import NavBar from './NavBar';
 import { GoogleLogin } from '@react-oauth/google';
 import './css/signup.css';
 
@@ -94,82 +95,85 @@ export default function Signup() {
     };
 
     return (
-        <div className="container">
-            <div className="text-center">
-                <h1>회원가입</h1>
+        <>
+            <NavBar />        
+            <div className="container">
+                <div className="text-center">
+                    <h1>Welcome to foodyChat!</h1>
+                </div>
+                <form onSubmit={handleSubmit}>
+                    <div className="form-group">
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="이름*"
+                            name="user_name"
+                            value={form.user_name}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <input
+                            type="email"
+                            className="form-control"
+                            placeholder="이메일*"
+                            name="email"
+                            value={form.email}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <input
+                            type="password"
+                            className="form-control"
+                            placeholder="비밀번호*"
+                            name="user_password"
+                            value={form.user_password}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <input
+                            type="password"
+                            className="form-control"
+                            placeholder="비밀번호 확인*"
+                            name="confirmPassword"
+                            value={form.confirmPassword}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <input
+                            type="tel"
+                            className="form-control"
+                            placeholder="전화번호*"
+                            name="phone"
+                            value={form.phone}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+
+                    {error && <div className="error-message">{error}</div>}
+                    {success && <div className="success-message">{success}</div>}
+
+                    <button type="submit" className="btn btn-primary">계속</button>
+
+                    <div className="terms-text">
+                        회원가입 시 <Link to="/terms">이용약관</Link>과 <br /><Link to="/privacy">개인정보 보호정책</Link>에 동의하는 것으로 간주됩니다.
+                    </div>
+
+                    <hr />
+                    <GoogleLogin
+                        onSuccess={handleGoogleSignup}
+                        onError={() => alert("구글 로그인 실패")}
+                    />
+                </form>
             </div>
-            <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <input
-                        type="text"
-                        className="form-control"
-                        placeholder="이름*"
-                        name="user_name"
-                        value={form.user_name}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <input
-                        type="email"
-                        className="form-control"
-                        placeholder="이메일*"
-                        name="email"
-                        value={form.email}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <input
-                        type="password"
-                        className="form-control"
-                        placeholder="비밀번호*"
-                        name="user_password"
-                        value={form.user_password}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <input
-                        type="password"
-                        className="form-control"
-                        placeholder="비밀번호 확인*"
-                        name="confirmPassword"
-                        value={form.confirmPassword}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <input
-                        type="tel"
-                        className="form-control"
-                        placeholder="전화번호*"
-                        name="phone"
-                        value={form.phone}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-
-                {error && <div className="error-message">{error}</div>}
-                {success && <div className="success-message">{success}</div>}
-
-                <button type="submit" className="btn btn-primary">계속</button>
-
-                <div className="terms-text">
-                    회원가입 시 <Link to="/terms">이용약관</Link>과 <Link to="/privacy">개인정보 보호정책</Link>에 동의하는 것으로 간주됩니다.
-                </div>
-
-                <hr />
-                <GoogleLogin
-                    onSuccess={handleGoogleSignup}
-                    onError={() => alert("구글 로그인 실패")}
-                />
-            </form>
-        </div>
+        </>
     );
 }
