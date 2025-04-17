@@ -16,7 +16,7 @@ import UserMealSearch from './UserMealSearch';
 import Imageanalysis from './ImageAnalysis';
 import MealRecommend from './MealRecommend';
 import CafeRecommend from './CafeRecommend';
-import ChatBot from './ChatBot';
+import ChatTest from "./ChatTest"; // 경로는 실제 ChatTest.jsx 위치에 맞게 수정
 
 function App() {
   return (
@@ -52,7 +52,7 @@ function App() {
             <Route path="/image-analysis" element={<Imageanalysis />} />
             <Route path="/meal-recommend" element={<MealRecommend />} />
             <Route path="/cafe-recommend/:foodName" element={<CafeRecommend/>} />
-            <Route path="/chatbot" element={<ChatBot/>} />
+            <Route path="/chatbot" element={<ChatTest />} />
           </Routes>
         </div>
       </Router>
