@@ -33,6 +33,8 @@ import com.foodychat.user.vo.UserDetailsVO;
 import com.foodychat.user.vo.UserLogVO;
 import com.foodychat.user.vo.UserVO;
 import com.foodychat.user.vo.UserMealsVO;
+import com.foodychat.user.vo.BmiHistoryVO;
+import com.foodychat.user.vo.FoodRecognitionHistoryVO;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -418,10 +420,23 @@ public class UserController {
 	
 	        return ResponseEntity.ok(userInfo);
     	}else {
-    		return ResponseEntity.ok(null);
+            return ResponseEntity.ok("No user in session");
     	}
     }
-    
+    //세션에서 유저 아이디 반환
+    @GetMapping("/user-id")
+    public ResponseEntity<?> getUserId(HttpSession session) {
+    UserVO user = (UserVO) session.getAttribute("user");
+    System.out.println("세션에 저장된 유저: " + user);  // null이면 세션이 안 붙은 것
+        if (user != null) {
+            return ResponseEntity.ok(user.getUser_id());
+        } else {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 필요");
+        }
+    }
+
+
+
     /**
    	 * 유저 식단 조회
    	 * */
@@ -462,4 +477,24 @@ public class UserController {
        ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:8000/query", entity, String.class);
        return ResponseEntity.ok(response.getBody());
    }
+    // 유저 int 아이디로 조회
+    @GetMapping("/{id}/details")
+    public ResponseEntity<UserVO> getUserRagInfo(@PathVariable("id") int userId) {
+    UserVO userInfo = userService.getUserInfoByUserId(userId);
+    return ResponseEntity.ok(userInfo);
+    }
+
+    // ✅ BMI 히스토리 조회
+    @GetMapping("/{id}/bmi")
+    public ResponseEntity<List<BmiHistoryVO>> getBmiHistory(@PathVariable("id") Long userId) {
+    List<BmiHistoryVO> bmiHistory = userService.getBmiHistory(userId);
+    return ResponseEntity.ok(bmiHistory);
+    }
+
+    // ✅ 음식 인식 히스토리 조회
+    @GetMapping("/{id}/meals")
+    public ResponseEntity<List<FoodRecognitionHistoryVO>> getFoodHistory(@PathVariable("id") Long userId) {
+    List<FoodRecognitionHistoryVO> foodHistory = userService.getFoodHistory(userId);
+    return ResponseEntity.ok(foodHistory);
+    }
 }

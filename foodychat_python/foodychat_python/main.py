@@ -1,61 +1,43 @@
-import uvicorn
-from fastapi import FastAPI
-from router import chat_router
-from sqlalchemy.orm import Session
-from database import get_db  # DB 세션 주입
-from services.rag_service import build_rag_document
-from fastapi.middleware.cors import CORSMiddleware
-from UserMealLLM_models import MealQueryRequest
-from UserMealLLM_service_gemini import build_prompt, query_openai
+from fastapi import FastAPI, HTTPException, Request
+from pydantic import BaseModel
+from fastapi.responses import JSONResponse
 import json
 import re
-from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
+from router import chat_router  # chat_router에서 FastAPI 라우터 가져오기
+from services.rag_service import generate_answer_from_gemini  # 정확한 함수 이름 사용
 
-
+# FastAPI 앱 생성
 app = FastAPI()
 
+#라우터 
+app.include_router(chat_router)
+
+# CORS 설정
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=["*"],  # 모든 출처에서의 요청을 허용
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["*"],  # 모든 HTTP 메서드를 허용
+    allow_headers=["*"],  # 모든 헤더를 허용
 )
 
+# MealQueryRequest 모델 정의 (user_id는 필수로 지정)
+class MealQueryRequest(BaseModel):
+    user_id: int  # 필수로 user_id가 필요합니다
+    question: str = None  # 챗봇 대화 시 사용
+    query: str = None     # RAG 생성 시 사용
+
+    # 데이터 유효성 검사
+    def validate(self):
+        if not self.user_id:
+            raise HTTPException(status_code=422, detail="user_id는 필수입니다.")
+        if not (self.question or self.query):
+            raise HTTPException(status_code=422, detail="question 또는 query는 필수입니다.")
+
+# Helper function to extract JSON from string response
 def extract_json_block(text: str) -> str:
     match = re.search(r"\{[\s\S]*\}", text)
     if match:
         return match.group(0)
     return text  # fallback: return original
-
-@app.post("/query")
-async def query_llm(request: MealQueryRequest):
-    prompt = build_prompt(request.query, request.meals)
-    response_str = query_openai(prompt)
-    print("🔍 LLM 응답 원본:\n", response_str)
-
-    try:
-        clean_json_str = extract_json_block(response_str)
-        json_obj = json.loads(clean_json_str)
-        return JSONResponse(content=json_obj)
-    except Exception as e:
-        return JSONResponse(
-            status_code=400,
-            content={"error": f"LLM 응답 파싱 실패: {str(e)}", "llm_response": response_str}
-        )
-    
-if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
-
-#RAG파일 생성
-@app.get("/rag/{user_id}")
-def get_rag_document(user_id: int, db: Session = Depends(get_db)):
-    rag_text = build_rag_document(db, user_id)
-    if rag_text is None:
-        return {"error": "User not found"}
-
-    # Optional: 저장도 가능
-    with open(f"rag_user_{user_id}.txt", "w", encoding="utf-8") as f:
-        f.write(rag_text)
-
-    return {"rag": rag_text}

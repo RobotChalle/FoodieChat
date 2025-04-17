@@ -13,9 +13,12 @@ import FindAccount from './FindAccount';
 import ResetPassword from './ResetPassword';
 import { ToastContainer } from 'react-toastify';
 import UserMealSearch from './UserMealSearch';
+import ChatTest from "./ChatTest"; // 경로는 실제 ChatTest.jsx 위치에 맞게 수정
+import axios from 'axios'; 
 
 function App() {
   return (
+    
     <GoogleOAuthProvider clientId="758964500028-3l2f9avbost20tq4ri7nr4nfed4fd2l3.apps.googleusercontent.com">
 
       <Router>
@@ -45,6 +48,7 @@ function App() {
             <Route path="/change-password" element={<ChangePassword />} />
             <Route path="/meal-plan" element={<UserMealSearch />} />
             <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/chat-test" element={<ChatTest />} />
           </Routes>
         </div>
       </Router>

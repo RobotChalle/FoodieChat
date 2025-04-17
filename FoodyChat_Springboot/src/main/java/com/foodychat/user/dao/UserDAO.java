@@ -7,6 +7,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.foodychat.user.vo.BmiHistoryVO;
+import com.foodychat.user.vo.FoodRecognitionHistoryVO;
 import com.foodychat.user.vo.UserDetailsVO;
 import com.foodychat.user.vo.UserLogVO;
 import com.foodychat.user.vo.UserMealsVO;
@@ -67,7 +69,10 @@ public class UserDAO {
     public UserVO getUserById(long id) {
         return sqlSession.selectOne(mapper + ".selectUserById", id);
     }
-
+    // 새롭게 추가된 user_id 기반 조회
+    public UserVO selectUserByUserId(int userId) {
+        return sqlSession.selectOne(mapper + ".selectUserByUserId", userId);
+    }
     // 사용자 비밀번호 변경
     public void updatePasswordUser(UserVO user) {
         sqlSession.update(mapper + ".updatePasswordUser", user);
@@ -124,4 +129,14 @@ public class UserDAO {
 	public List<UserMealsVO> getMeals(long user_id) {
 		return sqlSession.selectList(mapper + ".selectMeals", user_id);
 	}
+    // BMI 히스토리 조회
+    public List<BmiHistoryVO> selectBmiHistoryByUserId(Long userId) {
+        return sqlSession.selectList(mapper + ".selectBmiHistoryByUserId", userId);
+    }
+
+    // 음식 인식 히스토리 조회
+    public List<FoodRecognitionHistoryVO> selectFoodHistoryByUserId(Long userId) {
+        return sqlSession.selectList(mapper + ".selectFoodHistoryByUserId", userId);
+    }
+
 }

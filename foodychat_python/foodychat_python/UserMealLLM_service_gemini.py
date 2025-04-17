@@ -1,15 +1,17 @@
-import openai
-from dotenv import load_dotenv
 import os
-from UserMealLLM_models import Meal
+from dotenv import load_dotenv
 import time
 import requests
+from UserMealLLM_models import Meal
 
+# 환경 변수 로드
 load_dotenv()
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
+# Gemini API 키 설정
+API_KEY = os.getenv("GOOGLE_API_KEY")
 
 def build_prompt(user_query: str, meals: list[Meal]) -> str:
+    # 사용자의 식단 정보를 형식화
     meal_lines = "\n".join([
         f"{meal.meal_date} | {meal.meal_type_nm} | {meal.meal_text}"
         for meal in meals
@@ -40,12 +42,20 @@ def build_prompt(user_query: str, meals: list[Meal]) -> str:
 """
     return prompt
 
-def query_openai(prompt: str) -> str:
-    data = {"contents": [{"parts": [{"text": prompt}]}]}
-    api_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyDPr7KPl7PZT9pnW-_fzA23ui6pOHnehwE"
-    api_header = {"Content-Type": "application/json"}
-    response = requests.post(api_url, headers=api_header, json=data)
+def query_gemini(prompt: str) -> str:
+    # Gemini API 엔드포인트 및 API 키
+    api_url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
+    headers = {"Content-Type": "application/json"}
+    data = {
+        "contents": [
+            {"parts": [{"text": prompt}]}
+        ]
+    }
+
+    # API 요청
+    response = requests.post(api_url, headers=headers, json=data, params={"key": API_KEY})
     
+    # 응답 처리
     if response.status_code == 200:
         result = response.json()
         try:

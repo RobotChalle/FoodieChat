@@ -24,11 +24,12 @@ public class UserVO {
 	
 	/* 테이블명 user_details */
 	private String gender;
-	private int age;
+	private int  age;
 	private float user_weight;
 	private float height;
 	private String user_address;
-	
+	private String  healthGoal; 		//(common_code_details.detail_name)
+
 	private long login_id;			// 로그인아이디
 	private String login_ip;			// 로그인아이피
 }

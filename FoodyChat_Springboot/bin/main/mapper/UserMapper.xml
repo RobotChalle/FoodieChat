@@ -34,7 +34,6 @@
         LEFT JOIN user_details ud ON u.user_id = ud.user_id
         WHERE u.email = #{email}
     </select>
-
     <!-- 구글 ID로 사용자 조회 -->
     <select id="findByGoogleId" parameterType="String" resultType="com.foodychat.user.vo.UserVO">
         SELECT u.*, ud.age, ud.user_weight, ud.height, ud.user_address
@@ -100,14 +99,38 @@
                um.membership_level AS membership_level,
                um.reg_date,
                um.upd_date,
-               IFNULL(ud.gender,'1') AS gender,
+               CAST(IFNULL(ud.gender,1) AS CHAR) AS gender,
                ud.age,
                ud.user_weight,
                ud.height,
-               ud.user_address
+               IFNULL(ud.user_address,'') AS user_address,
+               cm.detail_name as health_goal
         FROM users um
         LEFT OUTER JOIN user_details ud ON um.user_id = ud.user_id
-        WHERE um.user_id = #{id}
+        LEFT OUTER JOIN common_code_details cm ON cm.code_id = 'CM003' and cm.detail_code = ud.health_goal
+        WHERE um.email = #{email}
+    </select>
+    <!-- 사용자 조회(유저 고유 int 아이디) -->
+    <select id="selectUserByUserId" parameterType="int" resultType="com.foodychat.user.vo.UserVO">
+        SELECT um.user_id,
+           um.email,
+           IFNULL(um.google_id,'') AS google_id,
+           IFNULL(um.user_password,'') AS user_password,
+           um.user_name,
+           um.phone,
+           um.membership_level AS membership_level,
+           um.reg_date,
+           um.upd_date,
+           IFNULL(ud.gender,1) AS gender,
+           ud.age,
+           ud.user_weight,
+           ud.height,
+           IFNULL(ud.user_address,'') AS user_address,
+           cm.detail_name AS health_goal
+        FROM users um
+        LEFT OUTER JOIN user_details ud ON um.user_id = ud.user_id
+        LEFT OUTER JOIN common_code_details cm ON cm.code_id = 'CM003' AND cm.detail_code = ud.health_goal
+        WHERE um.user_id = #{userId}
     </select>
 
     <!-- 사용자 조회(이메일) -->
@@ -238,4 +261,19 @@
             AND m.user_id = #{user_id}
         ORDER BY m.meal_date ASC
 	</select>
+    <!-- BMI 기록 리스트 조회 -->
+    <select id="selectBmiHistoryByUserId" parameterType="long" resultType="com.foodychat.user.vo.BmiHistoryVO">
+        SELECT id, user_id, bmi_score, gender, user_weight, height, reg_date, upd_date
+        FROM bmi_history
+        WHERE user_id = #{userId}
+        ORDER BY reg_date DESC
+    </select>
+
+    <!-- 음식 인식 기록 리스트 조회 -->
+    <select id="selectFoodHistoryByUserId" parameterType="long" resultType="com.foodychat.user.vo.FoodRecognitionHistoryVO">
+        SELECT id, user_id, food_id, rec_date, meal_type, image_path, reg_date, upd_date
+        FROM food_recognition_history
+        WHERE user_id = #{userId}
+        ORDER BY reg_date DESC
+    </select>
 </mapper>
