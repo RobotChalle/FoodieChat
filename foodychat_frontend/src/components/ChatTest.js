@@ -7,12 +7,12 @@ function ChatTest() {
   const [answer, setAnswer] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // ✅ 세션 기반 유저 ID 불러오기 (Spring Boot 세션에서 user_id만 반환)
+  // ✅ 세션 기반 유저 ID 불러오기
   useEffect(() => {
     axios.get("http://localhost:8080/users/user-id", { withCredentials: true })
       .then(res => {
         console.log("📦 세션 유저 ID:", res.data);
-        setUserId(res.data);  // 서버에서 문자열로 user_id만 반환한다고 가정
+        setUserId(res.data);
       })
       .catch(err => {
         console.error("❌ 세션 유저 정보를 불러오지 못했습니다.", err.response || err);
@@ -44,7 +44,7 @@ function ChatTest() {
   };
 
   return (
-    <div className="chat-container">
+    <div className="chat-container" style={{ padding: "2rem", fontFamily: "sans-serif" }}>
       <h2>🗨️ Gemini 챗봇</h2>
       {!userId ? (
         <p>🔐 로그인 유저 정보를 불러오는 중입니다...</p>
@@ -56,14 +56,21 @@ function ChatTest() {
             placeholder="질문을 입력하세요"
             rows="5"
             cols="50"
+            style={{ padding: "1rem", fontSize: "1rem" }}
           />
           <br />
-          <button onClick={handleSend} disabled={loading}>
+          <button
+            onClick={handleSend}
+            disabled={loading}
+            style={{ marginTop: "0.5rem", padding: "0.5rem 1rem", fontSize: "1rem" }}
+          >
             {loading ? "질문 전송 중..." : "질문 보내기"}
           </button>
-          <div style={{ marginTop: "1rem" }}>
+          <div style={{ marginTop: "1.5rem" }}>
             <strong>💬 응답:</strong>
-            <p>{answer}</p>
+            <div style={{ whiteSpace: "pre-wrap", marginTop: "0.5rem", lineHeight: "1.7" }}>
+              {answer}
+            </div>
           </div>
         </>
       )}

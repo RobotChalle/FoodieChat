@@ -48,7 +48,7 @@ function App() {
             <Route path="/change-password" element={<ChangePassword />} />
             <Route path="/meal-plan" element={<UserMealSearch />} />
             <Route path="/reset-password" element={<ResetPassword />} />
-            <Route path="/chat-test" element={<ChatTest />} />
+            <Route path="/chatbot" element={<ChatTest />} />
           </Routes>
         </div>
       </Router>
