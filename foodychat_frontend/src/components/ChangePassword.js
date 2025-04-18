@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import NavBar from './NavBar';
 import './css/change-password.css';
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 export default function ChangePassword() {
     const navigate = useNavigate();
     const [currentPassword, setCurrentPassword] = useState('');
@@ -20,7 +21,7 @@ export default function ChangePassword() {
         }
 
         try {
-        const response = await axios.post('http://localhost:8080/users/changePassword', 
+        const response = await axios.post(`${BASE_URL}/users/changePassword`, 
             new URLSearchParams({
                 currentPassword: currentPassword,
                 newPassword: newPassword,

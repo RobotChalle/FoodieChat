@@ -12,6 +12,7 @@ export default function ResetPassword() {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    const BASE_URL = process.env.REACT_APP_BASE_URL;
 
     useEffect(() => {
         if (!token) {
@@ -30,7 +31,7 @@ export default function ResetPassword() {
         }
 
         try {
-            await axios.post('http://localhost:8080/users/resetPassword', 
+            await axios.post(`${BASE_URL}/users/resetPassword`, 
                 new URLSearchParams({
                     token: token,
                     newPassword: password

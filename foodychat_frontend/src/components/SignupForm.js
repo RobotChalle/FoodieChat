@@ -6,6 +6,7 @@ import { GoogleLogin } from '@react-oauth/google';
 import './css/signup.css';
 
 export default function Signup() {
+    const BASE_URL = process.env.REACT_APP_BASE_URL;
     const [form, setForm] = useState({
         user_name: '',
         email: '',
@@ -38,7 +39,7 @@ export default function Signup() {
 
         try {
             const response = await axios.post(
-                'http://localhost:8080/users/signup',
+                `${BASE_URL}/users/signup`,
                 {
                     user_name: form.user_name,
                     email: form.email,
@@ -74,7 +75,7 @@ export default function Signup() {
 
     const handleGoogleSignup = async (credentialResponse) => {
         try {
-            const res = await axios.post('http://localhost:8080/users/google', {
+            const res = await axios.post(`${BASE_URL}/users/google`, {
                 token: credentialResponse.credential,
             });
 

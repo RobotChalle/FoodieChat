@@ -1,7 +1,7 @@
 // src/api/chat.js
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:8000'; // FastAPI 주소 (포트 확인!)
+const BASE_URL = process.env.REACT_APP_FAST_API_URL;
 
 export const sendChatMessage = async (userId, message) => {
   try {

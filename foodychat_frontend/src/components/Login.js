@@ -12,10 +12,11 @@ function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate(); // 👈 페이지 이동 함수
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
 
   const handleGoogleSignup = async (credentialResponse) => {
     try {
-        const res = await axios.post('http://localhost:8080/users/googleLogin', {
+        const res = await axios.post(`${BASE_URL}/users/googleLogin`, {
             token: credentialResponse.credential,
         },
         {
@@ -49,7 +50,7 @@ function Login() {
   
     try {
       const response = await axios.post(
-        'http://localhost:8080/users/loginUser', 
+        `${BASE_URL}/users/loginUser`, 
         new URLSearchParams({
           email: username,
           user_password: password,

@@ -5,6 +5,7 @@ import NavBar from './NavBar';
 import './css/signup2.css';
 
 export default function Signup2() {
+    const BASE_URL = process.env.REACT_APP_BASE_URL;
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
@@ -60,7 +61,7 @@ export default function Signup2() {
         }
 
         try {
-            const response = await axios.post('http://localhost:8080/users/details', formData);
+            const response = await axios.post(`${BASE_URL}/users/details`, formData);
             if (response.status === 200) {
                 setSuccess('건강 정보가 성공적으로 저장되었습니다!');
                 setTimeout(() => {

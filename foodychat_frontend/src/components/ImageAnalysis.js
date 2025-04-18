@@ -13,6 +13,7 @@ export default function Imageanalysis() {
   const imageInputRef = useRef();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
 
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
@@ -27,7 +28,7 @@ export default function Imageanalysis() {
       const formData = new FormData();
       formData.append('file', file);
 
-      const response = await axios.post('http://localhost:8080/analyze/upload', formData, {
+      const response = await axios.post(`${BASE_URL}/analyze/upload`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         withCredentials: true,
       });

@@ -12,6 +12,7 @@ export default function Mypage() {
     const [phone, setPhone] = useState('');
     const [formData, setFormData] = useState({ age: '', weight: '', height: '', address: '', addressDetail: '' });
     const navigate = useNavigate();
+    const BASE_URL = process.env.REACT_APP_BASE_URL;
 
     const handleAddressSearch = () => {
         if (window.daum && window.daum.Postcode) {
@@ -32,7 +33,7 @@ export default function Mypage() {
       
         const fetchUserInfo = async () => {
           try {
-            const response = await axios.post("http://localhost:8080/users/myPage", {}, {
+            const response = await axios.post(`${BASE_URL}/users/myPage`, {}, {
               withCredentials: true
             });
       
@@ -70,7 +71,7 @@ export default function Mypage() {
 
     const handleLogout = async () => {
         try {
-            await axios.post('http://localhost:8080/users/logout', 
+            await axios.post(`${BASE_URL}/users/logout`, 
                 new URLSearchParams({
                     user_id: userInfo.user_id,
                 }),
@@ -106,7 +107,7 @@ export default function Mypage() {
                 address_detail: formData.addressDetail
             });
 
-            const response = await axios.post('http://localhost:8080/users/updateUser', payload, {
+            const response = await axios.post(`${BASE_URL}/users/updateUser`, payload, {
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 withCredentials: true
             });

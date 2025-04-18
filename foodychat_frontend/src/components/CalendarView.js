@@ -8,7 +8,6 @@ import './css/calendarview.css';
 import CustomEvent from './CustomEvent'; // ✅ 추가
 
 const localizer = momentLocalizer(moment);
-
 export default function CalendarView({ meals }) {
   const events = meals.map(meal => ({
     title: `${meal.meal_type_nm}: ${meal.meal_text}`,

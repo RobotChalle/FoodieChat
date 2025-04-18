@@ -3,8 +3,10 @@ import axios from 'axios';
 import NavBar from '../components/NavBar.js';
 import './css/admin.css';
 import './css/main.css';
+
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 const PAGE_SIZE = 10;
-axios.defaults.baseURL = 'http://localhost:8080';
+axios.defaults.baseURL = BASE_URL;
 axios.defaults.withCredentials = true;
 export default function AdminPage() {
   const [users, setUsers] = useState([]);

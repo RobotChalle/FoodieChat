@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -55,6 +56,12 @@ public class AnalyzeController {
 	@Autowired
     private UserService userService;
 	
+	@Value("${fastapi.url}")
+    private String fastApiUrl;
+	
+	@Autowired
+	private PythonModelCaller pythonModelCaller;
+	
 	private final RestTemplate restTemplate = new RestTemplate();
 
 	/**
@@ -81,7 +88,7 @@ public class AnalyzeController {
 			
 			String encodedGoal = URLEncoder.encode(info.getHealth_goal(), StandardCharsets.UTF_8);
 
-	        URI uri = UriComponentsBuilder.fromHttpUrl("http://localhost:8000/recommend")
+	        URI uri = UriComponentsBuilder.fromHttpUrl(fastApiUrl+"/recommend")
 	                .queryParam("start", start)
 	                .queryParam("end", end)
 	                .queryParam("types", types)
@@ -244,7 +251,7 @@ public class AnalyzeController {
 	        file.transferTo(saveFile);
 	
 	        // 5. Python 예측 호출 (정확한 파일 경로 전달)
-	        JsonNode prediction = PythonModelCaller.predictJson(saveFile.getAbsolutePath());
+	        JsonNode prediction = pythonModelCaller.predictJson(saveFile.getAbsolutePath());
 
 	        String predictedClass = prediction.get("predictedClass").asText();
 	        double confidence = prediction.get("confidence").asDouble();

@@ -7,8 +7,9 @@ function ChatBot() {
   const [answer, setAnswer] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
   useEffect(() => {
-    axios.get("http://localhost:8080/users/user-id", { withCredentials: true })
+    axios.get(`${BASE_URL}/users/user-id`, { withCredentials: true })
       .then(res => setUserId(res.data))
       .catch(err => {
         console.error("❌ 유저 정보 로딩 실패", err);
@@ -25,7 +26,7 @@ function ChatBot() {
     setLoading(true);
     setAnswer(""); // 로딩 중 이전 응답 초기화
     try {
-      const res = await axios.post("http://localhost:8000/chat/chat", {
+      const res = await axios.post(`${BASE_URL}/chat/chat`, {
         user_id: userId,
         question,
       });

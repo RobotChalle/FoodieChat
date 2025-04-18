@@ -7,6 +7,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -28,13 +29,13 @@ import org.springframework.web.client.RestTemplate;
 import com.foodychat.config.EmailService;
 import com.foodychat.config.GoogleTokenVerifier;
 import com.foodychat.user.service.UserService;
+import com.foodychat.user.vo.BmiHistoryVO;
+import com.foodychat.user.vo.FoodRecognitionHistoryVO;
 import com.foodychat.user.vo.GoogleUserInfo;
 import com.foodychat.user.vo.UserDetailsVO;
 import com.foodychat.user.vo.UserLogVO;
-import com.foodychat.user.vo.UserVO;
 import com.foodychat.user.vo.UserMealsVO;
-import com.foodychat.user.vo.BmiHistoryVO;
-import com.foodychat.user.vo.FoodRecognitionHistoryVO;
+import com.foodychat.user.vo.UserVO;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -45,7 +46,7 @@ import jakarta.servlet.http.HttpSession;
  */
 @RestController
 @RequestMapping("/users")
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+@CrossOrigin(origins = "${react.url}", allowCredentials = "true")
 public class UserController {
     @Autowired
     private UserService userService;
@@ -55,6 +56,12 @@ public class UserController {
 
 	@Autowired
 	PasswordEncoder passwordEncoder;
+	
+	@Value("${react.url}")
+	private String reactiUrl;
+	
+	@Value("${fastapi.url}")
+    private String fastapiUrl;
 
     // 🟢 일반 로그인
     @PostMapping("/loginUser")
@@ -287,7 +294,7 @@ public class UserController {
         userService.savePasswordResetToken(email, token);
 
         // 비밀번호 재설정 링크 생성
-        String resetLink = "http://localhost:3000/reset-password?token=" + token;
+        String resetLink = reactiUrl+"/reset-password?token=" + token;
 
         // 이메일 발송
         String subject = "비밀번호 재설정 안내";
@@ -486,7 +493,7 @@ public class UserController {
        requestBody.put("meals", meals);
 
        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
-       ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:8000/query", entity, String.class);
+       ResponseEntity<String> response = restTemplate.postForEntity(fastapiUrl+"/query", entity, String.class);
        return ResponseEntity.ok(response.getBody());
    }
 
