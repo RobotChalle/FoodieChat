@@ -140,8 +140,8 @@ ALTER TABLE password_reset_token
 ADD COLUMN email VARCHAR(255) NOT NULL;
 
 
-INSERT INTO users(email , user_name, membership_level, phone)
-values('admin@gmail.com', '관리자', 'admin', '000-0000-0000');
+INSERT INTO users(email , user_name, membership_level, phone, user_password)
+values('admin@gmail.com', '관리자', 'admin', '000-0000-0000','$2a$10$JF9a/4i/NKLinqMc5q3X4.9dw1uYYiVv4.ci4NVQMkJMiF3aT4jMa');
 INSERT INTO common_codes(code_id , code_name, reg_id, reg_ip)
 values('CT001','카테고리',1,'127.0.0.1');
 INSERT INTO common_codes(code_id , code_name, reg_id, reg_ip)
