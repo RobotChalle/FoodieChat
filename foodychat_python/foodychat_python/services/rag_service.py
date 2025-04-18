@@ -1,11 +1,11 @@
 # services/rag_service.py
 
-from langchain_chroma import Chroma
+from langchain.vectorstores import Chroma
 from langchain_community.embeddings import OllamaEmbeddings
 from langchain_core.documents import Document
 from utils.rag_text_templates import build_full_rag_text
 from utils.rag_builder import build_and_store_rag
-from models.schemas import FullUserProfileSchema
+from models.schemas import FullUserProfileSchema 
 from LLM_model import generate_answer_from_gemini
 
 CHROMA_PATH = "chroma_db"

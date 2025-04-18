@@ -262,7 +262,7 @@ export default function Mypage() {
                         </div>
 
                         <div className="mypage-grid-row actions">
-                            <div className="button-group">
+                            <div className="mypage-button-group">
                                 <button onClick={handleSave} className="button">저장</button>
                                 <button onClick={() => navigate('/change-password')} className="button secondary">비밀번호 변경</button>
                                 {userInfo && userInfo.membership_level?.toLowerCase() !== 'regular' && (

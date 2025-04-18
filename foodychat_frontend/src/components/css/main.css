@@ -260,7 +260,16 @@ nav.glass-navbar {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  margin-top: 30px;
+  margin-top: 20px;
+  gap: 15px;
+}
+
+/* 버튼 그룹 */
+.mypage-button-group {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
   gap: 15px;
 }
 

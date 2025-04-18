@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import NavBar from './NavBar';
 
 function ChatTest() {
   const [userId, setUserId] = useState(null);
@@ -38,50 +39,53 @@ function ChatTest() {
   };
 
   return (
-    <div style={styles.container}>
-      <h1 style={styles.header}>🤖 Gemini 챗봇</h1>
+    <>
+                <NavBar />
+      <div style={styles.container}>
+        <h1 style={styles.header}>🤖 Gemini 챗봇</h1>
 
-      {!userId ? (
-        <p style={styles.status}>🔐 로그인 유저 정보를 불러오는 중입니다...</p>
-      ) : (
-        <>
-          <div style={styles.chatBox}>
-            {/* 사용자 질문 말풍선 */}
-            {question && (
-              <div style={{ ...styles.bubble, ...styles.userBubble }}>
-                {question}
-              </div>
-            )}
-
-            {/* 챗봇 응답 말풍선 */}
-            {loading ? (
-              <div style={{ ...styles.bubble, ...styles.botBubble }}>
-                <span className="blinking">💬 생각 중...</span>
-              </div>
-            ) : (
-              answer && (
-                <div style={{ ...styles.bubble, ...styles.botBubble }}>
-                  <pre style={styles.pre}>{answer}</pre>
+        {!userId ? (
+          <p style={styles.status}>🔐 로그인 유저 정보를 불러오는 중입니다...</p>
+        ) : (
+          <>
+            <div style={styles.chatBox}>
+              {/* 사용자 질문 말풍선 */}
+              {question && (
+                <div style={{ ...styles.bubble, ...styles.userBubble }}>
+                  {question}
                 </div>
-              )
-            )}
-          </div>
+              )}
 
-          <div style={styles.inputArea}>
-            <textarea
-              value={question}
-              onChange={(e) => setQuestion(e.target.value)}
-              placeholder="질문을 입력하세요"
-              rows="4"
-              style={styles.textarea}
-            />
-            <button onClick={handleSend} disabled={loading} style={styles.button}>
-              {loading ? "전송 중..." : "질문 보내기"}
-            </button>
-          </div>
-        </>
-      )}
-    </div>
+              {/* 챗봇 응답 말풍선 */}
+              {loading ? (
+                <div style={{ ...styles.bubble, ...styles.botBubble }}>
+                  <span className="blinking">💬 생각 중...</span>
+                </div>
+              ) : (
+                answer && (
+                  <div style={{ ...styles.bubble, ...styles.botBubble }}>
+                    <pre style={styles.pre}>{answer}</pre>
+                  </div>
+                )
+              )}
+            </div>
+
+            <div style={styles.inputArea}>
+              <textarea
+                value={question}
+                onChange={(e) => setQuestion(e.target.value)}
+                placeholder="질문을 입력하세요"
+                rows="4"
+                style={styles.textarea}
+              />
+              <button onClick={handleSend} disabled={loading} style={styles.button}>
+                {loading ? "전송 중..." : "질문 보내기"}
+              </button>
+            </div>
+          </>
+        )}
+      </div>
+      </>
   );
 }
 
