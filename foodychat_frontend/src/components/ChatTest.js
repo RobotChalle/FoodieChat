@@ -8,8 +8,10 @@ function ChatTest() {
   const [answer, setAnswer] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
+  const FAST_API_URL = process.env.REACT_APP_FAST_API_URL;
   useEffect(() => {
-    axios.get("http://localhost:8080/users/user-id", { withCredentials: true })
+    axios.get(`${BASE_URL}/users/user-id`, { withCredentials: true })
       .then(res => setUserId(res.data))
       .catch(err => {
         console.error("❌ 유저 정보 로딩 실패", err);
@@ -26,7 +28,7 @@ function ChatTest() {
     setLoading(true);
     setAnswer(""); // 로딩 중 이전 응답 초기화
     try {
-      const res = await axios.post("http://localhost:8000/chat/chat", {
+      const res = await axios.post(`${FAST_API_URL}/chat/chat`, {
         user_id: userId,
         question,
       });
@@ -40,52 +42,52 @@ function ChatTest() {
 
   return (
     <>
-                <NavBar />
-      <div style={styles.container}>
-        <h1 style={styles.header}>🤖 Gemini 챗봇</h1>
+    <NavBar/>
+    <div style={styles.container}>
+      <h1 style={styles.header}>🤖 Gemini 챗봇</h1>
 
-        {!userId ? (
-          <p style={styles.status}>🔐 로그인 유저 정보를 불러오는 중입니다...</p>
-        ) : (
-          <>
-            <div style={styles.chatBox}>
-              {/* 사용자 질문 말풍선 */}
-              {question && (
-                <div style={{ ...styles.bubble, ...styles.userBubble }}>
-                  {question}
-                </div>
-              )}
+      {!userId ? (
+        <p style={styles.status}>🔐 로그인 유저 정보를 불러오는 중입니다...</p>
+      ) : (
+        <>
+          <div style={styles.chatBox}>
+            {/* 사용자 질문 말풍선 */}
+            {question && (
+              <div style={{ ...styles.bubble, ...styles.userBubble }}>
+                {question}
+              </div>
+            )}
 
-              {/* 챗봇 응답 말풍선 */}
-              {loading ? (
+            {/* 챗봇 응답 말풍선 */}
+            {loading ? (
+              <div style={{ ...styles.bubble, ...styles.botBubble }}>
+                <span className="blinking">💬 생각 중...</span>
+              </div>
+            ) : (
+              answer && (
                 <div style={{ ...styles.bubble, ...styles.botBubble }}>
-                  <span className="blinking">💬 생각 중...</span>
+                  <pre style={styles.pre}>{answer}</pre>
                 </div>
-              ) : (
-                answer && (
-                  <div style={{ ...styles.bubble, ...styles.botBubble }}>
-                    <pre style={styles.pre}>{answer}</pre>
-                  </div>
-                )
-              )}
-            </div>
+              )
+            )}
+          </div>
 
-            <div style={styles.inputArea}>
-              <textarea
-                value={question}
-                onChange={(e) => setQuestion(e.target.value)}
-                placeholder="질문을 입력하세요"
-                rows="4"
-                style={styles.textarea}
-              />
-              <button onClick={handleSend} disabled={loading} style={styles.button}>
-                {loading ? "전송 중..." : "질문 보내기"}
-              </button>
-            </div>
-          </>
-        )}
-      </div>
-      </>
+          <div style={styles.inputArea}>
+            <textarea
+              value={question}
+              onChange={(e) => setQuestion(e.target.value)}
+              placeholder="질문을 입력하세요"
+              rows="4"
+              style={styles.textarea}
+            />
+            <button onClick={handleSend} disabled={loading} style={styles.button}>
+              {loading ? "전송 중..." : "질문 보내기"}
+            </button>
+          </div>
+        </>
+      )}
+    </div>
+    </>
   );
 }
 

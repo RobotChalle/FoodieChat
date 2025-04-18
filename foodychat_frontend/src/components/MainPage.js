@@ -13,6 +13,7 @@ export default function MainPage() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const navigate = useNavigate();
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
@@ -38,7 +39,7 @@ export default function MainPage() {
 
   const handleLogout = async () => {
     try {
-      await axios.post('http://localhost:8080/users/logout',
+      await axios.post(`${BASE_URL}/users/logout`,
         new URLSearchParams({
           user_id: userInfo.user_id,
         }),

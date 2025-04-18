@@ -13,9 +13,13 @@ export default function UserMealSearch() {
   const [filteredMeals, setFilteredMeals] = useState([]);
   const [loading, setLoading] = useState(false);
   const [chatHistory, setChatHistory] = useState([]);
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
+  const FAST_API_URL = process.env.REACT_APP_FAST_API_URL;
 
+  console.log("👉 BASE_URL:", process.env.REACT_APP_BASE_URL);
+  console.log("👉 FAST_API_URL:", process.env.REACT_APP_FAST_API_URL);
   useEffect(() => {
-    axios.get('http://localhost:8080/users/meals', { withCredentials: true })
+    axios.get(`${BASE_URL}/users/meals`, { withCredentials: true })
       .then(res => setMeals(res.data))
       .catch(err => console.error('식단 조회 실패:', err));
   }, []);
@@ -28,7 +32,9 @@ export default function UserMealSearch() {
 
     setLoading(true);
     try {
-      const res = await axios.post('http://localhost:8000/query', {
+      console.log('📤 쿼리 전송:', query);
+      console.log('📤 meals 전송:', meals);
+      const res = await axios.post(`${FAST_API_URL}/query`, {
         query,
         meals
       }, {
@@ -37,6 +43,7 @@ export default function UserMealSearch() {
       });
 
       const result = res.data;
+      console.log('📥 응답 결과:', result);
       setResponseType(result.type);
       setFilteredMeals(result.filteredMeals);
 

@@ -2,8 +2,9 @@ import { GoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 
 const GoogleLoginBtn = () => {
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
   const handleLoginSuccess = async (credentialResponse) => {
-    const res = await axios.post('http://localhost:8080/api/auth/google', {
+    const res = await axios.post(`${BASE_URL}/api/auth/google`, {
     //const res = await axios.post('http://192.168.0.29:8080/api/auth/google', {
       token: credentialResponse.credential
     });

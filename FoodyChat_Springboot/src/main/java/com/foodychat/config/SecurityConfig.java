@@ -2,6 +2,7 @@ package com.foodychat.config;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,6 +21,11 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+	@Value("${react.url}")
+    private String reactUrl;
+	
+	@Value("${server.url}")
+    private String serverUrl;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
@@ -64,7 +70,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:8080", "http://192.168.0.29:8080"));  // 허용할 Origin 설정
+        config.setAllowedOrigins(List.of(reactUrl,serverUrl));  // 허용할 Origin 설정
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));  // 허용할 HTTP 메서드 설정
         config.setAllowedHeaders(List.of("Content-Type", "Authorization", "Accept"));  // 허용할 헤더 설정
         config.setAllowCredentials(true);  // 자격 증명 허용

@@ -21,23 +21,23 @@ import uuid
 from router import chat_router  # chat_router에서 FastAPI 라우터 가져오기
 from services.rag_service import generate_answer_from_gemini  # 정확한 함수 이름 사용
 from pydantic import BaseModel
+from Config import settings
 
 if not os.path.exists("temp"):
     os.makedirs("temp")
 
 app = FastAPI()
 
-#라우터 
-app.include_router(chat_router)
-
 app.add_middleware(
     CORSMiddleware,
-    #allow_origins=["http://192.168.0.29:8080"],
-    allow_origins=["http://localhost:8080"],
+    allow_origins=[settings.REACT_URL],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+#라우터 
+app.include_router(chat_router)
 
 def extract_json_block(text: str) -> str:
     match = re.search(r"\{[\s\S]*\}", text)

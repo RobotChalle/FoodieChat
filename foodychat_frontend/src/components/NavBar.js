@@ -10,6 +10,7 @@ export default function NavBar() {
     const [darkMode, setDarkMode] = useState(false);
     const [userInfo, setUserInfo] = useState(null);
     const navigate = useNavigate();
+    const BASE_URL = process.env.REACT_APP_BASE_URL;
 
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
@@ -21,7 +22,7 @@ export default function NavBar() {
     useEffect(() => {
         const fetchSession = async () => {
             try {
-                const res = await axios.get('http://localhost:8080/users/ses', { withCredentials: true });
+                const res = await axios.get(`${BASE_URL}/users/ses`, { withCredentials: true });
                 setUserInfo(res.data);
                 localStorage.setItem('user', JSON.stringify(res.data));
             } catch (err) {
@@ -57,7 +58,7 @@ export default function NavBar() {
         try {
             await axios.post( 
 
-                'http://localhost:8080/users/logout',
+                `${BASE_URL}/users/logout`,
                 new URLSearchParams({ user_id: userInfo.user_id }),
                 {
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },

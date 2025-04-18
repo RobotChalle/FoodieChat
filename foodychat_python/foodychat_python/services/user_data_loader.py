@@ -1,12 +1,13 @@
 import httpx  # httpx 모듈 import
 from datetime import datetime
+from Config import settings
 
 async def get_user_data(user_id: int) -> dict:
     """
     FastAPI에서 Spring Boot API로 HTTP 요청을 보내 사용자 상세 정보, 최신 BMI, 음식 기록을 가져온다.
     가져온 데이터를 바탕으로 RAG 생성을 위한 Dict 형태로 반환한다.
     """
-    base_url = "http://localhost:8080"  # Spring Boot 서버 주소
+    base_url = settings.SERVER_URL  # Spring Boot 서버 주소
 
     async with httpx.AsyncClient() as client:
         try:

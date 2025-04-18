@@ -7,6 +7,8 @@ import './css/main.css';
 import { useParams } from 'react-router-dom';
 import KakaoMap from './KakaoMap';
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+const FAST_API_URL = process.env.REACT_APP_FAST_API_URL;
 export default function MealRecommendation() {
   const { foodName: paramFoodName } = useParams();
   const [foodName, setFoodName] = useState(paramFoodName || '');
@@ -18,7 +20,7 @@ export default function MealRecommendation() {
 
   // ✅ 번역 정보 가져오기
   useEffect(() => {
-    axios.get('http://localhost:8080/analyze/foods/translations')
+    axios.get(`${BASE_URL}/analyze/foods/translations`)
       .then(res => {
         setFoodNameTranslations(res.data);
 
@@ -52,7 +54,7 @@ export default function MealRecommendation() {
         location: location,
       });
 
-      const response = await axios.post('http://localhost:8080/analyze/store', payload, {
+      const response = await axios.post(`${BASE_URL}/analyze/store`, payload, {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         withCredentials: true,
       });
@@ -66,7 +68,7 @@ export default function MealRecommendation() {
       console.error('StoreList:',storeList);
 
       // 2. FastAPI로 Gemini 요약 요청
-      const aiResponse = await axios.post('http://localhost:8000/cafe-recommend', {
+      const aiResponse = await axios.post(`${FAST_API_URL}/cafe-recommend`, {
         food: foodName,
         location: location,
         stores: storeList

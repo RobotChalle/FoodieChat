@@ -2,6 +2,13 @@ import os
 from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
+    # React API 주소
+    REACT_URL: str = "http://localhost:3000"
+    
+    # Spring Boot 주소
+    SERVER_URL: str = "http://localhost:8080"
+    # SERVER_URL = "http://192.168.0.29:8080"
+    
     # OPENAI 키 설정
     OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
     # 데이터베이스 연결 설정

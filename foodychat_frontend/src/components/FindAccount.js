@@ -13,6 +13,7 @@ export default function FindAccount() {
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
 
+    const BASE_URL = process.env.REACT_APP_BASE_URL;
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
@@ -20,7 +21,7 @@ export default function FindAccount() {
 
         try {
             if (activeTab === 'id') {
-                const response = await axios.post('http://localhost:8080/users/findId', 
+                const response = await axios.post(`${BASE_URL}/users/findId`, 
                     new URLSearchParams({
                         user_name: name,
                         phone: phone
@@ -35,7 +36,7 @@ export default function FindAccount() {
                     setEmail(response.data);
                 }}>이메일 : {response.data}</span>);                
             } else {
-                const response = await axios.post('http://localhost:8080/users/findPassword', 
+                const response = await axios.post(`${BASE_URL}/users/findPassword`, 
                     new URLSearchParams({
                         email: email
                     }),

@@ -22,6 +22,7 @@ export default function MealRecommendation() {
     const [mealTypes, setMealTypes] = useState([]);
     const [recommendedMeals, setRecommendedMeals] = useState([]);
     const [loading, setLoading] = useState(false); // ✅ 로딩 상태 추가
+    const BASE_URL = process.env.REACT_APP_BASE_URL;
 
     const handleCheckboxChange = (type) => {
         if (type === 'all') {
@@ -45,7 +46,7 @@ export default function MealRecommendation() {
                 types: filteredTypes.join(',')
             });
 
-            const response = await axios.post('http://localhost:8080/analyze/recommend', payload, {
+            const response = await axios.post(`${BASE_URL}/analyze/recommend`, payload, {
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 withCredentials: true
             });
