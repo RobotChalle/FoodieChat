@@ -13,6 +13,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -62,61 +68,68 @@ public class UserController {
 	
 	@Value("${fastapi.url}")
     private String fastapiUrl;
+	
+	@Autowired
+	private AuthenticationManager authenticationManager;
 
-    // 🟢 일반 로그인
+	// 🟢 일반 로그인
     @PostMapping("/loginUser")
     public ResponseEntity<?> loginUser(@RequestParam("email") String email,
     	    					   	   @RequestParam("user_password") String user_password,
     	    					   	   HttpServletResponse response,
     	    					   	   HttpServletRequest request,
     	    					   	   HttpSession session) {
-        // 1. 사용자 조회
-    	UserVO vo = userService.getUserByEmail(email);
-    	
     	UserLogVO log = new UserLogVO();
         log.setIpAddress(request.getRemoteAddr());
         log.setUserAgent(request.getHeader("User-Agent"));
-        log.setLoginTime(new Timestamp(System.currentTimeMillis())+"");
-        
-        if (vo == null) {
-        	log.setLoginStatus("0");
-            log.setFailureReason("이메일 없음");
-            log.setUserId(Long.parseLong("0"));
-            userService.insertUserLog(log);
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("이메일이 존재하지 않습니다.");
-        }
+        log.setLoginTime(new Timestamp(System.currentTimeMillis()) + "");
+     // loginUser 내부
+        System.out.println("🧪 로그인 시도: " + email + " / " + user_password);
+        try {
+            // ✅ Spring Security를 통한 인증 처리
+            Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(email, user_password)
+            );
 
-        // 2. 비밀번호 확인
-        if (!passwordEncoder.matches(user_password, vo.getUser_password())) {
-        	log.setLoginStatus("0");
-            log.setFailureReason("비밀번호 불일치");
+            System.out.println("✅ 인증 성공: " + authentication.getName());
+            // ✅ 인증 성공 → SecurityContext에 저장
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
+
+            // ✅ 로그인 성공 로그 기록
+            UserVO vo = (UserVO) authentication.getPrincipal();
+            session.setAttribute("user", vo); // 🔥 이거 추가!
+            log.setLoginStatus("1");
             log.setUserId(vo.getUser_id());
             userService.insertUserLog(log);
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("비밀번호가 일치하지 않습니다.");
-        }
-        
-        session.setAttribute("user", vo); // 세션에 유저 저장 (인증 상태 유지)
-        
-        // 로그인 성공
-        log.setLoginStatus("1");
-        log.setUserId(vo.getUser_id());
-        userService.insertUserLog(log);
-        
-        // 3. 유저 정보에서 민감한 정보 제외하고 응답
-        Map<String, Object> userInfo = new HashMap<>();
-        userInfo.put("user_name", vo.getUser_name());
-        userInfo.put("user_id", vo.getUser_id());
-        userInfo.put("email", vo.getEmail());
-        userInfo.put("phone", vo.getPhone());
-        userInfo.put("membership_level", vo.getMembership_level());
-        userInfo.put("gender", vo.getGender());
-        userInfo.put("height", vo.getHeight());
-        userInfo.put("user_weight", vo.getUser_weight());
-        userInfo.put("user_address", vo.getUser_address());
-        userInfo.put("reg_date", vo.getReg_date());
-        userInfo.put("upd_date", vo.getUpd_date());
 
-        return ResponseEntity.ok(userInfo);
+            // ✅ 유저 정보 응답 (필요한 정보만)
+            Map<String, Object> userInfo = new HashMap<>();
+            userInfo.put("user_name", vo.getUser_name());
+            userInfo.put("user_id", vo.getUser_id());
+            userInfo.put("email", vo.getEmail());
+            userInfo.put("phone", vo.getPhone());
+            userInfo.put("membership_level", vo.getMembership_level());
+            userInfo.put("gender", vo.getGender());
+            userInfo.put("height", vo.getHeight());
+            userInfo.put("user_weight", vo.getUser_weight());
+            userInfo.put("user_address", vo.getUser_address());
+            userInfo.put("reg_date", vo.getReg_date());
+            userInfo.put("upd_date", vo.getUpd_date());
+
+            return ResponseEntity.ok(userInfo);
+
+        } catch (AuthenticationException ex) {
+        	System.out.println("❌ 인증 실패: " + ex.getMessage());
+            // ✅ 실패 로그 기록
+            UserVO user = userService.getUserByEmail(email);
+            log.setLoginStatus("0");
+            log.setFailureReason("이메일 또는 비밀번호 불일치");
+            log.setUserId(user != null ? user.getUser_id() : 0L);
+            userService.insertUserLog(log);
+
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("이메일 또는 비밀번호가 일치하지 않습니다.");
+        }
     }
     
     @PostMapping("/logout")
@@ -140,12 +153,19 @@ public class UserController {
     
     @PostMapping("/myPage")
     public ResponseEntity<?> mypage(HttpSession session) {
-    	UserVO svo = (UserVO)session.getAttribute("user");
-	    if (svo == null) {
-	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
-	    }
+    	UserVO sessionUser = (UserVO) session.getAttribute("user");
+    	System.out.println("🌐 세션 유저 확인: " + (sessionUser != null ? sessionUser.getEmail() : "null"));
+    	
+    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    	System.out.println("🧪 인증 객체: " + auth);
+        if (auth == null || !auth.isAuthenticated() || auth.getPrincipal().equals("anonymousUser")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
+        }
 
-	    UserVO vo = userService.getUserById(svo.getUser_id());
+        UserVO user = (UserVO) auth.getPrincipal(); // ✅ 인증된 유저 객체
+        System.out.println("✅ 인증된 유저: " + user.getEmail());
+
+	    UserVO vo = userService.getUserById(user.getUser_id());
 	    
     	// 필요한 정보만 추출해서 전송 (보안 고려)
         Map<String, Object> data = new HashMap<>();
@@ -180,36 +200,46 @@ public class UserController {
     }
     
     @PostMapping("/googleLogin")
-    public ResponseEntity<?> googleLogin(@RequestBody Map<String, 
-    									  String> body,
-    									  HttpServletRequest request,
-    									  HttpSession session) {
+    public ResponseEntity<?> googleLogin(@RequestBody Map<String, String> body,
+                                         HttpServletRequest request,
+                                         HttpSession session) {
         String token = body.get("token");
-        GoogleUserInfo googleInfo = GoogleTokenVerifier.verify(token); // 직접 구현
+        GoogleUserInfo googleInfo = GoogleTokenVerifier.verify(token); // Google 토큰 파싱
 
-        // 1. 사용자 조회
-    	UserVO vo = userService.getUserByEmail(googleInfo.getEmail());
-    	
-    	UserLogVO log = new UserLogVO();
+        UserVO vo = userService.getUserByEmail(googleInfo.getEmail());
+
+        UserLogVO log = new UserLogVO();
         log.setIpAddress(request.getRemoteAddr());
         log.setUserAgent(request.getHeader("User-Agent"));
-        log.setLoginTime(new Timestamp(System.currentTimeMillis())+"");
-        
+        log.setLoginTime(new Timestamp(System.currentTimeMillis()) + "");
+
         if (vo == null) {
-        	log.setLoginStatus("0");
+            log.setLoginStatus("0");
             log.setFailureReason("이메일 없음");
-            log.setUserId(Long.parseLong("0"));
+            log.setUserId(0L);
             userService.insertUserLog(log);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("이메일이 존재하지 않습니다.");
         }
-        session.setAttribute("user", vo); // 세션에 유저 저장 (인증 상태 유지)
-        
-        // 로그인 성공(로그 저장)
+
+        // ✅ SecurityContext에 인증 정보 추가
+        UsernamePasswordAuthenticationToken authentication =
+            new UsernamePasswordAuthenticationToken(
+                vo,
+                null,
+                List.of(new SimpleGrantedAuthority("ROLE_" + vo.getMembership_level()))
+            );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
+
+        // ✅ 세션에 유저 정보 저장 (세션 동기화!)
+        session.setAttribute("user", vo);
+
+        // 로그인 성공 로그 기록
         log.setLoginStatus("1");
         log.setUserId(vo.getUser_id());
         userService.insertUserLog(log);
-        
-        // 3. 유저 정보에서 민감한 정보 제외하고 응답
+
+        // 유저 정보 응답
         Map<String, Object> userInfo = new HashMap<>();
         userInfo.put("user_name", vo.getUser_name());
         userInfo.put("user_id", vo.getUser_id());

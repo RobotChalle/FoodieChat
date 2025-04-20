@@ -1,5 +1,12 @@
 package com.foodychat.user.vo;
 
+import java.util.Collection;
+import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +17,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserVO {
+public class UserVO implements UserDetails {
+	private static final long serialVersionUID = 1L;
+	
 	/* 테이블명 users */
 	private long user_id;				// 회원아이디(고유) - 자동세팅
 	private String email;				// 이메일(아이디)
@@ -32,4 +41,39 @@ public class UserVO {
 	
 	private long login_id;			// 로그인아이디
 	private String login_ip;			// 로그인아이피
+	
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+	    return List.of(new SimpleGrantedAuthority("ROLE_" + this.membership_level));
+	}
+
+	@Override
+	public String getUsername() {
+	    return this.email;
+	}
+
+	@Override
+	public String getPassword() {
+	    return this.user_password;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+	    return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+	    return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+	    return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+	    return true;
+	}
 }
