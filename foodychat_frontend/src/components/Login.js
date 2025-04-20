@@ -63,15 +63,21 @@ function Login() {
 
       if (response.status === 200) {
         toast.success('로그인 성공!');
-        console.log(response.data); // 👈 유저 정보 확인
-
-        // 유저 정보 저장 (예: localStorage)
-        localStorage.setItem('user', JSON.stringify(response.data));
-
-        // 페이지 이동
+        console.log(response.data);
+      
+        // ✅ 로그인 직후 세션이 잘 붙었는지 확인하기
         setTimeout(() => {
-          navigate('/');
-        }, 1000);
+          axios.get(`${BASE_URL}/users/ses`, { withCredentials: true })
+            .then((res) => {
+              console.log('✅ 세션 유저 정보 확인:', res.data);
+              localStorage.setItem('user', JSON.stringify(res.data)); // 덮어쓰기
+              navigate('/');
+            })
+            .catch(() => {
+              console.warn('⚠️ 세션 확인 실패. 로그인이 유지되지 않을 수 있습니다.');
+              navigate('/');
+            });
+        }, 300); // 💡 300~500ms 정도 딜레이 주면 쿠키 저장 확실
       }
     } catch (err) {
       setError('로그인 실패: 아이디 또는 비밀번호를 확인하세요.');
