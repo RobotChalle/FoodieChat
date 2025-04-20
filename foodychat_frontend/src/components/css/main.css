@@ -343,3 +343,12 @@ nav.glass-navbar {
   align-items: center;
   white-space: nowrap;             /* ✅ 줄바꿈 방지 */
 }
+
+.input-size {
+  width: 40vw;
+}
+
+.btn-position {
+  display: flex;
+  align-items: center;
+} 

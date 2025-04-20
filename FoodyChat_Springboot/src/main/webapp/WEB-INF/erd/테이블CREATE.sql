@@ -190,3 +190,20 @@ CREATE TABLE llm_responses (
     upd_date DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
+
+CREATE TABLE food_recognition_history (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    food_id BIGINT NULL,
+    rec_date VARCHAR(10) NOT NULL,
+    meal_type ENUM('1', '2', '3') NOT NULL COMMENT '1:아침, 2:점심, 3:저녁',
+    image_path VARCHAR(255),
+    reg_id BIGINT,
+    reg_ip VARCHAR(50),
+    reg_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    upd_id BIGINT,
+    upd_ip VARCHAR(50),
+    upd_date DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    CONSTRAINT fk_food FOREIGN KEY (food_id) REFERENCES foods(food_id) ON DELETE SET NULL
+);

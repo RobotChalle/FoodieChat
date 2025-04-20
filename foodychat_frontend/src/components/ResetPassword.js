@@ -76,7 +76,9 @@ export default function ResetPassword() {
                             required
                         />
                     </div>
-                    <button type="submit" className="btn btn-primary">비밀번호 재설정</button>
+                    <div className="form-group btn-position" >
+                        <button type="submit" className="btn btn-primary" style={{margin : "0px", }}>비밀번호 재설정</button> 
+                    </div>
                 </form>
             )}
         </div>
