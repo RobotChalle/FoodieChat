@@ -8,7 +8,8 @@ from torchvision import models
 import os
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-MODEL_PATH = os.path.join(BASE_DIR, "model", "checkpoint_epoch_156.pth")
+#MODEL_PATH = os.path.join(BASE_DIR, "model", "checkpoint_epoch_156.pth")
+MODEL_PATH = os.path.join(BASE_DIR, "model", "checkpoint_epoch_195.pth")
 
 class CustomCNN(nn.Module):
     def __init__(self, num_classes, dropout_rate=0.4):
@@ -72,8 +73,8 @@ class CustomCNN(nn.Module):
 # ✅ 클래스 이름 로딩
 def get_class_names():
     session = SessionLocal()
-    #foods = session.query(Food).order_by(Food.food_id).all()
-    foods = session.query(Food).order_by(Food.food_id).limit(101).all()
+    foods = session.query(Food).order_by(Food.food_id).all()
+    #foods = session.query(Food).order_by(Food.food_id).limit(101).all()
     session.close()
     return [food.food_name for food in foods]  # ✅ DB의 food_name 컬럼 사용
 
