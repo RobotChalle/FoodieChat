@@ -178,13 +178,16 @@ public class AnalyzeController {
 	public ResponseEntity<?> crawl(@RequestParam Map<String, String> req,
 	                               HttpSession session,
 	                               HttpServletRequest request) {
-	    String foodName = req.get("foodName");
+		String foodName = req.get("foodName");
+		String foodNameKo = req.get("foodName_ko");  // ✅ 정상 출력됨
+		System.out.println("한글 음식명: " + foodNameKo);
 	    String location = req.get("location");
 
 	    try {
 	        // ✅ Python 파일 실행 - 경로 주의 (상대 or 절대)
-	    	String pythonScriptPath = "D:\\workspace\\FoodyChat\\foodychat_python\\foodychat_python\\store.py";
-	        ProcessBuilder pb = new ProcessBuilder("python", pythonScriptPath, foodName, location);
+	    	//String pythonScriptPath = "D:\\workspace\\FoodyChat\\foodychat_python\\foodychat_python\\store.py";
+	    	String pythonScriptPath = "C:\\FoodyChat\\foodychat_python\\foodychat_python\\store.py";
+	        ProcessBuilder pb = new ProcessBuilder("python", pythonScriptPath, foodNameKo, location);
 	        pb.redirectErrorStream(true); // stderr도 stdout으로 병합
 	        Process process = pb.start();
 

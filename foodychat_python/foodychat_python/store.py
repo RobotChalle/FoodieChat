@@ -12,14 +12,14 @@ KAKAO_REST_API_KEY = '0146dca41d8270e805a5134078869c29'
 
 def get_real_address_by_kakao(name, location):
     try:
-        keyword = f"{location} {name}"
+        keyword = f"{name} {location}"  # 음식점 이름 먼저 → 검색 정확도 ↑
         url = "https://dapi.kakao.com/v2/local/search/keyword.json"
         headers = {
             "Authorization": f"KakaoAK {KAKAO_REST_API_KEY}"
         }
         params = {
             "query": keyword,
-            "size": 1  # 1개만 가져오기
+            "size": 1
         }
 
         res = requests.get(url, headers=headers, params=params)
@@ -30,10 +30,9 @@ def get_real_address_by_kakao(name, location):
             return {
                 "road_address": doc.get("road_address_name"),
                 "address": doc.get("address_name"),
-                "x": doc.get("x"),  # 경도
-                "y": doc.get("y")   # 위도
+                "x": doc.get("x"),
+                "y": doc.get("y")
             }
-
     except Exception as e:
         print("Kakao 주소 검색 실패:", e)
 

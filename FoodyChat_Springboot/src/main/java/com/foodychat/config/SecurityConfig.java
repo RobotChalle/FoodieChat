@@ -24,9 +24,13 @@ import com.foodychat.user.service.CustomUserDetailsService;
 import jakarta.servlet.http.HttpSessionEvent;
 import jakarta.servlet.http.HttpSessionListener;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+	private static final Logger log = LoggerFactory.getLogger(SecurityConfig.class);
 
     @Value("${react.url}")
     private String reactUrl;
@@ -58,6 +62,7 @@ public class SecurityConfig {
                     "/users/googleLogin",
                     "/users/findId",
                     "/users/findPassword",
+                    "/users/resetPassword",
                     "/users/signup",
                     "/users/google",
                     "/users/ses",
@@ -72,7 +77,6 @@ public class SecurityConfig {
                     "/users/myPage",
                     "/users/changePassword",
                     "/users/updateUser",
-                    "/users/resetPassword",
                     "/users/details",
                     "/users/*/details",
                     "/users/*/bmi",
@@ -82,27 +86,36 @@ public class SecurityConfig {
                     "/analyze/food",
                     "/analyze/store",
                     "/analyze/upload"
-                ).hasAnyRole("regular", "business", "admin")
+                ).hasAnyRole("REGULAR", "BUSINESS", "ADMIN")
                 .requestMatchers(
                     "/users/meals",
                     "/analyze/recommend"
-                ).hasAnyRole("business", "admin")
-                .requestMatchers("/users/admin/users/**").hasRole("admin")
+                ).hasAnyRole("BUSINESS", "ADMIN")
+                .requestMatchers("/users/admin/users/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
+            .securityContext(context -> context.requireExplicitSave(false))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
-            .formLogin().disable()
-            .logout(logout -> logout.invalidateHttpSession(true).deleteCookies("JSESSIONID"));
+            .formLogin(form -> form
+                .loginProcessingUrl("/users/loginUser")
+                .usernameParameter("email")
+                .passwordParameter("user_password")
+                .defaultSuccessUrl("/users/ses", true)
+                .permitAll()
+            )
+            .logout().disable();
 
         return http.build();
     }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
+    	log.info("🌐 [CORS Config] React URL: {}", reactUrl);
+        log.info("🌐 [CORS Config] Server URL: {}", serverUrl);
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of(reactUrl, serverUrl));
+        config.setAllowedOrigins(List.of(reactUrl, serverUrl)); // ✅ 혹시 여기에서 포트 포함되어 있나? 예: http://localhost:3000
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
-        config.setAllowedHeaders(List.of("Content-Type", "Authorization", "Accept"));
+        config.setAllowedHeaders(List.of("*")); // ✅ 이걸로 확장 필요함
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

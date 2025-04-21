@@ -59,10 +59,8 @@ export default function Mypage() {
         };
       
         fetchUserInfo();
-      }, []);
+    }, []);
       
-  
-
     useEffect(() => {
         if (userInfo?.phone) {
             setPhone(userInfo.phone);
@@ -71,18 +69,14 @@ export default function Mypage() {
 
     const handleLogout = async () => {
         try {
-            await axios.post(`${BASE_URL}/users/logout`, 
-                new URLSearchParams({
-                    user_id: userInfo.user_id,
-                }),
-                {
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    withCredentials: true,
-                }
-            );
+            await axios.post(`${BASE_URL}/users/logout`, null, {
+                withCredentials: true
+            });
 
             localStorage.removeItem('user');
-            navigate('/login');
+            localStorage.removeItem('myPageForm');
+            navigate('/');
+            window.location.reload(); // ✅ NavBar 상태 갱신 보장
         } catch (err) {
             console.error('로그아웃 실패:', err);
             alert('로그아웃 중 오류가 발생했습니다.');

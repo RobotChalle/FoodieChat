@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 from pydantic import BaseModel
 from services.rag_service import generate_chat_response, generate_user_rag
 from services.user_data_loader import get_user_data  # 유저 데이터 로더
@@ -17,13 +17,14 @@ class ChatResponse(BaseModel):
 
 # POST 엔드포인트 - 질문 처리
 @router.post("/chat/chat", response_model=ChatResponse)
-async def chat(chat_req: ChatRequest):
+async def chat(chat_req: ChatRequest, request: Request):
     """
     사용자 질문을 받아 RAG + Gemini 기반 응답 반환
     """
     # ✅ 1. 유저 정보 불러오기
-    user_data_dict = await get_user_data(chat_req.user_id)  # dict 반환
-
+    cookies = request.cookies  # 세션 쿠키 가져오기
+    user_data_dict = await get_user_data(chat_req.user_id,cookies)  # dict 반환
+    print("🔥 user_data_dict =", user_data_dict)
     # ✅ 2. dict → Pydantic 모델 변환
     user_data = FullUserProfileSchema(**user_data_dict)  # FullUserProfileSchema로 변환
 
