@@ -88,7 +88,6 @@
 | 기술 스택 | 설명 |
 |-----------|-------------|
 | ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white) | 컨테이너 기반 배포 |
-| ![Google Cloud](https://img.shields.io/badge/Google%20Cloud-4285F4?style=for-the-badge&logo=google-cloud-platform&logoColor=white) | Google Cloud 기반 배포 |
 | ![Ubuntu](https://img.shields.io/badge/Ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white) | 서버 운영 환경 |
 | ![CI/CD](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white) | 자동화 배포 & 테스트 |
 
@@ -106,7 +105,6 @@
 - 해당 프로젝트는 지속적으로 업데이트됩니다.  
 - 기여를 원하시면 **Issues** 및 **Pull Requests**를 통해 의견을 남겨주세요!  
 
-✉️ **Contact:** foodieychat@support.com  
 📌 **GitHub Repository:** [https://github.com/FoodieyChat](https://github.com/FoodieyChat)  
 
 ---
