@@ -24,8 +24,8 @@ export default function MealRecommendation() {
       .then(res => {
         setFoodNameTranslations(res.data);
 
-        if (paramFoodName && res.data[paramFoodName.toLowerCase()]) {
-          setFoodName(paramFoodName.toLowerCase());
+        if (paramFoodName && res.data[paramFoodName]) {
+          setFoodName(paramFoodName);
         }
       })
       .catch(err => {
@@ -33,7 +33,7 @@ export default function MealRecommendation() {
       });
   }, []);
 
-  const translatedFood = foodNameTranslations[foodName?.toLowerCase()];
+  const translatedFood = foodNameTranslations[foodName];
 
   const handleRecommend = async () => {
     if (!foodName.trim()) {
@@ -48,10 +48,13 @@ export default function MealRecommendation() {
 
     try {
       setLoading(true);
-
+      console.log("foodName:", foodName);
+      console.log("translatedFood:", translatedFood);
+      console.log("translations keys:", Object.keys(foodNameTranslations));
       const payload = new URLSearchParams({
-        foodName: foodName,
-        location: location,
+        foodName,
+        location,
+        foodName_ko: translatedFood || '',  // ❗ undefined 방지
       });
 
       const response = await axios.post(`${BASE_URL}/analyze/store`, payload, {

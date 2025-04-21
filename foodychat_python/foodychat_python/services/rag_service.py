@@ -1,14 +1,17 @@
 # services/rag_service.py
 
-from langchain.vectorstores import Chroma
+from langchain_chroma import Chroma  # ✅ 최신 import 방식
 from langchain_community.embeddings import OllamaEmbeddings
 from langchain_core.documents import Document
 from utils.rag_text_templates import build_full_rag_text
 from utils.rag_builder import build_and_store_rag
 from models.schemas import FullUserProfileSchema 
 from LLM_model import generate_answer_from_gemini
+import os
 
-CHROMA_PATH = "chroma_db"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+CHROMA_PATH = os.path.join(BASE_DIR, "../chroma_db")  # ← 부모 디렉토리의 chroma_db
+
 embedding_model = OllamaEmbeddings(model="nomic-embed-text")
 
 def generate_user_rag(user_data: FullUserProfileSchema):

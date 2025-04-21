@@ -9,6 +9,7 @@ import Carousel from './Carousel'; // ✅ 캐러셀 추가
 import './css/main.css';
 
 export default function MainPage() {
+  //localStorage.removeItem('user');
   const [userInfo, setUserInfo] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);

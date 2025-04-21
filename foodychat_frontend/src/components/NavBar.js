@@ -11,7 +11,7 @@ export default function NavBar() {
     const navigate = useNavigate();
     const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-    // ✅ 1. localStorage에서 초기화 (최우선)
+    // ✅ 1. localStorage에서 초기화
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
@@ -25,39 +25,32 @@ export default function NavBar() {
         }
     }, []);
 
-    // ✅ 2. 세션 요청은 userInfo가 없을 때만 실행
+    // ✅ 2. 항상 최신 세션 동기화
     useEffect(() => {
-        if (!userInfo) {
-            const timer = setTimeout(() => {
-                axios.get(`${BASE_URL}/users/ses`, { withCredentials: true })
-                    .then((res) => {
-                        if (res.data) {
-                            console.log("✅ 세션 동기화 완료:", res.data);
-                            setUserInfo(res.data);
-                            localStorage.setItem('user', JSON.stringify(res.data));
-                        }
-                    })
-                    .catch(() => {
-                        console.log('❌ 세션 없음');
-                        localStorage.removeItem('user');
-                    });
-            }, 500);
-
-            return () => clearTimeout(timer);
-        }
-    }, [userInfo]);
+        axios.get(`${BASE_URL}/users/ses`, { withCredentials: true })
+            .then((res) => {
+                if (res.data) {
+                    console.log("✅ 세션 동기화 완료:", res.data);
+                    setUserInfo(res.data);
+                    localStorage.setItem('user', JSON.stringify(res.data));
+                }
+            })
+            .catch(() => {
+                console.log('❌ 세션 없음');
+                localStorage.removeItem('user');
+                setUserInfo(null);
+            });
+    }, []);
 
     // 🧪 userInfo 변경 로그
     useEffect(() => {
         console.log('🌀 userInfo 변경:', userInfo);
     }, [userInfo]);
 
-    // 메뉴 토글 처리
     useEffect(() => {
         document.body.style.overflow = menuOpen ? 'hidden' : '';
     }, [menuOpen]);
 
-    // 반응형 메뉴 닫기 처리
     useEffect(() => {
         const handleResize = () => {
             if (window.innerWidth > 768 && menuOpen) {
@@ -71,22 +64,15 @@ export default function NavBar() {
     // 로그아웃 처리
     const handleLogout = async () => {
         try {
-            await axios.post(
-                `${BASE_URL}/users/logout`,
-                new URLSearchParams({ user_id: userInfo.user_id }),
-                {
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    withCredentials: true,
-                }
-            );
+            await axios.post(`${BASE_URL}/users/logout`, null, {
+                withCredentials: true
+            });
 
             localStorage.removeItem('user');
-            toast.success('로그아웃 되었습니다!');
             setUserInfo(null);
-
-            setTimeout(() => {
-                navigate('/');
-            }, 1000);
+            toast.success('로그아웃 되었습니다!');
+            setMenuOpen(false);
+            navigate('/');
         } catch (err) {
             console.error('로그아웃 실패:', err);
             toast.error('로그아웃 중 오류가 발생했습니다.');

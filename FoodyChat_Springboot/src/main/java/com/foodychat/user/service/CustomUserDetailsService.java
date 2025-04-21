@@ -16,12 +16,11 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        System.out.println("🔍 [UserDetailsService] 사용자 조회 시도: " + email);
-
-        UserVO user = userDAO.getUserByEmail(email); // userService 대신 직접 DAO 호출
+    	UserVO user = userDAO.getUserByEmail(email);  // 👈 DAO에 이 메서드가 있어야 해요
+    	System.out.println("loadUserByUsername:"+user);
+    	
         if (user == null) {
-            System.out.println("❌ [UserDetailsService] 유저 없음!");
-            throw new UsernameNotFoundException("User not found");
+            throw new UsernameNotFoundException("해당 이메일을 가진 사용자를 찾을 수 없습니다: " + email);
         }
 
         return user;

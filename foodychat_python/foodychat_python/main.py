@@ -23,11 +23,15 @@ from services.rag_service import generate_answer_from_gemini  # 정확한 함수
 from pydantic import BaseModel
 from Config import settings
 
-if not os.path.exists("temp"):
-    os.makedirs("temp")
+# ✅ 현재 파일 위치 기준으로 temp 경로 고정
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+TEMP_DIR = os.path.join(BASE_DIR, "temp")
+
+if not os.path.exists(TEMP_DIR):
+    os.makedirs(TEMP_DIR)
 
 app = FastAPI()
-
+print("🔥 settings.REACT_URL =", settings.REACT_URL)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[settings.REACT_URL],
@@ -90,13 +94,14 @@ async def recommend(
 @app.post("/cafe-recommend")
 async def cafe_recommend(req: StoreRequest):
     prompt = build_cafe_recommend_prompt(req.food, req.location, req.stores)
+    print("🔍 prompt 원본:\n", prompt)
     result = query_cafe_recommend_gemini(prompt)
     print("🔍 Gemini 응답:\n", result)
     return {"summary": result}
 
 @app.post("/predict")
 async def analyze_image(file: UploadFile = File(...)):
-    file_path = f"temp/{file.filename}"
+    file_path = os.path.join(TEMP_DIR, file.filename)
     with open(file_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
 

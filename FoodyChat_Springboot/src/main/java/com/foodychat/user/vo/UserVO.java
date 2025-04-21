@@ -44,7 +44,7 @@ public class UserVO implements UserDetails {
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-	    return List.of(new SimpleGrantedAuthority("ROLE_" + this.membership_level));
+	    return List.of(new SimpleGrantedAuthority("ROLE_" + this.membership_level.toUpperCase()));
 	}
 
 	@Override

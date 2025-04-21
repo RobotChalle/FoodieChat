@@ -14,9 +14,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -73,37 +74,31 @@ public class UserController {
 	private AuthenticationManager authenticationManager;
 
 	// 🟢 일반 로그인
-    @PostMapping("/loginUser")
-    public ResponseEntity<?> loginUser(@RequestParam("email") String email,
-    	    					   	   @RequestParam("user_password") String user_password,
-    	    					   	   HttpServletResponse response,
-    	    					   	   HttpServletRequest request,
-    	    					   	   HttpSession session) {
-    	UserLogVO log = new UserLogVO();
-        log.setIpAddress(request.getRemoteAddr());
-        log.setUserAgent(request.getHeader("User-Agent"));
-        log.setLoginTime(new Timestamp(System.currentTimeMillis()) + "");
-     // loginUser 내부
-        System.out.println("🧪 로그인 시도: " + email + " / " + user_password);
+	@PostMapping("/loginUser")
+    public ResponseEntity<?> loginUser(@RequestParam String email, @RequestParam String user_password,
+                                       HttpServletRequest request, HttpSession session) {
         try {
-            // ✅ Spring Security를 통한 인증 처리
-            Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(email, user_password)
-            );
-
-            System.out.println("✅ 인증 성공: " + authentication.getName());
-            // ✅ 인증 성공 → SecurityContext에 저장
+            UsernamePasswordAuthenticationToken authRequest =
+                    new UsernamePasswordAuthenticationToken(email, user_password);
+            Authentication authentication = authenticationManager.authenticate(authRequest);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
 
-            // ✅ 로그인 성공 로그 기록
-            UserVO vo = (UserVO) authentication.getPrincipal();
-            session.setAttribute("user", vo); // 🔥 이거 추가!
+            if (!(authentication.getPrincipal() instanceof UserVO vo)) {
+                throw new AuthenticationServiceException("인증된 사용자 정보가 올바르지 않습니다.");
+            }
+
+            session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
+            session.setAttribute("user", vo);
+
+            // ✅ 로그인 로그 기록
+            UserLogVO log = new UserLogVO();
+            log.setIpAddress(request.getRemoteAddr());
+            log.setUserAgent(request.getHeader("User-Agent"));
+            log.setLoginTime(new Timestamp(System.currentTimeMillis()) + "");
             log.setLoginStatus("1");
             log.setUserId(vo.getUser_id());
             userService.insertUserLog(log);
 
-            // ✅ 유저 정보 응답 (필요한 정보만)
             Map<String, Object> userInfo = new HashMap<>();
             userInfo.put("user_name", vo.getUser_name());
             userInfo.put("user_id", vo.getUser_id());
@@ -118,38 +113,46 @@ public class UserController {
             userInfo.put("upd_date", vo.getUpd_date());
 
             return ResponseEntity.ok(userInfo);
-
-        } catch (AuthenticationException ex) {
-        	System.out.println("❌ 인증 실패: " + ex.getMessage());
-            // ✅ 실패 로그 기록
+        } catch (BadCredentialsException e) {
             UserVO user = userService.getUserByEmail(email);
+            UserLogVO log = new UserLogVO();
+            log.setIpAddress(request.getRemoteAddr());
+            log.setUserAgent(request.getHeader("User-Agent"));
+            log.setLoginTime(new Timestamp(System.currentTimeMillis()) + "");
             log.setLoginStatus("0");
             log.setFailureReason("이메일 또는 비밀번호 불일치");
             log.setUserId(user != null ? user.getUser_id() : 0L);
             userService.insertUserLog(log);
-
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("이메일 또는 비밀번호가 일치하지 않습니다.");
         }
     }
     
-    @PostMapping("/logout")
-    public ResponseEntity<?> logoutUser(@RequestParam("user_id") String user_id,
-    									HttpServletResponse response,
-    									HttpServletRequest request,
-    									HttpSession session) {
-    	// 1. 세션 무효화
-        session.invalidate();
-        
-        // 2. 최신 로그인 로그를 찾고 로그아웃 시간 기록
-        UserLogVO lastLog = userService.getLastSuccessfulLogByUserId(Long.parseLong(user_id));
-        if (lastLog != null) {
-            lastLog.setLogoutTime(new Timestamp(System.currentTimeMillis())+"");
-            userService.updateLogoutTime(lastLog);
-        }
+	@PostMapping("/logout")
+	public ResponseEntity<?> logoutUser(HttpServletRequest request,
+	                                    HttpServletResponse response,
+	                                    HttpSession session) {
+	    try {
+	        UserVO user = (UserVO) session.getAttribute("user");
 
-        // 3. 응답
-        return ResponseEntity.ok("로그아웃 되었습니다.");
-    }
+	        if (user != null) {
+	            // 로그아웃 시간 기록
+	            UserLogVO lastLog = userService.getLastSuccessfulLogByUserId(user.getUser_id());
+	            if (lastLog != null) {
+	                lastLog.setLogoutTime(new Timestamp(System.currentTimeMillis()).toString());
+	                userService.updateLogoutTime(lastLog);
+	            }
+	        }
+
+	        // 세션 무효화
+	        session.invalidate();
+
+	        // 응답 반환
+	        return ResponseEntity.ok().body(Map.of("message", "로그아웃 되었습니다."));
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                             .body(Map.of("error", "로그아웃 처리 중 오류가 발생했습니다."));
+	    }
+	}
     
     @PostMapping("/myPage")
     public ResponseEntity<?> mypage(HttpSession session) {
@@ -200,12 +203,11 @@ public class UserController {
     }
     
     @PostMapping("/googleLogin")
-    public ResponseEntity<?> googleLogin(@RequestBody Map<String, String> body,
-                                         HttpServletRequest request,
-                                         HttpSession session) {
+    public ResponseEntity<?> googleLogin(@RequestBody Map<String, String> body, 
+    									 HttpServletRequest request, 
+    									 HttpSession session) {
         String token = body.get("token");
-        GoogleUserInfo googleInfo = GoogleTokenVerifier.verify(token); // Google 토큰 파싱
-
+        GoogleUserInfo googleInfo = GoogleTokenVerifier.verify(token);
         UserVO vo = userService.getUserByEmail(googleInfo.getEmail());
 
         UserLogVO log = new UserLogVO();
@@ -221,25 +223,16 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("이메일이 존재하지 않습니다.");
         }
 
-        // ✅ SecurityContext에 인증 정보 추가
-        UsernamePasswordAuthenticationToken authentication =
-            new UsernamePasswordAuthenticationToken(
-                vo,
-                null,
-                List.of(new SimpleGrantedAuthority("ROLE_" + vo.getMembership_level()))
-            );
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                vo, null, List.of(new SimpleGrantedAuthority("ROLE_" + vo.getMembership_level().toUpperCase())));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
-
-        // ✅ 세션에 유저 정보 저장 (세션 동기화!)
         session.setAttribute("user", vo);
-
-        // 로그인 성공 로그 기록
+        
         log.setLoginStatus("1");
         log.setUserId(vo.getUser_id());
         userService.insertUserLog(log);
 
-        // 유저 정보 응답
         Map<String, Object> userInfo = new HashMap<>();
         userInfo.put("user_name", vo.getUser_name());
         userInfo.put("user_id", vo.getUser_id());
@@ -450,28 +443,28 @@ public class UserController {
     }
 
     @GetMapping("/ses")
-    public ResponseEntity<?> sessionConfirm(HttpSession session) {
-    	UserVO svo = (UserVO)session.getAttribute("user");
-    	
-    	if(svo != null) {
-	    	// 3. 유저 정보에서 민감한 정보 제외하고 응답
-	        Map<String, Object> userInfo = new HashMap<>();
-	        userInfo.put("user_name", svo.getUser_name());
-	        userInfo.put("user_id", svo.getUser_id());
-	        userInfo.put("email", svo.getEmail());
-	        userInfo.put("phone", svo.getPhone());
-	        userInfo.put("membership_level", svo.getMembership_level());
-	        userInfo.put("gender", svo.getGender());
-	        userInfo.put("height", svo.getHeight());
-	        userInfo.put("user_weight", svo.getUser_weight());
-	        userInfo.put("user_address", svo.getUser_address());
-	        userInfo.put("reg_date", svo.getReg_date());
-	        userInfo.put("upd_date", svo.getUpd_date());
-	
-	        return ResponseEntity.ok(userInfo);
-    	}else {
-    		return ResponseEntity.ok(null);
-    	}
+    public ResponseEntity<?> sessionConfirm(Authentication authentication, 
+    										HttpSession session) {
+    	System.out.println("🔒 Session ID: " + session.getId());
+        System.out.println("🔒 Auth: " + authentication);
+        if (authentication != null && authentication.isAuthenticated() && authentication.getPrincipal() instanceof UserVO user) {
+            session.setAttribute("user", user);
+            Map<String, Object> userInfo = new HashMap<>();
+            userInfo.put("user_name", user.getUser_name());
+            userInfo.put("user_id", user.getUser_id());
+            userInfo.put("email", user.getEmail());
+            userInfo.put("phone", user.getPhone());
+            userInfo.put("membership_level", user.getMembership_level());
+            userInfo.put("gender", user.getGender());
+            userInfo.put("height", user.getHeight());
+            userInfo.put("user_weight", user.getUser_weight());
+            userInfo.put("user_address", user.getUser_address());
+            userInfo.put("reg_date", user.getReg_date());
+            userInfo.put("upd_date", user.getUpd_date());
+            return ResponseEntity.ok(userInfo);
+        } else {
+            return ResponseEntity.ok(null);
+        }
     }
 
     //세션에서 유저 아이디 반환
@@ -530,21 +523,21 @@ public class UserController {
    // 유저 int 아이디로 조회
     @GetMapping("/{id}/details")
     public ResponseEntity<UserVO> getUserRagInfo(@PathVariable("id") int userId) {
-    UserVO userInfo = userService.getUserInfoByUserId(userId);
-    return ResponseEntity.ok(userInfo);
+	    UserVO userInfo = userService.getUserInfoByUserId(userId);
+	    return ResponseEntity.ok(userInfo);
     }
 
     // ✅ BMI 히스토리 조회
     @GetMapping("/{id}/bmi")
     public ResponseEntity<List<BmiHistoryVO>> getBmiHistory(@PathVariable("id") Long userId) {
-    List<BmiHistoryVO> bmiHistory = userService.getBmiHistory(userId);
-    return ResponseEntity.ok(bmiHistory);
+	    List<BmiHistoryVO> bmiHistory = userService.getBmiHistory(userId);
+	    return ResponseEntity.ok(bmiHistory);
     }
 
     // ✅ 음식 인식 히스토리 조회
     @GetMapping("/{id}/meals")
     public ResponseEntity<List<FoodRecognitionHistoryVO>> getFoodHistory(@PathVariable("id") Long userId) {
-    List<FoodRecognitionHistoryVO> foodHistory = userService.getFoodHistory(userId);
-    return ResponseEntity.ok(foodHistory);
+	    List<FoodRecognitionHistoryVO> foodHistory = userService.getFoodHistory(userId);
+	    return ResponseEntity.ok(foodHistory);
     }
 }
