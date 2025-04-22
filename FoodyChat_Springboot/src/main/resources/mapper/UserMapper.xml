@@ -300,4 +300,19 @@
         WHERE user_id = #{userId}
         ORDER BY reg_date DESC
     </select>
+	
+    <!-- 이번 달 신규 유저 수 -->
+    <select id="getNewUserCountThisMonth" resultType="int">
+    SELECT COUNT(*) 
+    FROM users 
+    WHERE DATE_FORMAT(reg_date, '%Y-%m') = DATE_FORMAT(NOW(), '%Y-%m');
+    </select>
+
+    <!-- 회원 등급별 유저 수 -->
+    <select id="getUserCountByGrade" resultType="map">
+    SELECT membership_level, COUNT(*) AS count
+    FROM users
+    GROUP BY membership_level;
+    </select>
+
 </mapper>
