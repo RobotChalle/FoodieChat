@@ -260,16 +260,7 @@ nav.glass-navbar {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  margin-top: 20px;
-  gap: 15px;
-}
-
-/* 버튼 그룹 */
-.mypage-button-group {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
+  margin-top: 30px;
   gap: 15px;
 }
 
@@ -337,18 +328,121 @@ nav.glass-navbar {
   margin-top: 4px;
 }
 
-.navbar-center .nav-link,
-.navbar-right .nav-link {
-  display: inline-flex;            /* ✅ 가로 정렬 보장 */
-  align-items: center;
-  white-space: nowrap;             /* ✅ 줄바꿈 방지 */
+/* 메인 이미지 (뷔페) */
+.hero-img-horizontal {
+  width: 100%;
+  max-height: 480px;
+  object-fit: cover;
+  border-radius: 0;
+  display: block;
+  margin: 0 auto;
 }
 
-.input-size {
-  width: 40vw;
+/* 메인 텍스트 블록 */
+.main-text {
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 40px;
+  border-radius: 16px;
+  color: rgb(4, 4, 4);
+  max-width: 600px;
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
-.btn-position {
+/* 갤러리 이미지 */
+.gallery-img {
+  width: 100%;
+  max-width: 580px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* 두 개 나란히 있는 이미지 */
+.image-row {
   display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+/* 이미지 정렬: 가운데 정렬을 더 명확하게 */
+.image-block {
+  width: 100%;
+  display: flex;
+  justify-content: center;
   align-items: center;
-} 
+}
+
+.image-row .gallery-img {
+  flex: 1 1 48%;
+  min-width: 280px;
+  max-width: 48%;
+  height: auto;
+  object-fit: cover;
+}
+
+/* 카드 소개 섹션 */
+.card-section {
+  padding: 60px 20px;
+  background-color: #f9fafb;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.card {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+
+.card-img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.card-content {
+  padding: 24px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-content h3 {
+  margin: 0 0 12px;
+  font-size: 1.2rem;
+  color: var(--text-color);
+}
+
+.card-content p {
+  flex: 1;
+  font-size: 0.95rem;
+  color: #6b7280;
+  margin-bottom: 20px;
+}
+
+.card-content button {
+  align-self: flex-start;
+}

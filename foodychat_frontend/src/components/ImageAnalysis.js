@@ -71,33 +71,46 @@ export default function Imageanalysis() {
           <h1 className="analysis-title">이미지 분석</h1>
 
           {/* 이미지 업로드 영역 */}
-          <div
-            className="upload-area"
-            onClick={() => imageInputRef.current.click()}
-            onDragOver={(e) => e.preventDefault()}
-            onDrop={(e) => {
-              e.preventDefault();
-              const file = e.dataTransfer.files[0];
-              if (file) {
-                imageInputRef.current.files = e.dataTransfer.files;
-                handleImageChange({ target: { files: e.dataTransfer.files } });
-              }
-            }}
-          >
-            <p>이미지를 클릭하거나 드래그 앤 드롭하세요</p>
-            <input
-              type="file"
-              accept="image/*"
-              ref={imageInputRef}
-              onChange={handleImageChange}
-              style={{ display: 'none' }}
-            />
-          </div>
+          {!previewUrl && (
+            <div
+              className="upload-area"
+              onClick={() => imageInputRef.current.click()}
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={(e) => {
+                e.preventDefault();
+                const file = e.dataTransfer.files[0];
+                if (file) {
+                  imageInputRef.current.files = e.dataTransfer.files;
+                  handleImageChange({ target: { files: e.dataTransfer.files } });
+                }
+              }}
+            >
+              <p>이미지를 클릭하거나 드래그 앤 드롭하세요</p>
+              <input
+                type="file"
+                accept="image/*"
+                ref={imageInputRef}
+                onChange={handleImageChange}
+                style={{ display: 'none' }}
+              />
+            </div>
+          )}
 
           {/* 🖼️ 이미지 미리보기 */}
           {previewUrl && (
-            <div className="image-preview">
+            <div
+              className="image-preview"
+              onClick={() => imageInputRef.current.click()}
+              style={{ cursor: 'pointer' }}
+            >
               <img src={previewUrl} alt="업로드된 음식" />
+              <input
+                type="file"
+                accept="image/*"
+                ref={imageInputRef}
+                onChange={handleImageChange}
+                style={{ display: 'none' }}
+              />
             </div>
           )}
 

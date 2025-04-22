@@ -24,7 +24,7 @@ export default function CalendarView({ meals }) {
           events={events}
           startAccessor="start"
           endAccessor="end"
-          style={{ height: '100%', width: '100%' }}
+          style={{ height: 550 , width: '100%' }}
           components={{ event: CustomEvent }} // ✅ 이벤트 커스터마이징
         />
       </div>

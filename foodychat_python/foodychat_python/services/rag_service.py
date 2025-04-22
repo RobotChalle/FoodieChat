@@ -1,6 +1,6 @@
 # services/rag_service.py
 
-from langchain_chroma import Chroma  # ✅ 최신 import 방식
+from langchain_community.vectorstores import Chroma  # ✅ 최신 import 방식
 from langchain_community.embeddings import OllamaEmbeddings
 from langchain_core.documents import Document
 from utils.rag_text_templates import build_full_rag_text

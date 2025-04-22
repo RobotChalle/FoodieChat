@@ -212,4 +212,57 @@
   .btn:hover {
   transform: translateY(-2px);
   }
+
+  /* 이미지 업로드 박스 */
+  .upload-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px auto;
+    padding: 10px;
+    border: 2px dashed #ccc;
+    background: #fafafa;
+    border-radius: 10px;
+    max-width: 500px;
+  }
+
+  .upload-area {
+    border: 2px dashed #ccc;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    background-color: #f9f9f9;
+    transition: background-color 0.3s;
+  }
   
+  .upload-area:hover {
+    background-color: #eef6ff;
+  }
+
+  /* 이미지 미리보기 */
+  .image-preview {
+    width: 420px;
+    height: 350px;                /* 고정 높이 */
+    display: flex;
+    align-items: center;         /* 세로 중앙 정렬 */
+    justify-content: center;     /* 가로 중앙 정렬 */
+    background-color: #f8f8f8;
+    border-radius: 12px;
+    overflow: hidden;            /* 넘치는 이미지 자르기 */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+  }
+  
+  .image-preview img {
+    width: 100%;                 /* 부모에 맞춰 너비 420px */
+    height: auto;                /* 비율 유지 */
+    object-fit: cover;           /* 잘라내기 */
+    object-position: center;     /* 가운데 정렬 */
+    display: block;
+    border-radius: 12px;
+  }
+  
+  .image-preview:hover img {
+    transform: scale(1.02);
+  }

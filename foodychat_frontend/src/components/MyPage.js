@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import NavBar from './NavBar';
 import './css/mypage.css';
-import './css/main.css';
 import InputMask from 'react-input-mask';
 
 export default function Mypage() {
@@ -12,7 +11,6 @@ export default function Mypage() {
     const [phone, setPhone] = useState('');
     const [formData, setFormData] = useState({ age: '', weight: '', height: '', address: '', addressDetail: '' });
     const navigate = useNavigate();
-    const BASE_URL = process.env.REACT_APP_BASE_URL;
 
     const handleAddressSearch = () => {
         if (window.daum && window.daum.Postcode) {
@@ -30,37 +28,35 @@ export default function Mypage() {
     useEffect(() => {
         const saved = localStorage.getItem('myPageForm');
         const localForm = saved ? JSON.parse(saved) : null;
-      
+
         const fetchUserInfo = async () => {
-          try {
-            const response = await axios.post(`${BASE_URL}/users/myPage`, {}, {
-              withCredentials: true
-            });
-      
-            if (response.status === 200) {
-              setUserInfo(response.data);
-      
-              // 🔄 서버 값 + localStorage 병합
-              const merged = {
-                age: response.data.age,
-                weight: response.data.user_weight,
-                height: response.data.height,
-                address: response.data.user_address || '',
-                addressDetail: response.data.address_detail || ''
-              };
-      
-              // localStorage 값이 있다면 병합해서 덮어쓰기
-              setFormData(localForm ? { ...merged, ...localForm } : merged);
+            try {
+                const response = await axios.post("http://localhost:8080/users/myPage", {}, {
+                    withCredentials: true
+                });
+
+                if (response.status === 200) {
+                    setUserInfo(response.data);
+
+                    const merged = {
+                        age: response.data.age,
+                        weight: response.data.user_weight,
+                        height: response.data.height,
+                        address: response.data.user_address || '',
+                        addressDetail: response.data.address_detail || ''
+                    };
+
+                    setFormData(localForm ? { ...merged, ...localForm } : merged);
+                }
+            } catch (err) {
+                setError('정보를 불러오는데 실패 했습니다.');
+                console.error(err);
             }
-          } catch (err) {
-            setError('정보를 불러오는데 실패 했습니다.');
-            console.error(err);
-          }
         };
-      
+
         fetchUserInfo();
     }, []);
-      
+
     useEffect(() => {
         if (userInfo?.phone) {
             setPhone(userInfo.phone);
@@ -69,14 +65,18 @@ export default function Mypage() {
 
     const handleLogout = async () => {
         try {
-            await axios.post(`${BASE_URL}/users/logout`, null, {
-                withCredentials: true
-            });
+            await axios.post('http://localhost:8080/users/logout',
+                new URLSearchParams({
+                    user_id: userInfo.user_id,
+                }),
+                {
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    withCredentials: true,
+                }
+            );
 
             localStorage.removeItem('user');
-            localStorage.removeItem('myPageForm');
-            navigate('/');
-            window.location.reload(); // ✅ NavBar 상태 갱신 보장
+            navigate('/login');
         } catch (err) {
             console.error('로그아웃 실패:', err);
             alert('로그아웃 중 오류가 발생했습니다.');
@@ -101,12 +101,11 @@ export default function Mypage() {
                 address_detail: formData.addressDetail
             });
 
-            const response = await axios.post(`${BASE_URL}/users/updateUser`, payload, {
+            const response = await axios.post('http://localhost:8080/users/updateUser', payload, {
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 withCredentials: true
             });
 
-            // ✅ localStorage에 저장
             localStorage.setItem('myPageForm', JSON.stringify(formData));
 
             if (response.status === 200) {
@@ -176,7 +175,7 @@ export default function Mypage() {
                                             <small className="helper-text">가입 시 선택된 성별입니다.</small>
                                         </div>
                                     </div>
-                                    
+
                                     <div className="form-group full-width">
                                         <label htmlFor="address">주소</label>
                                         <div className="address-input-wrap">
@@ -191,7 +190,7 @@ export default function Mypage() {
                                                 type="button"
                                                 className="address-button"
                                                 onClick={handleAddressSearch}
-                                                > 
+                                            >
                                                 주소 검색
                                             </button>
                                         </div>
@@ -205,7 +204,6 @@ export default function Mypage() {
                                         />
                                         <small className="helper-text">정확한 주소를 입력해주세요.</small>
                                     </div>
-
 
                                     <div className="form-triple">
                                         <div className="form-group">
@@ -257,13 +255,12 @@ export default function Mypage() {
                         </div>
 
                         <div className="mypage-grid-row actions">
-                            <div className="mypage-button-group">
-                                <button onClick={handleSave} className="button">저장</button>
+                            <div className="mypage-button-group"> {/* ✅ 버튼 간격 반영 */}
+                                <button onClick={handleSave} className="button primary">저장</button>
                                 <button onClick={() => navigate('/change-password')} className="button secondary">비밀번호 변경</button>
                                 {userInfo && userInfo.membership_level?.toLowerCase() !== 'regular' && (
-                                    <button onClick={() => navigate('/meal-plan')} className="button secondary">식단 조회</button>
+                                    <button onClick={() => navigate('/meal-plan')} className="button logout">식단 조회</button> // ✅ 빨간색 버튼
                                 )}
-                                <button onClick={handleLogout} className="button logout">로그아웃</button>
                             </div>
                         </div>
                     </div>
