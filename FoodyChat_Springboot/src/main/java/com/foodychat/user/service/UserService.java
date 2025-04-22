@@ -106,4 +106,8 @@ public interface UserService {
 
     // 음식 기록 리스트
     List<FoodRecognitionHistoryVO> getFoodHistory(Long userId);
+	
+	//회원 숫자 데이터
+	int getNewUserCountThisMonth();
+	List<Map<String, Object>> getUserCountByGrade();
 }
