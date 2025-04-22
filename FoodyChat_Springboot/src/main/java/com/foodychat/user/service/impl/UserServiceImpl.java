@@ -254,4 +254,15 @@ public class UserServiceImpl implements UserService {
 	public List<FoodRecognitionHistoryVO> getFoodHistory(Long userId) {
     	return userDao.selectFoodHistoryByUserId(userId);
 	}
+	
+	@Override
+	public int getNewUserCountThisMonth() {
+		return userDao.getNewUserCountThisMonth();
+	}
+
+	@Override
+	public List<Map<String, Object>> getUserCountByGrade() {
+		return userDao.getUserCountByGrade();
+	}
+
 }
