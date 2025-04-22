@@ -137,6 +137,7 @@
   border: 1px solid #ccc;
   background-color: white;
   border-radius: 6px;
+  color: #33a837;
   cursor: pointer;
 }
 
@@ -235,4 +236,35 @@ html[data-theme="dark"] .page-button {
   background-color: #374151;
   color: #f3f4f6;
   border: 1px solid #6b7280;
+}
+
+.search-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.date-picker {
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  min-width: 140px;
+}
+
+.download-btn {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.download-btn:hover {
+  background-color: #388e3c;
 }

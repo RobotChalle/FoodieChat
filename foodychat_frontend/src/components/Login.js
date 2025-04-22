@@ -90,7 +90,7 @@ function Login() {
     <NavBar />
     <div className="container">
       <div className="text-center">
-          <h1>다시 오신 걸 환영합니다</h1>
+          <h1> 👨‍🍳 Let’s discover ! <br/> what’s on your plate today! 🍱</h1>
       </div>
       <form onSubmit={handleLogin}>
           <div className="form-group">

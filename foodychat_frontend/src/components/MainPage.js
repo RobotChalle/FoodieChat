@@ -65,9 +65,9 @@ export default function MainPage() {
             <div className="card">
               <img src={emptyPlate} alt="영양 분석" className="card-img" />
               <div className="card-content">
-                <h3>AI 식단 추천</h3>
-                <p>AI가 당신의 건강 정보에 맞춰<br />최고의 식단을 설계해줍니다.</p>
-                <button onClick={() => navigate('/meal-recommend')}>식단 추천 받기</button>
+                <h3>AI 식단 조회</h3>
+                <p>AI가 당신의 식단 정보에 맞춰<br />시각화 해줍니다.</p>
+                <button onClick={() => navigate('/meal-plan')}>식단 조회 하기</button>
               </div>
             </div>
 
