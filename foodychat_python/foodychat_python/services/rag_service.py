@@ -13,25 +13,34 @@ embedding_model = OllamaEmbeddings(model="nomic-embed-text")
 
 def generate_user_rag(user_data: FullUserProfileSchema):
     """
-    사용자의 정보를 바탕으로 RAG 텍스트를 생성하고, 이를 Chroma DB에 저장합니다.
+    사용자의 정보를 바탕으로 RAG 텍스트를 생성하고, 이를 Chroma DB에 무조건 갱신합니다.
     """
-    user_id = user_data.user_details.user_id  # ← 여기서 정확히 꺼내야 함
+    user_id = user_data.user_details.user_id
+    collection_name = f"user_{user_id}"
 
-    print(f"📄 [RAG] 유저 정보 기반 문서 생성 시작 (user_id={user_id})")
-    
-    # 1. 텍스트 생성
+    print(f"📄 [RAG] 유저 정보 기반 문서 갱신 시작 (user_id={user_id})")
+
+    # ✅ 1. 기존 RAG 삭제 (컬렉션 제거)
+    try:
+        existing = Chroma(
+            collection_name=collection_name,
+            embedding_function=embedding_model,
+            persist_directory=CHROMA_PATH
+        )
+        existing._collection.delete()  # 내부 컬렉션 삭제a
+        print(f"🗑️ 기존 RAG 삭제 완료: {collection_name}")
+    except Exception as e:
+        print(f"⚠️ 기존 RAG 삭제 실패 (무시 가능): {e}")
+
+    # ✅ 2. 텍스트 생성
     rag_text = build_full_rag_text(user_data)
-    
-    # 2. Document 변환
     documents = [Document(page_content=rag_text)]
 
-    # 3. 저장
-    collection_name = f"user_{user_id}"
+    # ✅ 3. 새로 저장
     build_and_store_rag(documents, collection_name)
 
-    print(f"✅ [RAG] Chroma 저장 완료: {collection_name}")
-
-
+    print(f"✅ [RAG] 새로운 Chroma 저장 완료: {collection_name}")
+    
 def generate_chat_response(user_id: int, question: str) -> str:
     """
     사용자의 질문에 대해 Chroma에서 RAG 문서를 검색하고, Gemini 모델로 응답을 생성합니다.
