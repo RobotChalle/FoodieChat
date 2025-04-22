@@ -40,5 +40,6 @@
     	SELECT	f.food_name,
     			f.food_ko_name
     	FROM	foods f
+    	LIMIT 101
     </select>
 </mapper>

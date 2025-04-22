@@ -185,8 +185,8 @@ public class AnalyzeController {
 
 	    try {
 	        // ✅ Python 파일 실행 - 경로 주의 (상대 or 절대)
-	    	//String pythonScriptPath = "D:\\workspace\\FoodyChat\\foodychat_python\\foodychat_python\\store.py";
-	    	String pythonScriptPath = "C:\\FoodyChat\\foodychat_python\\foodychat_python\\store.py";
+	    	String pythonScriptPath = "D:\\workspace\\FoodyChat\\foodychat_python\\foodychat_python\\store.py";
+	    	//String pythonScriptPath = "C:\\FoodyChat\\foodychat_python\\foodychat_python\\store.py";
 	        ProcessBuilder pb = new ProcessBuilder("python", pythonScriptPath, foodNameKo, location);
 	        pb.redirectErrorStream(true); // stderr도 stdout으로 병합
 	        Process process = pb.start();

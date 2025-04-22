@@ -1,6 +1,6 @@
 # utils/rag_builder.py
 
-from langchain_chroma import Chroma  # ✅ 최신 import 방식
+from langchain_community.vectorstores import Chroma  # ✅ 최신 import 방식
 from langchain_core.documents import Document
 from langchain_community.embeddings import OllamaEmbeddings
 from typing import List
