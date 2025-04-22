@@ -147,4 +147,15 @@ public class UserDAO {
     public List<FoodRecognitionHistoryVO> selectFoodHistoryByUserId(Long userId) {
         return sqlSession.selectList(mapper + ".selectFoodHistoryByUserId", userId);
     }
+	
+    // 최근 일주일간 신규 사용자 수
+    public int getNewUserCountThisMonth() {
+        return sqlSession.selectOne(mapper + ".getNewUserCountThisMonth");
+    }
+
+    // 회원 등급별 사용자 수 (Map<등급, 수>)
+    public List<Map<String, Object>> getUserCountByGrade() {
+        return sqlSession.selectList(mapper + ".getUserCountByGrade");
+    }
+
 }
