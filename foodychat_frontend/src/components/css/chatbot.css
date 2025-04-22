@@ -1,0 +1,118 @@
+.chat-container {
+  max-width: 800px;
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff; /* 전체 배경 */
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* 상단 FoodyChat 스타일 */
+.chat-header {
+  padding: 1.5rem 1rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+  background: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.foody-logo-icon {
+  width: 28px;
+  height: 28px;
+}
+
+.foody-logo-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+/* 채팅 내용 */
+.chat-window {
+  flex-grow: 1;
+  padding: 1.2rem;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* 말풍선 */
+.chat-bubble {
+  max-width: 70%;
+  padding: 0.75rem 1rem;
+  border-radius: 16px;
+  line-height: 1.6;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+.chat-bubble.user {
+  align-self: flex-end;
+  background-color: #DCF8C6;
+}
+
+.chat-bubble.bot {
+  align-self: flex-start;
+  background-color: #ECECEC;
+}
+
+/* 블록 분리 */
+.chat-block {
+  margin-bottom: 0.5rem;
+}
+
+.chat-divider {
+  border: none;
+  border-top: 1px solid #ccc;
+  margin: 1rem 0;
+}
+
+/* 입력 영역 */
+.chat-input-box {
+  display: flex;
+  gap: 0.5rem;
+  padding: 1rem 1rem 2rem;
+  border-top: 1px solid #ddd;
+  background: none;
+  position: sticky;
+  bottom: 0;
+  backdrop-filter: blur(6px);
+}
+
+.chat-textarea {
+  flex: 1;
+  font-size: 1rem;
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  resize: none;
+  overflow: hidden;
+  max-height: 160px;
+  line-height: 1.4;
+  background: transparent;
+}
+
+.chat-send-btn {
+  background-color: #4F46E5;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.chat-send-btn:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+}
+

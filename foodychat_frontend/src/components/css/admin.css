@@ -1,0 +1,238 @@
+/* AdminPage 전체 감싸는 배경 */
+.admin-wrapper {
+  width: 100%; /* ✅ 항상 100% */
+  display: flex;
+  justify-content: center;
+  padding: 40px 45px;
+  background: #f4f6f8;
+  min-height: calc(100vh - 80px); /* ✅ NavBar 높이 제외하고 화면 채우기 */
+  box-sizing: border-box;
+}
+
+/* AdminPage 안쪽 컨텐츠 */
+.admin-inner {
+  width: 100%;
+  max-width: 1200px; /* ✅ Carousel과 통일 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 섹션 제목 */
+.section-title {
+  font-size: 28px;
+  font-weight: bold;
+  color: #1f2937;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+/* 검색 */
+.search-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+  justify-content: center;
+}
+
+.search-input {
+  width: 300px;
+  padding: 10px 14px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f8f9fc;
+}
+
+.btn-search {
+  height: 40px;
+  padding: 0 16px;
+  font-size: 14px;
+  background-color: #4e73df;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-search:hover {
+  background-color: #395ab7;
+}
+
+/* 테이블 */
+.admin-table {
+  width: 100%;
+  max-width: 1150px; /* ✅ 1200px 안에서 자연스럽게 */
+  table-layout: fixed; /* ✅ 추가 */
+  margin: 0 auto;
+  border-collapse: collapse;
+  background-color: #fdfdfd;
+  font-size: 15px;
+  margin-top: 20px;
+}
+
+.admin-table th {
+  background-color: #4e73df;
+  color: #ffffff;
+  font-weight: bold;
+  padding: 12px;
+}
+
+.admin-table td {
+  padding: 12px;
+  text-align: center;
+  border-bottom: 1px solid #e2e8f0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-table tr:nth-child(even) td {
+  background-color: #f4f6fa;
+}
+
+.admin-table tr:hover td {
+  background-color: #dfeaf7;
+}
+
+/* 드롭다운 */
+.dropdown-select {
+  width: 100%;
+  height: 40px;
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 1px solid #d0d5dd;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+/* 삭제 버튼 */
+.btn-danger {
+  padding: 8px 12px;
+  background-color: #e74a3b;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.btn-danger:hover {
+  background-color: #dc2626;
+}
+
+/* 페이지네이션 */
+.pagination {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.page-button {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  background-color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.page-button.active {
+  background-color: #4CAF50;
+  color: white;
+  font-weight: bold;
+}
+
+/* 모달 */
+.modal-backdrop {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0, 0, 0, 0.35);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal {
+  background: #fff;
+  padding: 24px;
+  border-radius: 12px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.modal h3 {
+  margin-top: 0;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .admin-inner {
+    padding: 20px;
+  }
+
+  .search-input {
+    width: 90%;
+  }
+}
+
+/* 기본적으로 모든 색상 변경에 부드러운 전환 효과 */
+.admin-inner,
+.mypage-inner,
+.admin-table th,
+.admin-table td,
+.search-input,
+.dropdown-select,
+.page-button {
+  transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease;
+}
+
+/* 다크모드 스타일 */
+html[data-theme="dark"] .admin-inner,
+html[data-theme="dark"] .mypage-inner {
+  background: #1f2937;
+  color: #f3f4f6;
+}
+
+html[data-theme="dark"] .admin-table th {
+  background-color: #374151;
+}
+
+html[data-theme="dark"] .admin-table td {
+  background-color: #1f2937;
+  color: #f3f4f6;
+}
+
+html[data-theme="dark"] .admin-table tr:nth-child(even) td {
+  background-color: #111827;
+}
+
+html[data-theme="dark"] .admin-table tr:hover td {
+  background-color: #4b5563;
+}
+
+html[data-theme="dark"] .search-input {
+  background-color: #374151;
+  color: #f3f4f6;
+  border: 1px solid #6b7280;
+}
+
+html[data-theme="dark"] .dropdown-select {
+  background-color: #374151;
+  color: #f3f4f6;
+  border: 1px solid #6b7280;
+}
+
+html[data-theme="dark"] .page-button {
+  background-color: #374151;
+  color: #f3f4f6;
+  border: 1px solid #6b7280;
+}

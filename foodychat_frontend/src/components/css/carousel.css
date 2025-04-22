@@ -1,0 +1,148 @@
+/* Carousel 전체 감싸는 컨테이너 */
+.carousel-container {
+  width: 100%;
+  max-width: 92%;
+  margin: 0 auto;
+  padding: 20px;
+  border-radius: 20px;
+  background: white;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  height: 100%;
+}
+
+.carousel-slide {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 250px);
+  overflow: hidden;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f9fafb;
+}
+
+.carousel-slide img {
+  width: auto;
+  height: 100%;
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+  margin: auto;
+  border-radius: 20px;
+}
+
+/* ✅ 이미지 위에 텍스트 오버레이 */
+.carousel-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end; /* 아래부터 쌓기 */
+  padding: 30px;
+  box-sizing: border-box;
+}
+
+/* 슬라이드 위에 나오는 텍스트 박스 (반투명 배경) */
+/* 타이틀 + 서브텍스트 */
+.carousel-caption {
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 10px;
+  color: white;
+  text-align: left;
+}
+
+/* description 설명 영역 */
+.carousel-description {
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 12px;
+  padding: 16px;
+  color: #222;
+  text-align: center;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+/* 왼쪽/오른쪽 화살표 */
+.slick-prev:before, .slick-next:before {
+  color: black;
+  font-size: 30px;
+}
+
+/* slick dots */
+.slick-dots li button:before {
+  font-size: 12px;
+  color: gray;
+}
+.slick-dots li.slick-active button:before {
+  color: black;
+}
+
+/* 왼쪽/오른쪽 화살표 커스텀 */
+.left-arrow, .right-arrow {
+  background: rgba(0, 0, 0, 0.4);
+  border: none;
+  color: white;
+  font-size: 26px;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  border-radius: 50%;
+}
+
+.left-arrow:hover,
+.right-arrow:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.left-arrow {
+  left: 10px;
+}
+.right-arrow {
+  right: 10px;
+}
+
+/* slick 기본 화살표 (모양, 위치 조정) */
+.slick-prev:before,
+.slick-next:before {
+  color: black;
+  font-size: 30px;
+}
+
+/* slick 기본 점(dot) 네비게이션 커스텀 */
+.slick-dots li button:before {
+  font-size: 12px;
+  color: gray;
+}
+
+.slick-dots li.slick-active button:before {
+  color: black;
+}
+
+/* ✅ 추가: 텍스트 등장 애니메이션 */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 텍스트에 적용하는 애니메이션 클래스 */
+.animate-text {
+  animation: fadeInUp 1s ease forwards;
+}

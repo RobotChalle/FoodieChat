@@ -2,12 +2,20 @@ import os
 from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
+    # React API 주소
+    REACT_URL: str = "http://localhost:3000"
+    
+    # Spring Boot 주소
+    SERVER_URL: str = "http://localhost:8080"
+    # SERVER_URL = "http://192.168.0.29:8080"
+    
     # OPENAI 키 설정
     OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
     # 데이터베이스 연결 설정
     # "SQLALCHEMY_DATABASE_URI", "mysql+pymysql://root:각자비밀번호@localhost:3306/데이터베이스명" : 개인
     # "SQLALCHEMY_DATABASE_URI", "mysql+pymysql://root:서버비밀번호@localhost:3306/데이터베이스명" : 서버
-    DB_URL: str = os.getenv("SQLALCHEMY_DATABASE_URI", "mysql+pymysql://root:hu26792991@localhost:3306/proj_test")
+    DB_URL: str = os.getenv("SQLALCHEMY_DATABASE_URI", "mysql+pymysql://root:dhforkwk96$@192.168.0.45:3306/foodychat")
+    #DB_URL: str = os.getenv("SQLALCHEMY_DATABASE_URI", "mysql+pymysql://root:hu26792991@localhost:3306/proj")
     # Google Login API 설정
     SECRET_KEY: str = os.getenv("SECRET_KEY", "your_secret_key")
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30

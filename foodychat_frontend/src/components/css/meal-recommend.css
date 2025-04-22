@@ -1,0 +1,265 @@
+.recommend-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+    background: #f4f6f8;
+    min-height: calc(100vh - 80px);
+    box-sizing: border-box;
+  }
+  
+  .recommend-inner {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 30px;
+    text-align: center;
+  }
+  
+  /* ✅ 가로 정렬 핵심 */
+  .form-row {
+    display: flex;
+  align-items: center;
+  gap: 32px;
+  flex-wrap: wrap; /* ✅ 한 줄 넘으면 자동 줄바꿈 */
+  width: 100%;
+  }
+  
+  .form-group-inline {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .form-group-inline label {
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  
+  .date-input {
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+  }
+  
+  .tilde {
+    font-weight: bold;
+    font-size: 18px;
+  }
+  
+  .btn {
+    max-width: 200px;
+  }
+  
+  .result-table {
+    width: 100%;
+    margin-top: 30px;
+    border-collapse: collapse;
+  }
+  
+  .result-table th, .result-table td {
+    padding: 12px;
+    border: 1px solid #ccc;
+    text-align: center;
+  }
+  
+  .result-table th {
+    background-color: #f3f4f6;
+  }
+
+  .meal-type-group {
+    flex-wrap: wrap;
+    gap:20px;
+    max-width: 100%;
+  }
+
+  .meal-type-group label {
+    display: flex;
+    align-items: center;
+    gap: 4px; /* ✅ 간격 최소화 */
+    margin-right: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  
+  .meal-type-group input[type="checkbox"] {
+    margin: 0; /* ✅ 브라우저 기본 여백 제거 */
+    padding: 0;
+  }
+  
+  .form-group-inline {
+    flex-wrap: nowrap;
+    min-width: 280px;
+  }
+  
+  @media (max-width: 768px) {
+    .form-row {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .form-group-inline {
+      flex-wrap: wrap;
+    }
+  }
+
+  .table-scroll-container {
+    height: calc(100vh - 320px); /* 상단 폼 제외한 높이 */
+    overflow-y: auto;
+    width: 100%;
+  }
+  
+  .col-narrow {
+    width: 180px;
+    white-space: nowrap;
+  }
+  
+  .col-wide {
+    width: auto;
+  }
+  .recommend-form-container {
+    padding: 40px 20px;
+    background-color: #f3f4f6;
+    min-height: 100vh;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  
+  .recommend-title {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 30px;
+    font-weight: bold;
+  }
+  
+  .recommend-form-card {
+    max-width: 700px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 30px 40px;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+  }
+  
+  .input-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  
+  .input-group input {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+  }
+  
+  .input-group button {
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  .input-group button:disabled {
+    background-color: #9ca3af;
+  }
+  
+  .result-section {
+    margin-top: 30px;
+  }
+  
+  .result-title {
+    font-size: 1.2rem;
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+  
+  .result-item {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+  
+  .result-item label {
+    font-size: 0.95rem;
+    margin-bottom: 6px;
+    color: #374151;
+  }
+  
+  .result-item input {
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    background-color: #f9fafb;
+  }
+  
+  .no-result {
+    color: #6b7280;
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  .input-group-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    margin-bottom: 16px;
+  }
+  
+  .input-item {
+    display: flex;
+    flex-direction: column;
+    min-width: 160px;
+    flex: 1;
+  }
+  
+  .input-item input,
+  .input-item select {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+  
+  .button-wrap {
+    flex: none;
+  }
+  
+  .input-item button {
+    padding: 8px 14px;
+    font-weight: bold;
+    background-color: #6366f1;
+    border: none;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .input-item button:disabled {
+    background-color: #999;
+    cursor: not-allowed;
+  }
+
+  .recommend-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 0%;    /* 🔽 줄임 */
+    margin-bottom: 10px; /* 🔽 줄임 */
+    text-align: center;
+  }
+  

@@ -10,4 +10,10 @@ import lombok.Data;
 //@AllArgsConstructor
 public class AnalyzeVO {
 	/**입력 필요*/
+	private float calories;
+	private float nut_carb;
+	private float nut_pro;
+	private float nut_fat;
+	private String food_name;
+	private String food_ko_name;
 }

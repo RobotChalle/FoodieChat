@@ -4,4 +4,42 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.foodychat.analyze.dao.AnalyzeDAO">
+	<insert id="insertRecommendedMeal" parameterType="com.foodychat.analyze.vo.MealRecommendationVO">
+        INSERT INTO user_meals (user_id, meal_date, meal_type, meal_text, reg_id, reg_ip)
+        VALUES (#{user_id}, #{rec_date}, #{meal_type}, #{menu}, #{login_id}, #{login_ip})
+    </insert>
+    <update id="updateRecommendedMeal" parameterType="com.foodychat.analyze.vo.MealRecommendationVO">
+    	UPDATE	user_meals
+        SET		meal_text = #{menu},
+        		upd_id = #{login_id},
+        		upd_ip = #{login_ip}
+        WHERE	user_id = #{user_id}
+        	AND	meal_date = #{rec_date}
+        	AND meal_type = #{meal_type}
+    </update>
+    <select id="selectRecommendedMeal" parameterType="java.util.Map" resultType="com.foodychat.analyze.vo.MealRecommendationVO">
+    	SELECT	user_id,
+    			meal_date as rec_date,
+    			meal_type,
+    			meal_text as menu
+    	FROM	user_meals
+        WHERE	user_id = #{user_id}
+        	AND	meal_date = #{meal_date}
+        	AND meal_type = #{meal_type}
+    </select>
+    <select id="selectFoodbyName" parameterType="string" resultType="com.foodychat.analyze.vo.AnalyzeVO">
+    	SELECT	d.calories,
+    			d.nut_carb,
+    			d.nut_pro,
+    			d.nut_fat,
+    			f.food_ko_name
+    	FROM	foods f LEFT OUTER JOIN food_details d ON d.food_id = f.food_id
+        WHERE	f.food_name = #{foodName}
+    </select>
+    <select id="selectFoodTranslations" resultType="com.foodychat.analyze.vo.AnalyzeVO">
+    	SELECT	f.food_name,
+    			f.food_ko_name
+    	FROM	foods f
+    	LIMIT 101
+    </select>
 </mapper>

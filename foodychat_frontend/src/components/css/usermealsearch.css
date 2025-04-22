@@ -1,0 +1,160 @@
+.usermealsearch-wrapper {
+  width: 100%; /* ✅ 항상 100% */
+  display: flex;
+  justify-content: center;
+  padding: 40px 0;
+  background: #f4f6f8;
+  min-height: calc(100vh - 80px); /* ✅ NavBar 높이 제외하고 화면 채우기 */
+  box-sizing: border-box;
+}
+
+/* AdminPage 안쪽 컨텐츠 */
+.usermealsearch-inner {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: row; /* ✅ 꼭 row */
+  align-items: stretch; /* ✅ 세로 높이도 맞추기 */
+  gap: 20px;
+  box-sizing: border-box;
+}
+
+.chat-feature-panel {
+  flex-grow: 7;
+  flex-shrink: 1;
+  flex-basis: 0; /* ✅ */
+  min-height: 600px;
+  background: #ffffff;
+  border-radius: 16px;
+  padding-right: 40px;
+}
+
+.chatbot-panel {
+  flex-grow: 3;
+  flex-shrink: 1;
+  flex-basis: 0;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+/* 안쪽 visualizer도 꽉 채우기 */
+.visualizer {
+  width: 100%;
+  max-width: 100%;
+  max-height: 600px;          /* ✅ 원하는 최대 높이 지정 */
+  overflow-y: auto;           /* ✅ 내용이 넘치면 스크롤 */
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  background: white;
+}
+
+.visualizer > * {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* 챗봇 제목바 */
+.chat-title-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.chat-title {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+/* 채팅 이력 */
+.chat-history {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* ✅ 메시지끼리 간격 */
+  padding: 10px;
+  background-color: #f9fafb;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  box-sizing: border-box;
+}
+
+/* 각 채팅 메시지 */
+.chat-message {
+  display: flex;
+  margin-bottom: 10px;
+  max-width: 80%;
+  word-break: break-word;
+}
+
+.chat-message.user {
+  align-self: flex-end;
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.chat-message.ai {
+  align-self: flex-start;
+  justify-content: flex-start;
+  text-align: left;
+}
+
+/* 말풍선 스타일 */
+.chat-bubble {
+  padding: 12px 18px;
+  border-radius: 20px;
+  background-color: #e0e7ff; /* 기본 파란 말풍선 */
+  color: #1f2937;
+  font-size: 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  max-width: 100%;
+}
+
+/* AI용 말풍선 따로 색 */
+.chat-message.ai .chat-bubble {
+  background-color: #d1fae5; /* 연한 초록 말풍선 */
+  color: #065f46;
+}
+
+/* 입력창 */
+.chatbot-input-area {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0; /* ✅ 입력창 고정 */
+}
+
+.chatbot-input-area input {
+  flex: 1;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f8f9fc;
+}
+
+.chatbot-input-area button {
+  padding: 12px 20px;
+  background-color: #4e73df;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.chatbot-input-area button:hover {
+  background-color: #395ab7;
+}
+/* 반응형 */
+@media (max-width: 768px) {
+  .usermealsearch-inner {
+    flex-direction: column; /* ✅ 모바일에서는 세로 쌓기 */
+  }
+}

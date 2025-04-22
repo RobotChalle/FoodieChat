@@ -1,0 +1,234 @@
+/* MyPage 전체 컨테이너 */
+.mypage-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+  background: #f4f6f8;
+  min-height: calc(100vh - 80px);
+  box-sizing: border-box;
+}
+
+/* 안쪽 컨텐츠 */
+.mypage-inner {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 프로필 + 내정보 전체 그리드 */
+.mypage-grid-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  justify-content: center;
+  width: 100%;
+}
+
+/* 프로필 박스 */
+.profile-sidebar {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  flex: 1;
+  min-width: 280px;
+  max-width: 400px;
+}
+
+.profile-sidebar img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 20px;
+}
+
+.profile-sidebar h3 {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.profile-sidebar p {
+  font-size: 14px;
+  color: #666;
+  margin: 2px 0;
+}
+
+/* 내 정보 섹션 */
+.mypage-content {
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.08);
+  flex: 2;
+  min-width: 280px;
+  max-width: 800px;
+}
+
+.mypage-title {
+  text-align: center;
+  font-size: 26px;
+  font-weight: bold;
+  margin-bottom: 30px;
+  color: #1f2937;
+}
+
+/* 주소 입력 줄 */
+.address-input-wrap {
+  display: flex;
+  gap: 10px;
+}
+
+.address-input-wrap input {
+  flex: 1;
+}
+
+.address-button {
+  padding: 10px 16px;
+  background-color: #2563eb;
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.address-button:hover {
+  background-color: #1e40af;
+}
+
+/* 나이, 체중, 키 3개 나열 */
+.form-triple {
+  display: flex;
+  gap: 20px;
+}
+
+.form-triple .form-group {
+  flex: 1;
+}
+
+/* 라디오 그룹 (건강 목표) */
+.radio-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 10px;
+}
+
+.radio-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.radio-item input[type="radio"] {
+  accent-color: #2563eb;
+  width: 16px;
+  height: 16px;
+}
+
+/* 공통 폼 그룹 */
+.form-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #374151;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"] {
+  padding: 10px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+/* 저장 버튼 */
+.save-button {
+  margin-top: 30px;
+  margin-bottom: 10px; /* 하단 간격 추가 */
+  padding: 12px 24px;
+  background-color: #10b981;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.save-button:hover {
+  background-color: #059669;
+}
+
+/* 버튼 그룹 커스텀 - 간격 조절용 */
+.button-group-custom {
+  display: flex;
+  gap: 16px; /* 버튼 사이 간격 */
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+/* 에러 메시지 */
+.error-message {
+  color: #ef4444;
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .mypage-grid-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .profile-sidebar,
+  .mypage-content {
+    width: 100%;
+  }
+
+  .form-pair, .form-triple {
+    flex-direction: column;
+  }
+
+  .radio-group {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.mypage-button-group {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 16px; /* ✅ 버튼 간격 */
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
