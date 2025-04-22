@@ -1,5 +1,6 @@
 package com.foodychat.user.service.impl;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +14,7 @@ import com.foodychat.user.dao.PasswordResetTokenMapper;
 import com.foodychat.user.dao.UserDAO;
 import com.foodychat.user.service.UserService;
 import com.foodychat.user.vo.BmiHistoryVO;
+import com.foodychat.user.vo.CommonCodesVO;
 import com.foodychat.user.vo.FoodRecognitionHistoryVO;
 import com.foodychat.user.vo.PasswordResetToken;
 import com.foodychat.user.vo.UserDetailsVO;
@@ -253,5 +255,25 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<FoodRecognitionHistoryVO> getFoodHistory(Long userId) {
     	return userDao.selectFoodHistoryByUserId(userId);
+	}
+
+	@Override
+	public List<UserLogVO> getUserLogList(String email, String status, LocalDate startDate, LocalDate endDate, int limit, int offset) {
+        return userDao.getUserLogList(email, status, startDate, endDate, limit, offset);
+	} 
+
+	@Override
+	public int getTotalUserLogCount(String email, String status, LocalDate startDate, LocalDate endDate) {
+		return userDao.getTotalUserLogCount(email, status, startDate, endDate);
+	}
+
+	@Override
+	public List<CommonCodesVO> getCommonCodesList() {
+		return userDao.getCommonCodesList();
+	}
+
+	@Override
+	public List<CommonCodesVO> getCommonCodesDetailList(String code_id) {
+		return userDao.getCommonCodesDetailList(code_id);
 	}
 }

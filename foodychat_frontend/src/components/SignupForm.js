@@ -100,7 +100,7 @@ export default function Signup() {
             <NavBar />        
             <div className="container">
                 <div className="text-center">
-                    <h1>Welcome to foodyChat!</h1>
+                    <h1>🌱 Start your healthy eating 🧑‍⚕</h1>
                 </div>
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">

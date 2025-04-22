@@ -1,0 +1,101 @@
+.search-row {
+    display: flex;
+    flex-wrap: wrap;      /* 반응형 대응 */
+    align-items: center;
+    justify-content: center; /* 중앙 정렬 */
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  
+  .search-row input,
+  .search-row select,
+  .search-row .date-input,
+  .search-row .download-btn {
+    height: 38px;
+    font-size: 14px;
+    padding: 0 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+  }
+  
+  .date-input {
+    width: 140px;
+  }
+  
+  .search-input {
+    width: 300px;
+  }
+  
+  .status-select {
+    width: 120px;
+  }
+  
+  .download-btn {
+    background-color: #4caf50;
+    color: white;
+    font-weight: bold;
+    border: none;
+    padding: 0 16px;
+    cursor: pointer;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background-color 0.2s ease;
+  }
+  
+  .download-btn:hover {
+    background-color: #388e3c;
+  }
+
+  .table-header {
+    display: flex;
+    justify-content: flex-end; /* 오른쪽 정렬 */
+    width: 96%;
+    margin: 0px 0;
+  }
+  
+  .csv-button {
+    background-color: #4caf50;
+    color: white;
+    font-size: 13px;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    max-width: 70px;
+    transition: background-color 0.2s ease;
+  }
+  
+  .csv-button:hover {
+    background-color: #388e3c;
+  }
+
+  .ghost-icon-button {
+    background: transparent;
+    border: none;
+    color: #4caf50;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 6px;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+  }
+  
+  .ghost-icon-button:hover {
+    background-color: rgba(76, 175, 80, 0.1); /* 연한 초록 배경 */
+    transform: scale(1.1);
+  }
+  
+  .table-header {
+    display: flex;
+    justify-content: flex-end;
+    width: 96%;
+    margin-bottom: 4px;  /* 기존 간격보다 좁게 설정 */
+  }
+  
+  .admin-table {
+    margin-top: 0;         /* 혹시 테이블에 여백이 있다면 제거 */
+    border-collapse: collapse;
+  }

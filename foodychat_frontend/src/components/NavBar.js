@@ -91,10 +91,20 @@ export default function NavBar() {
                         <Link to="/chatbot" className="nav-link">🤖 <span>챗봇</span></Link>
                         <Link to="/image-analysis" className="nav-link">🍜 <span>이미지 분석</span></Link>
                         {userInfo && (
+                            <Link to="/meal-plan" className="nav-link">🥗 <span>식단조회</span></Link>
+                        )}
+                        {userInfo && (
                             <Link to="/mypage" className="nav-link">👩‍🍳 <span>마이페이지</span></Link>
                         )}
                         {userInfo && userInfo.membership_level?.toLowerCase() === 'admin' && (
-                            <Link to="/users/admin" className="nav-link">🍱 <span>관리자페이지</span></Link>
+                            <div className="dropdown">
+                                <span className="nav-link dropdown-toggle">🍱 <span>관리자페이지</span></span>
+                                <div className="dropdown-menu">
+                                <Link to="/users/admin" className="dropdown-item">👥 회원관리</Link>
+                                <Link to="/users/admin/logs" className="dropdown-item">📄 사용로그조회</Link>
+                                <Link to="/users/admin/codes" className="dropdown-item">🗂 공통코드관리</Link>
+                                </div>
+                            </div>
                         )}
                     </div>
 

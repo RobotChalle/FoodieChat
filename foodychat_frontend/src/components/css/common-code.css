@@ -1,0 +1,62 @@
+.common-code-wrapper {
+    padding: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  
+  .common-code-table-container {
+    max-height: 400px;       /* ✅ 높이 제한 */
+    overflow-y: auto;        /* ✅ 세로 스크롤만 */
+    border: 1px solid #ddd;
+    border-radius: 6px;
+  }
+  
+  .common-code-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+  }
+  
+  .common-code-table th,
+  .common-code-table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+    background-color: #fff;
+    cursor: pointer;
+  }
+  
+  .common-code-table th {
+    position: sticky;
+    top: 0;
+    background-color: #f8f9fa;
+    z-index: 1;
+  }
+  
+  .common-code-table tr:hover {
+    background-color: #f0f0f0;
+  }
+  
+  /* 모달은 기존 그대로 */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal-content {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    width: 500px;
+  }
+  
+  .admin-table td.code-name-column {
+    text-align: left !important;
+  }

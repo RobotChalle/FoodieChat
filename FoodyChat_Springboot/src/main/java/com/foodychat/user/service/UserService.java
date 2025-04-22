@@ -1,7 +1,9 @@
 package com.foodychat.user.service;
+import java.time.LocalDate;
 import java.util.List;
 
 import com.foodychat.user.vo.BmiHistoryVO;
+import com.foodychat.user.vo.CommonCodesVO;
 import com.foodychat.user.vo.FoodRecognitionHistoryVO;
 import com.foodychat.user.vo.UserDetailsVO;
 import com.foodychat.user.vo.UserLogVO;
@@ -106,4 +108,8 @@ public interface UserService {
 
     // 음식 기록 리스트
     List<FoodRecognitionHistoryVO> getFoodHistory(Long userId);
+	List<UserLogVO> getUserLogList(String email, String status, LocalDate startDate, LocalDate endDate, int limit, int offset);
+	int getTotalUserLogCount(String email, String status, LocalDate startDate, LocalDate endDate);
+	List<CommonCodesVO> getCommonCodesList();
+	List<CommonCodesVO> getCommonCodesDetailList(String code_id);
 }
