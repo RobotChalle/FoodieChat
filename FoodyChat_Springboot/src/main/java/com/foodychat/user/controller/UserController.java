@@ -540,4 +540,15 @@ public class UserController {
 	    List<FoodRecognitionHistoryVO> foodHistory = userService.getFoodHistory(userId);
 	    return ResponseEntity.ok(foodHistory);
     }
+	
+    //회원 대시보드 정보 조회
+    @GetMapping("/admin/user-statistics")
+    @ResponseBody
+    public Map<String, Object> getUserStatistics() {
+        Map<String, Object> result = new HashMap<>();
+        result.put("totalUserCount", userService.getTotalUserCount());
+        result.put("newUserCountThisMonth", userService.getNewUserCountThisMonth());
+        result.put("userCountByGrade", userService.getUserCountByGrade());
+        return result;
+    }
 }
