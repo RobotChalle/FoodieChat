@@ -158,3 +158,11 @@
     flex-direction: column; /* ✅ 모바일에서는 세로 쌓기 */
   }
 }
+
+.meal-chart-container {
+  margin-top: 20px;
+  background: white;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}

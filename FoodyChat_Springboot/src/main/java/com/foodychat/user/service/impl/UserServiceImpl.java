@@ -22,6 +22,9 @@ import com.foodychat.user.vo.UserLogVO;
 import com.foodychat.user.vo.UserMealsVO;
 import com.foodychat.user.vo.UserVO;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+
 /**
  * 사용자 서비스 구현 클래스
  */	
@@ -275,5 +278,47 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<CommonCodesVO> getCommonCodesDetailList(String code_id) {
 		return userDao.getCommonCodesDetailList(code_id);
+	}
+
+	@Override
+	public boolean codeExists(String codeId) {
+		return userDao.codeExists(codeId) > 0;
+	}
+
+	@Override
+	public void insertCode(CommonCodesVO code) {
+		userDao.insertCode(code);
+	}
+
+	@Override
+	public void updateCode(CommonCodesVO code) {
+		userDao.updateCode(code);
+	}
+
+	@Override
+	public void upsertDetails(String codeId, List<CommonCodesVO> details, HttpSession session, HttpServletRequest req) {
+		UserVO svo = (UserVO)session.getAttribute("user");
+		for (CommonCodesVO detail : details) {
+			detail.setLogin_id(svo.getUser_id());
+			detail.setLogin_ip(req.getRemoteAddr());
+	        detail.setCode_id(codeId);
+	        int count = userDao.countDetailCode(detail); // 존재 여부 확인
+	        if (count > 0) {
+	        	userDao.updateDetailCode(detail);
+	        } else {
+	        	userDao.insertDetailCode(detail);
+	        }
+	    }
+	}
+
+	@Override
+	public void deleteCodeWithDetails(String codeId) {
+		userDao.deleteDetailCodes(codeId); // 자식 먼저
+		userDao.deleteCode(codeId);
+	}
+
+	@Override
+	public void deleteDetailCode(String codeId, String detailCode) {
+		userDao.deleteDetailCode(codeId, detailCode); // 자식 먼저
 	}
 }

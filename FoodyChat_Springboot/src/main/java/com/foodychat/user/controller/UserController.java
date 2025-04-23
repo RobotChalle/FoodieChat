@@ -39,6 +39,7 @@ import com.foodychat.config.EmailService;
 import com.foodychat.config.GoogleTokenVerifier;
 import com.foodychat.user.service.UserService;
 import com.foodychat.user.vo.BmiHistoryVO;
+import com.foodychat.user.vo.CommonCodeSaveVO;
 import com.foodychat.user.vo.CommonCodesVO;
 import com.foodychat.user.vo.FoodRecognitionHistoryVO;
 import com.foodychat.user.vo.GoogleUserInfo;
@@ -571,8 +572,44 @@ public class UserController {
     
     @GetMapping("/admin/codes/{code_id}/details")
     public ResponseEntity<?> getCommonCodesDetailList(@PathVariable("code_id") String code_id) {
-    	System.out.println(code_id);
     	List<CommonCodesVO> codes = userService.getCommonCodesDetailList(code_id);
         return ResponseEntity.ok(codes);
+    }
+    
+    @PostMapping("/admin/codes/save")
+    public ResponseEntity<?> saveCodeAndDetails(@RequestBody CommonCodeSaveVO request,
+    											HttpSession session,
+   	    									 	HttpServletRequest req) {
+        CommonCodesVO code = request.getCode();
+        List<CommonCodesVO> details = request.getDetails();
+        
+        UserVO svo = (UserVO)session.getAttribute("user");
+        code.setLogin_id(svo.getUser_id());
+        code.setLogin_ip(req.getRemoteAddr());
+
+        boolean exists = userService.codeExists(code.getCode_id());
+
+        if (exists) {
+        	userService.updateCode(code);
+        } else {
+        	userService.insertCode(code);
+        }
+
+        userService.upsertDetails(code.getCode_id(), details, session, req); // ON DUPLICATE 방식 또는 조건 분기
+
+        return ResponseEntity.ok("저장 완료");
+    }
+    
+    @DeleteMapping("/admin/codes/delete/{codeId}")
+    public ResponseEntity<?> deleteCommonCodes(@PathVariable("codeId") String codeId) {
+    	userService.deleteCodeWithDetails(codeId); // 코드 + 세부항목 함께 삭제
+        return ResponseEntity.ok("삭제 완료");
+    }
+    
+    @DeleteMapping("/admin/codes/delete/{codeId}/details/{detailCode}")
+    public ResponseEntity<?> deleteDetailCode(@PathVariable("codeId") String codeId,
+                                              @PathVariable("detailCode") String detailCode) {
+    	userService.deleteDetailCode(codeId, detailCode);
+        return ResponseEntity.ok("세부항목 삭제 완료");
     }
 }

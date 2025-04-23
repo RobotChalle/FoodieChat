@@ -178,4 +178,43 @@ public class UserDAO {
 	public List<CommonCodesVO> getCommonCodesDetailList(String code_id) {
 		return sqlSession.selectList(mapper + ".getCommonCodesDetailList",code_id);
 	}
+
+	public int codeExists(String codeId) {
+		return sqlSession.selectOne(mapper + ".codeExists",codeId);
+	}
+
+	public void insertCode(CommonCodesVO code) {
+		sqlSession.insert(mapper + ".insertCode",code);
+	}
+
+	public void updateCode(CommonCodesVO code) {
+		sqlSession.update(mapper + ".updateCode",code);
+	}
+
+	public int countDetailCode(CommonCodesVO detail) {
+		return sqlSession.selectOne(mapper + ".countDetailCode",detail);
+	}
+
+	public void updateDetailCode(CommonCodesVO detail) {
+		sqlSession.update(mapper + ".updateDetailCode",detail);
+	}
+
+	public void insertDetailCode(CommonCodesVO detail) {
+		sqlSession.insert(mapper + ".insertDetailCode",detail);
+	}
+
+	public void deleteDetailCodes(String codeId) {
+		sqlSession.delete(mapper + ".deleteDetailCodes",codeId);
+	}
+
+	public void deleteCode(String codeId) {
+		sqlSession.delete(mapper + ".deleteCode",codeId);
+	}
+
+	public void deleteDetailCode(String codeId, String detailCode) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("codeId", codeId);
+		map.put("detailCode", detailCode);
+		sqlSession.delete(mapper + ".deleteDetailCode",map);
+	}
 }

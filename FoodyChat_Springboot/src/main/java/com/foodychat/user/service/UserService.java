@@ -8,7 +8,10 @@ import com.foodychat.user.vo.FoodRecognitionHistoryVO;
 import com.foodychat.user.vo.UserDetailsVO;
 import com.foodychat.user.vo.UserLogVO;
 import com.foodychat.user.vo.UserMealsVO;
-import com.foodychat.user.vo.UserVO;/**
+import com.foodychat.user.vo.UserVO;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;/**
 
 
  * 사용자 서비스 클래스
@@ -112,4 +115,10 @@ public interface UserService {
 	int getTotalUserLogCount(String email, String status, LocalDate startDate, LocalDate endDate);
 	List<CommonCodesVO> getCommonCodesList();
 	List<CommonCodesVO> getCommonCodesDetailList(String code_id);
+	boolean codeExists(String codeId);
+    void insertCode(CommonCodesVO code);
+    void updateCode(CommonCodesVO code); 
+    void upsertDetails(String codeId, List<CommonCodesVO> details, HttpSession session, HttpServletRequest req);
+	void deleteCodeWithDetails(String codeId);
+	void deleteDetailCode(String codeId, String detailCode);
 }
