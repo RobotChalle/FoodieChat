@@ -8,31 +8,34 @@ load_dotenv()
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-def build_prompt(user_query: str, meals: list[Meal]) -> str:
+def build_prompt(user_query: str, enriched_meals: list[dict], response_type: str) -> str:
     meal_lines = "\n".join([
-        f"{meal.meal_date} | {meal.meal_type_nm} | {meal.meal_text}"
-        for meal in meals
+        f"{meal['meal_date']} | {meal['meal_type_nm']} | {meal['meal_text']} | 칼로리: {meal['calories']}kcal | 탄수: {meal['carb']}g | 단백질: {meal['protein']}g | 지방: {meal['fat']}g"
+        for meal in enriched_meals
     ])
 
     prompt = f"""
 사용자의 자연어 명령: "{user_query}"
 
+예측된 시각화 타입은 "{response_type}"입니다.
+
 아래는 사용자의 식단 데이터입니다:
-날짜 | 구분 | 식단
+날짜 | 구분 | 식단 | 칼로리 | 탄수 | 단백질 | 지방
 {meal_lines}
 
-명령을 분석하여 다음 중 하나를 JSON 형식으로 응답하세요:
-- type: "table" 또는 "calendar"
-- filteredMeals: 해당 조건에 맞는 식단 목록
+"{response_type}" 형식에 맞는 식단만 추출해서 filteredMeals로 반환해주세요. 응답은 아래 JSON 형식으로만 주세요:
 
-응답 예시:
 {{
-  "type": "calendar",
+  "type": "{response_type}",
   "filteredMeals": [
     {{
-      "meal_date": "2025-03-10",
-      "meal_type_nm": "중식",
-      "meal_text": "닭갈비, 샐러드"
+      "meal_date": "2025-04-01",
+      "meal_type_nm": "조식",
+      "meal_text": "계란후라이, 밥, 김치",
+      "calories": 600,
+      "carb": 70,
+      "protein": 20,
+      "fat": 15
     }}
   ]
 }}
