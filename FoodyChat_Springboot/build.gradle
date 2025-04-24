@@ -1,8 +1,8 @@
 plugins {
 	id 'java'
 	id 'war'
-	id 'org.springframework.boot' version '3.4.4'
-	id 'io.spring.dependency-management' version '1.1.7'
+	id 'org.springframework.boot' version '3.1.0'
+    id 'io.spring.dependency-management' version '1.1.0'
 }
 
 group = 'com.foodychat'
@@ -12,6 +12,20 @@ java {
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(17)
 	}
+}
+
+bootJar {
+    enabled = false
+}
+
+bootWar {
+    enabled = true
+    archiveFileName = 'foodychat.war'
+
+    // 필요하다면 favicon 등만 포함
+    from('src/main/resources/static/favicon.ico') {
+        into ''
+    }
 }
 
 configurations {
@@ -25,36 +39,32 @@ repositories {
 }
 
 dependencies {
-	//implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'com.mysql:mysql-connector-j' // 사용하는 DB에 맞게
-    implementation 'org.springframework.boot:spring-boot-starter-mail'
- 
-    implementation 'com.sun.mail:jakarta.mail:2.0.1'
-	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.4'
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-    // Google OAuth 클라이언트
-    implementation 'com.google.api-client:google-api-client:1.34.1'
-    implementation 'com.google.oauth-client:google-oauth-client-jetty:1.34.1'
-    implementation 'com.google.http-client:google-http-client-gson:1.43.3'
-    
-	compileOnly 'org.projectlombok:lombok'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	implementation 'com.mysql:mysql-connector-j'
+	implementation 'com.sun.mail:jakarta.mail:2.0.1'
+	implementation 'com.google.api-client:google-api-client:1.34.1'
+	implementation 'com.google.oauth-client:google-oauth-client-jetty:1.34.1'
+	implementation 'com.google.http-client:google-http-client-gson:1.43.3'
+	implementation 'com.google.http-client:google-http-client-jackson2:1.43.3'
+
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
-	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+
+	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.4'
 	testImplementation 'org.springframework.security:spring-security-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	// Google OAuth 클라이언트
-    implementation 'com.google.api-client:google-api-client:1.34.1'
-    implementation 'com.google.oauth-client:google-oauth-client-jetty:1.34.1'
-    implementation 'com.google.http-client:google-http-client-gson:1.43.3'
-    implementation 'com.google.http-client:google-http-client-jackson2:1.43.3'
 }
 
 tasks.named('test') {
