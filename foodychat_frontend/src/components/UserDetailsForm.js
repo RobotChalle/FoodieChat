@@ -46,6 +46,12 @@ export default function Signup2() {
             oncomplete: function (data) {
                 const address = data.address;
                 setFormData(prev => ({ ...prev, user_address: address }));
+
+                // ✅ 유효성 수동 초기화
+                const addressInput = document.querySelector('input[name="user_address"]');
+                if (addressInput) {
+                    addressInput.setCustomValidity('');
+                }
             }
         }).open();
     };
@@ -90,6 +96,8 @@ export default function Signup2() {
               onChange={handleChange}
               className="form-control"
               required
+              onInvalid={(e) => e.target.setCustomValidity('성별을 선택하세요')}
+              onInput={(e) => e.target.setCustomValidity('')}
             >
               <option value="">성별 선택*</option>
               <option value="1">남성</option>
@@ -106,6 +114,8 @@ export default function Signup2() {
               onChange={handleChange}
               className="form-control"
               required
+              onInvalid={(e) => e.target.setCustomValidity('나이를 입력하세요')}
+              onInput={(e) => e.target.setCustomValidity('')}
             />
           </div>
 
@@ -118,6 +128,8 @@ export default function Signup2() {
               onChange={handleChange}
               className="form-control"
               required
+              onInvalid={(e) => e.target.setCustomValidity('키를 입력하세요')}
+              onInput={(e) => e.target.setCustomValidity('')}
             />
           </div>
 
@@ -130,6 +142,8 @@ export default function Signup2() {
               onChange={handleChange}
               className="form-control"
               required
+              onInvalid={(e) => e.target.setCustomValidity('몸무게를 입력하세요')}
+              onInput={(e) => e.target.setCustomValidity('')}
             />
           </div>
 
@@ -142,7 +156,9 @@ export default function Signup2() {
                 value={formData.user_address}
                 onChange={handleChange}
                 className="form-control"
-                readOnly
+                required
+                onInvalid={(e) => e.target.setCustomValidity('주소를 입력하세요')}
+                onInput={(e) => e.target.setCustomValidity('')}
               />
               <div className="input-group-append">
                 <button
@@ -163,6 +179,8 @@ export default function Signup2() {
               onChange={handleChange}
               className="form-control"
               required
+              onInvalid={(e) => e.target.setCustomValidity('건강목표를 선택하세요')}
+              onInput={(e) => e.target.setCustomValidity('')}
             >
               <option value="">건강 목표*</option>
               <option value="1">체중 감량</option>

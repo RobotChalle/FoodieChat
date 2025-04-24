@@ -88,10 +88,28 @@ export default function NavBar() {
                     </div>
 
                     <div className="navbar-center desktop-menu">
-                        <Link to="/chatbot" className="nav-link">🤖 <span>챗봇</span></Link>
-                        <Link to="/image-analysis" className="nav-link">🍜 <span>이미지 분석</span></Link>
+                    <Link to="/chatbot" className="nav-link" onClick={(e) => {
+                            if (!userInfo) {
+                                e.preventDefault(); // 이동 막기
+                                toast.warning("로그인이 필요합니다.");
+                            }
+                        }}>🤖 <span>챗봇</span></Link>
+                        <Link to="/image-analysis" className="nav-link" onClick={(e) => {
+                            if (!userInfo) {
+                                e.preventDefault(); // 이동 막기
+                                toast.warning("로그인이 필요합니다.");
+                            }
+                        }}>🍜 <span>이미지 분석</span></Link>
                         {userInfo && (
-                            <Link to="/meal-plan" className="nav-link">🥗 <span>식단조회</span></Link>
+                            <Link to="/meal-plan" className="nav-link" onClick={(e) => {
+                                if (!userInfo) {
+                                    e.preventDefault(); // 이동 막기
+                                    toast.warning("로그인이 필요합니다.");
+                                } else if (userInfo.membership_level?.toLowerCase() === 'regular') {
+                                    e.preventDefault();
+                                    toast.warning("일반회원 등급은 사용 할 수 없는 가능합니다.");
+                                }
+                            }}>🥗 <span>식단조회</span></Link>
                         )}
                         {userInfo && (
                             <Link to="/mypage" className="nav-link">👩‍🍳 <span>마이페이지</span></Link>
