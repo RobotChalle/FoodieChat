@@ -300,10 +300,13 @@ public class UserController {
 							        	 			   HttpServletRequest request) {
         try {
             String email = userService.getIdByNameAndPhone(userName,phone);
+            if (email == null || email.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("가입된 아이디가 없습니다.");
+            }
             return ResponseEntity.ok(email);
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("업데이트 실패");
+        	e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류가 발생했습니다.");
         }
     }
     

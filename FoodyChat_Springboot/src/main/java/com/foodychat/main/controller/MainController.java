@@ -8,8 +8,13 @@ import org.springframework.web.bind.annotation.GetMapping;
  */
 @Controller
 public class MainController {
-	@GetMapping(value = { "/", "/{path:[^\\.]*}" })
-    public String index() {
-        return "forward:/index.html";
+    // 모든 /foodychat 하위 경로를 React index.html로 forward
+	@GetMapping(value = {
+	    "/foodychat",
+	    "/foodychat/{path:[^\\.]*}",
+	    "/foodychat/{path:^(?!static|api|assets).*}"
+	})
+    public String forwardReactRoutes() {
+        return "forward:/index.html";  // ❗ static/index.html 이 아님
     }
 }
