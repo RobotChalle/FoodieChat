@@ -47,8 +47,8 @@ useEffect(() => {
       return;
     }
   
-    if (businessOnly && userInfo.grade !== 'business') {
-      toast.warning("해당 기능은 비즈니스 등급만 이용 가능합니다.");
+    if (businessOnly && userInfo.membership_level === 'regular') {
+      toast.warning("해당 기능은 비즈니스 등급 이상 이용 가능합니다.");
       return;
     }
   
