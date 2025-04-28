@@ -22,6 +22,7 @@ from router import chat_router  # chat_router에서 FastAPI 라우터 가져오�
 from services.rag_service import generate_answer_from_gemini  # 정확한 함수 이름 사용
 from pydantic import BaseModel
 from Config import settings
+from meal_summary_router import router as meal_summary_router
 
 # ✅ 현재 파일 위치 기준으로 temp 경로 고정
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -42,6 +43,7 @@ app.add_middleware(
 
 #라우터 
 app.include_router(chat_router)
+app.include_router(meal_summary_router)
 
 def extract_json_block(text: str) -> str:
     match = re.search(r"\{[\s\S]*\}", text)
@@ -127,7 +129,6 @@ def extract_json_block(text: str) -> str:
     if match:
         return match.group(0)
     return text  # fallback: return original
-
     
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

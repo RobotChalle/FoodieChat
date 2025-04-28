@@ -84,7 +84,7 @@
         SELECT user_id, email, membership_level, reg_date
         FROM users
         ORDER BY reg_date DESC
-        LIMIT #{limit} OFFSET #{offset}
+        <!-- LIMIT #{limit} OFFSET #{offset} -->
     </select>
 
     <!-- 유저 전체 숫자 -->

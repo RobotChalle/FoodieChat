@@ -4,12 +4,13 @@ import axios from 'axios';
 import NavBar from './NavBar';
 import './css/mypage.css';
 import InputMask from 'react-input-mask';
+import { toast } from 'react-toastify';
 
 export default function Mypage() {
     const [userInfo, setUserInfo] = useState(null);
     const [error, setError] = useState('');
     const [phone, setPhone] = useState('');
-    const [formData, setFormData] = useState({ age: '', weight: '', height: '', address: '', addressDetail: '' });
+    const [formData, setFormData] = useState({ age: '', weight: '', height: '', address: '', addressDetail: '', user_name: '', gender: '', });
     const navigate = useNavigate();
 
     const handleAddressSearch = () => {
@@ -21,7 +22,10 @@ export default function Mypage() {
                 }
             }).open();
         } else {
-            alert("주소 검색 모듈을 불러오는 데 실패했습니다. 페이지를 새로고침 해주세요.");
+            toast.error('주소 검색 모듈을 불러오는 데 실패했습니다. 페이지를 새로고침 해주세요.', {
+                position: "bottom-right",
+                autoClose: 1000
+            });
         }
     };
 
@@ -34,11 +38,13 @@ export default function Mypage() {
                 const response = await axios.post("http://localhost:8080/users/myPage", {}, {
                     withCredentials: true
                 });
-
+                console.error(response.data);
                 if (response.status === 200) {
                     setUserInfo(response.data);
 
                     const merged = {
+                        user_name: response.data.user_name,
+                        gender: response.data.gender,
                         age: response.data.age,
                         weight: response.data.user_weight,
                         height: response.data.height,
@@ -49,7 +55,10 @@ export default function Mypage() {
                     setFormData(localForm ? { ...merged, ...localForm } : merged);
                 }
             } catch (err) {
-                setError('정보를 불러오는데 실패 했습니다.');
+                toast.error('정보를 불러오는데 실패 했습니다.', {
+                    position: "bottom-right",
+                    autoClose: 1000
+                });
                 console.error(err);
             }
         };
@@ -79,7 +88,10 @@ export default function Mypage() {
             navigate('/login');
         } catch (err) {
             console.error('로그아웃 실패:', err);
-            alert('로그아웃 중 오류가 발생했습니다.');
+            toast.error('로그아웃 중 오류가 발생했습니다.', {
+                position: "bottom-right",
+                autoClose: 1000
+            });
         }
     };
 
@@ -89,10 +101,62 @@ export default function Mypage() {
     };
 
     const handleSave = async () => {
+        // ✅ 빈 항목 체크 리스트
+        if (!formData.user_name) {
+            toast.error('이름을 입력해주세요.', {
+                position: "bottom-right",
+                autoClose: 1000
+            });
+            return;
+        }
+        if (!phone) {
+            toast.error('연락처를 입력해주세요.', {
+                position: "bottom-right",
+                autoClose: 1000
+            });
+            return;
+        }
+        if (!formData.gender) {
+            toast.error('성별을 선택해주세요.', {
+                position: "bottom-right",
+                autoClose: 1000
+            });
+            return;
+        }
+        if (!formData.address) {
+            toast.error('주소를 입력해주세요.', {
+                position: "bottom-right",
+                autoClose: 1000
+            });
+            return;
+        }
+        if (!formData.age) {
+            toast.error('나이를 입력해주세요.', {
+                position: "bottom-right",
+                autoClose: 1000
+            });
+            return;
+        }
+        if (!formData.weight) {
+            toast.error('체중을 입력해주세요.', {
+                position: "bottom-right",
+                autoClose: 1000
+            });
+            return;
+        }
+        if (!formData.height) {
+            toast.error('키를 입력해주세요.', {
+                position: "bottom-right",
+                autoClose: 1000
+            });
+            return;
+        }
+
         try {
             const payload = new URLSearchParams({
                 user_id: userInfo.user_id,
-                user_name: userInfo.user_name,
+                user_name: formData.user_name,
+                gender: formData.gender,
                 phone,
                 age: formData.age,
                 user_weight: formData.weight,
@@ -109,11 +173,17 @@ export default function Mypage() {
             localStorage.setItem('myPageForm', JSON.stringify(formData));
 
             if (response.status === 200) {
-                alert('정보가 성공적으로 저장되었습니다.');
+                toast.success('정보가 성공적으로 저장되었습니다.', {
+                    position: "bottom-right",
+                    autoClose: 1000
+                });
             }
         } catch (err) {
             console.error('저장 실패:', err);
-            alert('정보 저장 중 오류가 발생했습니다.');
+            toast.error('정보 저장 중 오류가 발생했습니다.', {
+                position: "bottom-right",
+                autoClose: 1000
+            });
         }
     };
 
@@ -149,8 +219,9 @@ export default function Mypage() {
                                             <label>이름</label>
                                             <input
                                                 type="text"
-                                                value={userInfo?.user_name || ''}
-                                                disabled
+                                                name="user_name"
+                                                value={formData.user_name}
+                                                onChange={handleInputChange}
                                             />
                                             <small className="helper-text">가입 시 입력된 이름입니다.</small>
                                         </div>
@@ -168,7 +239,7 @@ export default function Mypage() {
 
                                         <div className="form-group">
                                             <label htmlFor="gender">성별</label>
-                                            <select id="gender" value={userInfo?.gender || ''} disabled>
+                                            <select id="gender" name="gender" value={formData.gender} onChange={handleInputChange}>
                                                 <option value="1">남성</option>
                                                 <option value="2">여성</option>
                                             </select>
@@ -257,7 +328,11 @@ export default function Mypage() {
                         <div className="mypage-grid-row actions">
                             <div className="mypage-button-group"> {/* ✅ 버튼 간격 반영 */}
                                 <button onClick={handleSave} className="button primary">저장</button>
-                                <button onClick={() => navigate('/change-password')} className="button secondary">비밀번호 변경</button>
+                                {userInfo && !(userInfo.google_id && userInfo.google_id.trim() !== '') && (
+                                  <button onClick={() => navigate('/change-password')} className="button secondary">
+                                    비밀번호 변경
+                                  </button>
+                                )}
                                 {userInfo && userInfo.membership_level?.toLowerCase() !== 'regular' && (
                                     <button onClick={() => navigate('/meal-plan')} className="button logout">식단 조회</button> // ✅ 빨간색 버튼
                                 )}

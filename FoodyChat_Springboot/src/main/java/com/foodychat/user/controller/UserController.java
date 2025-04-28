@@ -188,6 +188,7 @@ public class UserController {
         data.put("user_address", vo.getUser_address());
         data.put("reg_date", vo.getReg_date());
         data.put("upd_date", vo.getUpd_date());
+        data.put("google_id", vo.getGoogle_id());
         
         return ResponseEntity.ok(data);
     }
@@ -260,6 +261,7 @@ public class UserController {
 							        		 @RequestParam("age") int age,
 							        		 @RequestParam("user_weight") float weight,
 							        		 @RequestParam("height") float height,
+							        		 @RequestParam("gender") String gender,
 							        		 @RequestParam("user_address") String address,
 	    									 HttpSession session,
 	    									 HttpServletRequest request) {
@@ -271,6 +273,7 @@ public class UserController {
             updatedUser.setAge(age);
             updatedUser.setUser_weight(weight);
             updatedUser.setHeight(height);
+            updatedUser.setGender(gender);
             updatedUser.setUser_address(address);
             
             UserVO svo = (UserVO)session.getAttribute("user");
@@ -458,6 +461,7 @@ public class UserController {
             session.setAttribute("user", user);
             Map<String, Object> userInfo = new HashMap<>();
             userInfo.put("user_name", user.getUser_name());
+            userInfo.put("google_id", user.getGoogle_id());
             userInfo.put("user_id", user.getUser_id());
             userInfo.put("email", user.getEmail());
             userInfo.put("phone", user.getPhone());
@@ -614,5 +618,11 @@ public class UserController {
                                               @PathVariable("detailCode") String detailCode) {
     	userService.deleteDetailCode(codeId, detailCode);
         return ResponseEntity.ok("세부항목 삭제 완료");
+    }
+    
+    @GetMapping("codes/{code_id}/details")
+    public ResponseEntity<?> getCommonCodesDetailList2(@PathVariable("code_id") String code_id) {
+    	List<CommonCodesVO> codes = userService.getCommonCodesDetailList(code_id);
+        return ResponseEntity.ok(codes);
     }
 }

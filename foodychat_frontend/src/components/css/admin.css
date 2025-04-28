@@ -30,18 +30,23 @@
 /* 검색 */
 .search-row {
   display: flex;
+  justify-content: center;   /* 중앙 정렬 */
+  align-items: center;        /* 세로 가운데 */
   gap: 10px;
+  width: 100%;                /* 전체 너비 */
   margin-bottom: 30px;
-  justify-content: center;
 }
 
 .search-input {
-  width: 300px;
+  width: 400px;                /* 🔥 조금 넓혀서 */
+  max-width: 100%;             /* 반응형 대비 */
   padding: 10px 14px;
   font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 8px;
   background-color: #f8f9fc;
+  margin-left: 29.5%;
+  text-align: center;          /* 🔥 가운데 정렬 추가 (옵션) */
 }
 
 .btn-search {

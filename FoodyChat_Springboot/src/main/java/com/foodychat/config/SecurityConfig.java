@@ -71,7 +71,8 @@ public class SecurityConfig {
                     "/index.html",
                     "/static/**",
                     "/favicon.ico",
-                    "/error"
+                    "/error",
+                    "/users/codes/*/details"
                 ).permitAll()
                 .requestMatchers(
                     "/users/myPage",
@@ -96,13 +97,8 @@ public class SecurityConfig {
             )
             .securityContext(context -> context.requireExplicitSave(false))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
-            .formLogin(form -> form
-                .loginProcessingUrl("/users/loginUser")
-                .usernameParameter("email")
-                .passwordParameter("user_password")
-                .defaultSuccessUrl("/users/ses", true)
-                .permitAll()
-            )
+            .formLogin(form -> form.disable()) // ✅ formLogin 완전히 끔
+            .httpBasic(httpBasic -> httpBasic.disable()) // ✅ httpBasic 로그인 팝업도 끔
             .logout().disable();
 
         return http.build();

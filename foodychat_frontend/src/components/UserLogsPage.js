@@ -98,44 +98,45 @@ export default function UserLogsPage() {
           <h2 className="section-title">사용자 로그 조회</h2>
 
           <div className="search-row">
-            <DatePicker
-              selected={startDate}
-              onChange={(date) => setStartDate(date)}
-              dateFormat="yyyy-MM-dd"
-              placeholderText="시작일자"
-              locale={ko}
-              className="date-input"
-            />
-
-            <DatePicker
-              selected={endDate}
-              onChange={(date) => setEndDate(date)}
-              dateFormat="yyyy-MM-dd"
-              placeholderText="종료일자"
-              locale={ko}
-              className="date-input"
-            />
-
-            <select
-              className="status-select"
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-            >
-              <option value="ALL">전체</option>
-              <option value="1">성공</option>
-              <option value="0">실패</option>
-            </select>
-            <input
-              type="text"
-              className="search-input"
-              placeholder="이메일 검색"
-              value={searchEmail}
-              onChange={(e) => setSearchEmail(e.target.value)}
-            />
-          </div>
-
-          <div className="table-header">
-            <button onClick={handleDownloadCSV} className="btn csv-button">📥 CSV</button>
+            <div className="search-group">
+              <DatePicker
+                selected={startDate}
+                onChange={(date) => setStartDate(date)}
+                dateFormat="yyyy-MM-dd"
+                placeholderText="시작일자"
+                locale={ko}
+                className="date-input"
+              />
+              <DatePicker
+                selected={endDate}
+                onChange={(date) => setEndDate(date)}
+                dateFormat="yyyy-MM-dd"
+                placeholderText="종료일자"
+                locale={ko}
+                className="date-input"
+              />
+              <select
+                className="status-select"
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+              >
+                <option value="ALL">전체</option>
+                <option value="1">성공</option>
+                <option value="0">실패</option>
+              </select>
+              <input
+                type="text"
+                className="search-input"
+                placeholder="이메일 검색"
+                value={searchEmail}
+                onChange={(e) => setSearchEmail(e.target.value)}
+              />
+            </div>
+            <div className="download-group">
+              <button onClick={handleDownloadCSV} className="btn csv-button">
+                CSV
+              </button>
+            </div>
           </div>
 
           <table className="admin-table">
@@ -175,15 +176,60 @@ export default function UserLogsPage() {
           </table>
 
           <div className="pagination">
-            {[...Array(totalPages)].map((_, i) => (
-              <button
-                key={i}
-                className={`page-button ${currentPage === i + 1 ? 'active' : ''}`}
-                onClick={() => setCurrentPage(i + 1)}
-              >
-                {i + 1}
-              </button>
-            ))}
+            {/* 맨 앞으로 */}
+            <button
+              onClick={() => setCurrentPage(1)}
+              disabled={currentPage === 1}
+              className="page-button"
+            >
+              &laquo;
+            </button>
+
+            {/* 이전 페이지 */}
+            <button
+              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className="page-button"
+            >
+              &lt;
+            </button>
+
+            {/* 페이지 번호들 */}
+            {Array.from({ length: totalPages }, (_, i) => i + 1)
+              .filter(pageNumber => {
+                if (totalPages <= 5) return true;
+                if (currentPage <= 3) return pageNumber <= 5;
+                if (currentPage >= totalPages - 2) return pageNumber >= totalPages - 4;
+                return Math.abs(currentPage - pageNumber) <= 2;
+              })
+              .map(pageNumber => (
+                <button
+                  key={pageNumber}
+                  className={`page-button ${currentPage === pageNumber ? 'active' : ''}`}
+                  onClick={() => setCurrentPage(pageNumber)}
+                >
+                  {pageNumber}
+                </button>
+              ))
+            }
+
+            {/* 다음 페이지 */}
+            <button
+              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+              className="page-button"
+            >
+              &gt;
+            </button>
+
+            {/* 맨 끝으로 */}
+            <button
+              onClick={() => setCurrentPage(totalPages)}
+              disabled={currentPage === totalPages}
+              className="page-button"
+            >
+              &raquo;
+            </button>
           </div>
         </div>
       </div>

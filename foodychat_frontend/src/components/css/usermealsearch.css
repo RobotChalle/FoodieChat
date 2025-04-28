@@ -44,14 +44,16 @@
 
 /* 안쪽 visualizer도 꽉 채우기 */
 .visualizer {
+  position: relative;     /* ✅ 추가! */
   width: 100%;
   max-width: 100%;
-  max-height: 600px;          /* ✅ 원하는 최대 높이 지정 */
-  overflow-y: auto;           /* ✅ 내용이 넘치면 스크롤 */
+  max-height: 600px;
+  overflow-y: auto;
   border: 1px solid #ddd;
   border-radius: 10px;
   padding: 20px;
   background: white;
+  box-sizing: border-box; /* ✅ 추가로 깔끔 정리 */
 }
 
 .visualizer > * {
@@ -90,36 +92,39 @@
 .chat-message {
   display: flex;
   margin-bottom: 10px;
-  max-width: 80%;
-  word-break: break-word;
+  width: 100%;             /* ✅ 항상 꽉 채우기 */
+  box-sizing: border-box;
 }
 
+/* 사용자 메시지 */
 .chat-message.user {
-  align-self: flex-end;
   justify-content: flex-end;
   text-align: right;
 }
 
+/* AI 메시지 */
 .chat-message.ai {
-  align-self: flex-start;
   justify-content: flex-start;
   text-align: left;
 }
 
-/* 말풍선 스타일 */
+/* 말풍선 스타일 (수정) */
 .chat-bubble {
-  padding: 12px 18px;
-  border-radius: 20px;
-  background-color: #e0e7ff; /* 기본 파란 말풍선 */
-  color: #1f2937;
-  font-size: 15px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  max-width: 100%;
+  max-width: 100%;         /* ✅ 부모(.chat-message) 안에서 최대한 채우기 */
+  width: fit-content;      /* ✅ 내용에 맞게 너비 */
+  padding: 10px 16px;
+  border-radius: 12px;
+  background-color: #f1f1f1;
+  margin-bottom: 10px;
+  line-height: 1.5;
+  word-break: break-word;  /* ✅ 긴 단어 끊기 */
+  white-space: pre-line;   /* ✅ 줄바꿈 지원 */
+  box-sizing: border-box;
 }
 
-/* AI용 말풍선 따로 색 */
+/* AI용 말풍선 */
 .chat-message.ai .chat-bubble {
-  background-color: #d1fae5; /* 연한 초록 말풍선 */
+  background-color: #d1fae5;
   color: #065f46;
 }
 
@@ -165,4 +170,74 @@
   padding: 16px;
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+.view-toggle-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  justify-content: center;
+}
+
+.view-button {
+  padding: 8px 16px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  background-color: #f8f9fa;
+  color: #333;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.view-button:hover {
+  background-color: #e2e6ea;
+}
+
+.view-button.active {
+  background-color: #4e73df;
+  color: white;
+  border-color: #4e73df;
+}
+
+.pdf-download-button {
+  position: absolute;    /* ✅ visualizer 안 오른쪽 상단 고정 */
+  top: 10px;
+  right: 10px;
+  background-color: #10b981;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+  transition: background-color 0.2s ease;
+  z-index: 10;
+}
+
+.pdf-download-button:hover {
+  background-color: #059669;
+}
+
+.pdf-download-container {
+  display: flex;
+  justify-content: flex-end; /* 오른쪽 정렬 */
+  margin-bottom: 10px;
+}
+
+.pdf-download-button {
+  background-color: #10b981;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.pdf-download-button:hover {
+  background-color: #059669;
 }
