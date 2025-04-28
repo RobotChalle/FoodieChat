@@ -48,7 +48,11 @@ export default function FindAccount() {
                 setSuccess('비밀번호 재설정 링크를 이메일로 전송했습니다.');
             }
         } catch (err) {
-            setError('입력하신 정보와 일치하는 계정을 찾을 수 없습니다.');
+            if (err.response?.data) {
+                setError(err.response.data);  // ❗ 서버가 준 메시지 그대로 표시
+            } else {
+                setError('알 수 없는 오류가 발생했습니다.');
+            }
             console.error(err);
         }
     };
@@ -83,6 +87,8 @@ export default function FindAccount() {
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                                 required
+                                onInvalid={(e) => e.target.setCustomValidity('이름을 입력하세요')}
+                                onInput={(e) => e.target.setCustomValidity('')}
                             />
                         </div>
                         <div className="form-group">
@@ -107,6 +113,8 @@ export default function FindAccount() {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
+                                onInvalid={(e) => e.target.setCustomValidity('이메일 주소를 입력하세요')}
+                                onInput={(e) => e.target.setCustomValidity('')}
                             />
                         </div>
                     </>

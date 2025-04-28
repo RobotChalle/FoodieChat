@@ -300,4 +300,128 @@
         WHERE user_id = #{userId}
         ORDER BY reg_date DESC
     </select>
+    
+    <select id="getUserLogList" parameterType="java.util.Map" resultType="com.foodychat.user.vo.UserLogVO">
+        SELECT 	l.id,
+        		l.user_id as userId,
+				u.email,
+				l.ip_address AS ipAddress,
+				IFNULL(l.login_time,'') AS loginTime,
+				IFNULL(l.logout_time,'') AS logoutTime,
+				l.login_status as loginStatus,
+				IFNULL(l.failure_reason,'') AS failureReason,
+				l.reg_date as regDate
+		FROM	user_logs l LEFT OUTER JOIN users u ON u.user_id = l.user_id
+		WHERE 1=1
+	    <if test="email != null and email != ''">
+	        AND u.email LIKE CONCAT('%', #{email}, '%')
+	    </if>
+	    <if test="status != null and status != ''">
+	        AND l.login_status = #{status}
+	    </if>
+	    <if test="startDate != null">
+	        AND DATE(l.reg_date) &gt;= #{startDate}
+	    </if>
+	    <if test="endDate != null">
+	        AND DATE(l.reg_date) &lt;= #{endDate}
+	    </if>
+	    ORDER BY l.reg_date DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+    
+    <select id="getTotalUserLogCount" parameterType="java.util.Map" resultType="int">
+        SELECT COUNT(*) 
+        FROM user_logs l LEFT OUTER JOIN users u ON u.user_id = l.user_id
+        WHERE 1=1
+	    <if test="email != null and email != ''">
+	        AND u.email LIKE CONCAT('%', #{email}, '%')
+	    </if>
+	    <if test="status != null and status != ''">
+	        AND l.login_status = #{status}
+	    </if>
+	    <if test="startDate != null">
+	        AND DATE(l.reg_date) &gt;= #{startDate}
+	    </if>
+	    <if test="endDate != null">
+	        AND DATE(l.reg_date) &lt;= #{endDate}
+	    </if>
+    </select>
+    
+    <select id="getCommonCodesList" resultType="com.foodychat.user.vo.CommonCodesVO">
+        SELECT 	c.code_id,
+        		c.code_name,
+				IFNULL(u.USER_NAME,'') as reg_id,
+				c.reg_date
+		FROM	common_codes c LEFT OUTER JOIN users u ON u.user_id = c.reg_id
+    </select>
+    
+    <select id="getCommonCodesDetailList" resultType="com.foodychat.user.vo.CommonCodesVO">
+        SELECT 	c.code_id,
+        		c.code_name,
+        		d.detail_code,
+        		d.detail_name,
+				IFNULL(u.USER_NAME,'') as reg_id,
+				d.reg_date
+		FROM	common_codes c 	LEFT OUTER JOIN common_code_details d ON d.code_id = c.code_id
+								LEFT OUTER JOIN users u ON u.user_id = d.reg_id
+		WHERE	c.code_id = #{code_id}
+    </select>
+    
+    <select id="codeExists" parameterType="String" resultType="int">
+		SELECT	COUNT(*)
+		FROM	common_codes
+		WHERE	code_id = #{codeId}
+	</select>
+	
+	<insert id="insertCode" parameterType="com.foodychat.user.vo.CommonCodesVO">
+		INSERT common_codes(code_id, code_name, reg_id, reg_ip)
+		VALUES(#{code_id}, #{code_name}, #{login_id}, #{login_ip})
+	</insert>
+	
+	<update id="updateCode" parameterType="com.foodychat.user.vo.CommonCodesVO">
+		UPDATE common_codes
+        SET	code_name = #{code_name},
+            upd_id = #{login_id},
+            upd_ip = #{login_ip},
+            upd_date = NOW()
+        WHERE code_id = #{code_id}
+	</update>
+	
+	<select id="countDetailCode" parameterType="com.foodychat.user.vo.CommonCodesVO" resultType="int">
+		SELECT	COUNT(*)
+		FROM	common_code_details
+		WHERE	code_id = #{code_id}
+			AND detail_code = #{detail_code}
+	</select>
+	
+	<insert id="insertDetailCode" parameterType="com.foodychat.user.vo.CommonCodesVO">
+		INSERT common_code_details(code_id, detail_code, detail_name, reg_id, reg_ip)
+		VALUES(#{code_id}, #{detail_code}, #{detail_name}, #{login_id}, #{login_ip})
+	</insert>
+	
+	<update id="updateDetailCode" parameterType="com.foodychat.user.vo.CommonCodesVO">
+		UPDATE common_code_details
+        SET	detail_name = #{detail_name},
+            upd_id = #{login_id},
+            upd_ip = #{login_ip},
+            upd_date = NOW()
+        WHERE code_id = #{code_id}
+        	AND detail_code = #{detail_code}
+	</update>
+	
+	<delete id="deleteDetailCodes" parameterType="String">
+		DELETE FROM common_code_details
+        WHERE code_id = #{codeId}
+	</delete>
+	
+	<delete id="deleteCode" parameterType="String">
+		DELETE FROM common_codes
+        WHERE code_id = #{codeId}
+	</delete>
+	
+	<delete id="deleteDetailCode" parameterType="java.util.Map">
+		DELETE FROM common_code_details
+        WHERE code_id = #{codeId}
+        	AND detail_code = #{detailCode}
+	</delete>
 </mapper>

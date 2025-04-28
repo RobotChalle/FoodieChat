@@ -16,13 +16,14 @@ import UserMealSearch from './UserMealSearch';
 import Imageanalysis from './ImageAnalysis';
 import MealRecommend from './MealRecommend';
 import CafeRecommend from './CafeRecommend';
+import UserLogsPage from './UserLogsPage';
+import CommonCodePage from './CommonCode';
 import ChatBot from "./ChatBot"; // 경로는 실제 ChatTest.jsx 위치에 맞게 수정
 
 function App() {
   return (
     <GoogleOAuthProvider clientId="758964500028-3l2f9avbost20tq4ri7nr4nfed4fd2l3.apps.googleusercontent.com">
 
-      <Router>
       <div>
         {/* ToastContainer를 여기에 추가 */}
         <ToastContainer 
@@ -37,25 +38,26 @@ function App() {
           pauseOnHover
           theme="light"
         />
-          <Routes>
-            <Route path="/" element={<MainPage />} />
-            <Route path="/navbar" element={<NavBar />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<SignupForm />} />
-            <Route path="/user-details" element={<UserDetailsForm />} />
-            <Route path="/users/admin" element={<AdminPage />} />
-            <Route path="/mypage" element={<MyPage />} />
-            <Route path="/findaccount" element={<FindAccount />} />
-            <Route path="/change-password" element={<ChangePassword />} />
-            <Route path="/meal-plan" element={<UserMealSearch />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
-            <Route path="/image-analysis" element={<Imageanalysis />} />
-            <Route path="/meal-recommend" element={<MealRecommend />} />
-            <Route path="/cafe-recommend/:foodName" element={<CafeRecommend/>} />
-            <Route path="/chatbot" element={<ChatBot />} />
-          </Routes>
-        </div>
-      </Router>
+        <Routes>
+          <Route path="/" element={<MainPage />} />
+          <Route path="/navbar" element={<NavBar />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignupForm />} />
+          <Route path="/user-details" element={<UserDetailsForm />} />
+          <Route path="/users/admin" element={<AdminPage />} />
+          <Route path="/mypage" element={<MyPage />} />
+          <Route path="/findaccount" element={<FindAccount />} />
+          <Route path="/change-password" element={<ChangePassword />} />
+          <Route path="/meal-plan" element={<UserMealSearch />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/image-analysis" element={<Imageanalysis />} />
+          <Route path="/meal-recommend" element={<MealRecommend />} />
+          <Route path="/cafe-recommend/:foodName" element={<CafeRecommend/>} />
+          <Route path="/chatbot" element={<ChatBot />} />
+          <Route path="/users/admin/logs" element={<UserLogsPage />} />
+          <Route path="/users/admin/codes" element={<CommonCodePage />} />
+        </Routes>
+      </div>
     </GoogleOAuthProvider>
   );
 }

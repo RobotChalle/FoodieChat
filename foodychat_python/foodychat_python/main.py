@@ -29,7 +29,7 @@ TEMP_DIR = os.path.join(BASE_DIR, "temp")
 
 if not os.path.exists(TEMP_DIR):
     os.makedirs(TEMP_DIR)
-
+print("🔥 TEMP_DIR =", TEMP_DIR)
 app = FastAPI()
 print("🔥 settings.REACT_URL =", settings.REACT_URL)
 app.add_middleware(

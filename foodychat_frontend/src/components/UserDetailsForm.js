@@ -20,6 +20,7 @@ export default function Signup2() {
 
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    const [goalOptions, setGoalOptions] = useState([]); // 💡 건강 목표 코드 목록
 
     useEffect(() => {
         const storedUserId = localStorage.getItem('user_id');
@@ -31,21 +32,48 @@ export default function Signup2() {
         } else {
             setError('유효하지 않은 사용자 ID입니다. 다시 로그인해주세요.');
         }
-    }, []);
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
-    };
+        const fetchGoals = async () => {
+          try {
+            const res = await axios.get(`${BASE_URL}/users/codes/CM003/details`, {
+              withCredentials: true,
+            });
+            console.log('✅ 서버 응답:', res.data);
+            // ✅ res.data는 이미 배열이므로 바로 사용
+            if (Array.isArray(res.data)) {
+              setGoalOptions(res.data);
+            } else {
+              console.warn('서버 응답이 배열이 아닙니다:', res.data);
+              setGoalOptions([]); // fallback
+            }
+          } catch (err) {
+            console.error('❌ 건강목표 코드 조회 실패:', err);
+            setGoalOptions([]); // fallback on error
+          }
+        };
+      
+        fetchGoals();
+  }, []);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
 
     const handleAddressSearch = () => {
         new window.daum.Postcode({
             oncomplete: function (data) {
                 const address = data.address;
                 setFormData(prev => ({ ...prev, user_address: address }));
+
+                // ✅ 유효성 수동 초기화
+                const addressInput = document.querySelector('input[name="user_address"]');
+                if (addressInput) {
+                    addressInput.setCustomValidity('');
+                }
             }
         }).open();
     };
@@ -90,6 +118,8 @@ export default function Signup2() {
               onChange={handleChange}
               className="form-control"
               required
+              onInvalid={(e) => e.target.setCustomValidity('성별을 선택하세요')}
+              onInput={(e) => e.target.setCustomValidity('')}
             >
               <option value="">성별 선택*</option>
               <option value="1">남성</option>
@@ -106,6 +136,8 @@ export default function Signup2() {
               onChange={handleChange}
               className="form-control"
               required
+              onInvalid={(e) => e.target.setCustomValidity('나이를 입력하세요')}
+              onInput={(e) => e.target.setCustomValidity('')}
             />
           </div>
 
@@ -118,6 +150,8 @@ export default function Signup2() {
               onChange={handleChange}
               className="form-control"
               required
+              onInvalid={(e) => e.target.setCustomValidity('키를 입력하세요')}
+              onInput={(e) => e.target.setCustomValidity('')}
             />
           </div>
 
@@ -130,6 +164,8 @@ export default function Signup2() {
               onChange={handleChange}
               className="form-control"
               required
+              onInvalid={(e) => e.target.setCustomValidity('몸무게를 입력하세요')}
+              onInput={(e) => e.target.setCustomValidity('')}
             />
           </div>
 
@@ -142,7 +178,9 @@ export default function Signup2() {
                 value={formData.user_address}
                 onChange={handleChange}
                 className="form-control"
-                readOnly
+                required
+                onInvalid={(e) => e.target.setCustomValidity('주소를 입력하세요')}
+                onInput={(e) => e.target.setCustomValidity('')}
               />
               <div className="input-group-append">
                 <button
@@ -163,11 +201,15 @@ export default function Signup2() {
               onChange={handleChange}
               className="form-control"
               required
+              onInvalid={(e) => e.target.setCustomValidity('건강목표를 선택하세요')}
+              onInput={(e) => e.target.setCustomValidity('')}
             >
               <option value="">건강 목표*</option>
-              <option value="1">체중 감량</option>
-              <option value="2">근육 증가</option>
-              <option value="3">건강 유지</option>
+              {goalOptions.map((goal) => (
+              <option key={goal.detail_code} value={goal.detail_code}>
+                {goal.detail_name}
+              </option>
+            ))}
             </select>
           </div>
 

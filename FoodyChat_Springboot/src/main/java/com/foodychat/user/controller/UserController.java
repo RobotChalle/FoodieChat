@@ -1,5 +1,6 @@
 package com.foodychat.user.controller;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +9,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -37,6 +39,8 @@ import com.foodychat.config.EmailService;
 import com.foodychat.config.GoogleTokenVerifier;
 import com.foodychat.user.service.UserService;
 import com.foodychat.user.vo.BmiHistoryVO;
+import com.foodychat.user.vo.CommonCodeSaveVO;
+import com.foodychat.user.vo.CommonCodesVO;
 import com.foodychat.user.vo.FoodRecognitionHistoryVO;
 import com.foodychat.user.vo.GoogleUserInfo;
 import com.foodychat.user.vo.UserDetailsVO;
@@ -296,10 +300,13 @@ public class UserController {
 							        	 			   HttpServletRequest request) {
         try {
             String email = userService.getIdByNameAndPhone(userName,phone);
+            if (email == null || email.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("가입된 아이디가 없습니다.");
+            }
             return ResponseEntity.ok(email);
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("업데이트 실패");
+        	e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류가 발생했습니다.");
         }
     }
     
@@ -413,7 +420,7 @@ public class UserController {
     @GetMapping("/admin/users")
     public ResponseEntity<?> getUserList(
         @RequestParam(name = "page", defaultValue = "1") int page,
-        @RequestParam(name = "size", defaultValue = "10") int size
+        @RequestParam(name = "size", defaultValue = "5") int size
     ) {
         List<UserVO> users = userService.getUserList(page, size);
         int total = userService.getTotalUserCount();
@@ -539,5 +546,73 @@ public class UserController {
     public ResponseEntity<List<FoodRecognitionHistoryVO>> getFoodHistory(@PathVariable("id") Long userId) {
 	    List<FoodRecognitionHistoryVO> foodHistory = userService.getFoodHistory(userId);
 	    return ResponseEntity.ok(foodHistory);
+    }
+    
+    @GetMapping("/admin/logs")
+    public ResponseEntity<?> getUserLogList(
+        @RequestParam(name = "page", defaultValue = "1") int page,
+        @RequestParam(name = "size", defaultValue = "10") int size,
+        @RequestParam(name = "email", required = false) String email,
+        @RequestParam(name = "status", required = false) String status,
+        @RequestParam(name = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+        @RequestParam(name = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
+    ) {
+    	int offset = (page - 1) * size;
+    	List<UserLogVO> logs = userService.getUserLogList(email, status, startDate, endDate, size, offset);
+        int total = userService.getTotalUserLogCount(email, status, startDate, endDate);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("logs", logs);
+        result.put("total", total);
+        return ResponseEntity.ok(result);
+    }
+    
+    @GetMapping("/admin/codes")
+    public ResponseEntity<?> getCommonCodesList() {
+    	List<CommonCodesVO> codes = userService.getCommonCodesList();
+        return ResponseEntity.ok(codes);
+    }
+    
+    @GetMapping("/admin/codes/{code_id}/details")
+    public ResponseEntity<?> getCommonCodesDetailList(@PathVariable("code_id") String code_id) {
+    	List<CommonCodesVO> codes = userService.getCommonCodesDetailList(code_id);
+        return ResponseEntity.ok(codes);
+    }
+    
+    @PostMapping("/admin/codes/save")
+    public ResponseEntity<?> saveCodeAndDetails(@RequestBody CommonCodeSaveVO request,
+    											HttpSession session,
+   	    									 	HttpServletRequest req) {
+        CommonCodesVO code = request.getCode();
+        List<CommonCodesVO> details = request.getDetails();
+        
+        UserVO svo = (UserVO)session.getAttribute("user");
+        code.setLogin_id(svo.getUser_id());
+        code.setLogin_ip(req.getRemoteAddr());
+
+        boolean exists = userService.codeExists(code.getCode_id());
+
+        if (exists) {
+        	userService.updateCode(code);
+        } else {
+        	userService.insertCode(code);
+        }
+
+        userService.upsertDetails(code.getCode_id(), details, session, req); // ON DUPLICATE 방식 또는 조건 분기
+
+        return ResponseEntity.ok("저장 완료");
+    }
+    
+    @DeleteMapping("/admin/codes/delete/{codeId}")
+    public ResponseEntity<?> deleteCommonCodes(@PathVariable("codeId") String codeId) {
+    	userService.deleteCodeWithDetails(codeId); // 코드 + 세부항목 함께 삭제
+        return ResponseEntity.ok("삭제 완료");
+    }
+    
+    @DeleteMapping("/admin/codes/delete/{codeId}/details/{detailCode}")
+    public ResponseEntity<?> deleteDetailCode(@PathVariable("codeId") String codeId,
+                                              @PathVariable("detailCode") String detailCode) {
+    	userService.deleteDetailCode(codeId, detailCode);
+        return ResponseEntity.ok("세부항목 삭제 완료");
     }
 }

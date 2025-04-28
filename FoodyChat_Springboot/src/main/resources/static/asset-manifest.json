@@ -1,0 +1,18 @@
+{
+  "files": {
+    "main.css": "/foodychat/static/css/main.e2a35da9.css",
+    "main.js": "/foodychat/static/js/main.0457ca7f.js",
+    "static/media/empty_plate.jpg": "/foodychat/static/media/empty_plate.8a483c2f710a728f0b8b.jpg",
+    "static/media/diet.jpg": "/foodychat/static/media/diet.5132924290e155c4f193.jpg",
+    "static/media/laptop.jpg": "/foodychat/static/media/laptop.dbb3971d21a2a6dcccdb.jpg",
+    "static/media/steak.jpg": "/foodychat/static/media/steak.ecde0849f82e535cdc64.jpg",
+    "static/media/buffet.jpg": "/foodychat/static/media/buffet.ceab96d3b528b45353f7.jpg",
+    "index.html": "/foodychat/index.html",
+    "main.e2a35da9.css.map": "/foodychat/static/css/main.e2a35da9.css.map",
+    "main.0457ca7f.js.map": "/foodychat/static/js/main.0457ca7f.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e2a35da9.css",
+    "static/js/main.0457ca7f.js"
+  ]
+}

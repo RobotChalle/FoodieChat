@@ -5,7 +5,7 @@ import './css/admin.css';
 import './css/main.css';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 6;
 axios.defaults.baseURL = BASE_URL;
 axios.defaults.withCredentials = true;
 export default function AdminPage() {

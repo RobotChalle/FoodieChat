@@ -6,6 +6,7 @@ import lombok.Data;
 public class UserLogVO {
     private Long id;
     private Long userId;
+    private String email;
     private String loginTime;
     private String logoutTime;
     private String ipAddress;
